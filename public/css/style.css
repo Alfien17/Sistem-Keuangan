@@ -1,0 +1,64 @@
+a{
+  text-decoration: none;
+}
+.card-body-icon {
+    position: absolute;
+    z-index: 0;
+    top: 25px;
+    right: 35px;
+    opacity: 0.4;
+    font-size: 90px;
+}
+.content .icon {
+    font-size: 100px;
+    padding-left: 25px;
+}
+.content .text {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+/* Clock */
+.clock button[type="submit"] {
+    border: none;
+    background-color: transparent;
+    border-bottom: 2px solid darkslategray;
+    border-radius: 0px;
+}
+.tools-control,
+.tools-control:hover {
+    text-decoration: none;
+    cursor: pointer;
+    color: black;
+}
+
+/* Card */
+.saldo-control{
+    cursor: pointer;
+}
+.saldo-control:hover{
+    transform: scale(1.02);
+}
+
+/* image */
+.card-body .wrapper {
+    position: relative;
+    width: 100%;
+    border-radius: 5px;
+    background: #fff;
+    border: 1px solid #c2cdda;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+ .bd-callout {
+     padding: 1.25rem;
+     margin-top: 1.25rem;
+     margin-bottom: 1.25rem;
+     border: 1px solid #e9ecef;
+     border-left-width: .25rem;
+     border-radius: .25rem;
+     border-left-color:#dc3545;
+ }

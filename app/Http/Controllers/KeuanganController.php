@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Models\Keuangan;
 use App\Models\Total;
 use App\Models\Akun;
@@ -14,6 +15,21 @@ class KeuanganController extends Controller
 {
     public function rekap()
     {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
         $keuangan = Keuangan::orderBy('updated_at','DESC')->get();
         $saldo = Keuangan::sum('total');
         $kat = Kategori::get();
@@ -25,11 +41,28 @@ class KeuanganController extends Controller
             'kat' => $kat,
             'akun' => $akun,
             'kas' => $kas,
+            'forename' => $forename,
+            'surname' => $surname
         ]);
     }
 
     public function addin()
     {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
         $kat = Kategori::get();
         $akun = Akun::get();
         $kas = Bukukas::get();
@@ -37,6 +70,8 @@ class KeuanganController extends Controller
             'kat' => $kat,
             'akun' => $akun,
             'kas' => $kas,
+            'forename' => $forename,
+            'surname' => $surname
         ]);
     }
 
@@ -96,11 +131,26 @@ class KeuanganController extends Controller
                 $data->update();
             }
 
-            return redirect('/main/keuangan')->with('s_debit', 'Data berhasil ditambahkan');
+            return redirect('/main/keuangan')->with('success', 'Data berhasil ditambahkan');
     }
 
     public function addout()
     {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
         $kat = Kategori::get();
         $akun = Akun::get();
         $kas = Bukukas::get();
@@ -108,6 +158,8 @@ class KeuanganController extends Controller
             'kat' => $kat,
             'akun' => $akun,
             'kas' => $kas,
+            'forename' => $forename,
+            'surname' => $surname
         ]);
     }
 
@@ -170,7 +222,7 @@ class KeuanganController extends Controller
                     $data->update();
                 }
 
-                return redirect('/main/keuangan')->with('s_kredit', 'Data berhasil ditambahkan');
+                return redirect('/main/keuangan')->with('success', 'Data berhasil ditambahkan');
             } else {
                 $saldo = Keuangan::where('akun_id', $akun_id->id)->sum('total');  
                 return redirect('/main/keuangan/addout')
@@ -180,6 +232,21 @@ class KeuanganController extends Controller
 
     public function update($id)
     {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
         $kat = Kategori::get();
         $akun = Akun::get();
         $kas = Bukukas::get();
@@ -199,7 +266,9 @@ class KeuanganController extends Controller
                 'akun' => $akun,
                 'kas' => $kas,
                 'fakun' => $fakun,
-                'fkas' => $fkas
+                'fkas' => $fkas,
+                'forename' => $forename,
+                'surname' => $surname
             ]);
         } else {
             return view('rekap.update2', [
@@ -210,7 +279,9 @@ class KeuanganController extends Controller
                 'akun' => $akun,
                 'kas' => $kas,
                 'fakun' => $fakun,
-                'fkas' => $fkas
+                'fkas' => $fkas,
+                'forename' => $forename,
+                'surname' => $surname
             ]);
         }
     }
@@ -319,7 +390,7 @@ class KeuanganController extends Controller
                 'kas_id' => $kas_id->id,
                 'kat_id' => $kat_id->id
             ]);
-            return redirect('/main/keuangan')->with('s_upin', 'Data berhasil diubah');
+            return redirect('/main/keuangan')->with('success', 'Data berhasil diubah');
 
     }
 
@@ -364,7 +435,7 @@ class KeuanganController extends Controller
                     'kas_id' => $kas_id->id,
                     'kat_id' => $kat_id->id
                 ]);
-                return redirect('/main/keuangan')->with('s_upout', 'Data berhasil diubah');
+                return redirect('/main/keuangan')->with('success', 'Data berhasil diubah');
             }
         }
         else{
@@ -411,7 +482,7 @@ class KeuanganController extends Controller
                 'kas_id' => $kas_id->id,
                 'kat_id' => $kat_id->id
             ]);
-            return redirect('/main/keuangan')->with('s_upout', 'Data berhasil diubah');
+            return redirect('/main/keuangan')->with('success', 'Data berhasil diubah');
 
         }else{
             return redirect()->back()->with('g_upout', 'Proses ditolak karena saldo dari akun '
@@ -427,7 +498,7 @@ class KeuanganController extends Controller
         $saldo_d = Total::where('akun_id', $ids->akun_id)->first();
         if (empty($saldo_d)) {
             Keuangan::where('id', $id)->delete();
-            return redirect('/main/keuangan')->with('d_rekap', 'Data berhasil dihapus');
+            return redirect('/main/keuangan')->with('success', 'Data berhasil dihapus');
         }
         else{
             if($ids->status == "Debit"){
@@ -439,7 +510,7 @@ class KeuanganController extends Controller
                 } else {
                     $saldo_d->update();
                     Keuangan::where('id', $id)->delete();
-                    return redirect('/main/keuangan')->with('d_rekap', 'Data berhasil dihapus');
+                    return redirect('/main/keuangan')->with('success', 'Data berhasil dihapus');
                 }
             }elseif($ids->status == "Kredit"){
                 $saldo_d->total = $saldo_d->total + $ids->kredit;
@@ -450,7 +521,7 @@ class KeuanganController extends Controller
                 } else {
                     $saldo_d->update();
                     Keuangan::where('id', $id)->delete();
-                    return redirect('/main/keuangan')->with('d_rekap', 'Data berhasil dihapus');
+                    return redirect('/main/keuangan')->with('success', 'Data berhasil dihapus');
                 }
             }
         }
@@ -471,6 +542,21 @@ class KeuanganController extends Controller
 
     public function searchrekap(Request $request)
     {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
         $kat = Kategori::get();
         $akun = Akun::get();
         $kas = Bukukas::get();
@@ -490,7 +576,9 @@ class KeuanganController extends Controller
                 'akun' => $akun,
                 'kas' => $kas,
                 'kat' => $kat,
-                'keuangan' => $keuangan
+                'keuangan' => $keuangan,
+                'surname' => $surname,
+                'forename' => $forename
             ]);
         }elseif(!empty($idkas2->id)){
             $keuangan = Keuangan::where('tanggal', 'like', '%' . $search . '%')
@@ -501,7 +589,9 @@ class KeuanganController extends Controller
                 'akun' => $akun,
                 'kas' => $kas,
                 'kat' => $kat,
-                'keuangan' => $keuangan
+                'keuangan' => $keuangan,
+                'surname' => $surname,
+                'forename' => $forename
             ]);
         }elseif(!empty($idkas->id)){
             $keuangan = Keuangan::where('tanggal', 'like', '%' . $search . '%')
@@ -512,7 +602,9 @@ class KeuanganController extends Controller
                 'akun' => $akun,
                 'kas' => $kas,
                 'kat' => $kat,
-                'keuangan' => $keuangan
+                'keuangan' => $keuangan,
+                'surname' => $surname,
+                'forename' => $forename
             ]);
         }elseif(!empty($idkat->id)){
             $keuangan = Keuangan::where('tanggal', 'like', '%' . $search . '%')
@@ -523,7 +615,9 @@ class KeuanganController extends Controller
                 'akun' => $akun,
                 'kas' => $kas,
                 'kat' => $kat,
-                'keuangan' => $keuangan
+                'keuangan' => $keuangan,
+                'surname' => $surname,
+                'forename' => $forename
             ]);
         }else{
             $keuangan = Keuangan::where('tanggal', 'like', '%' . $search . '%')
@@ -533,13 +627,30 @@ class KeuanganController extends Controller
                 'akun' => $akun,
                 'kas' => $kas,
                 'kat' => $kat,
-                'keuangan' => $keuangan
+                'keuangan' => $keuangan,
+                'surname' => $surname,
+                'forename' => $forename
             ]);
         }
     }
 
     public function detail($id)
     {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
         $kat = Kategori::get();
         $akun = Akun::get();
         $kas = Bukukas::get();
@@ -554,7 +665,9 @@ class KeuanganController extends Controller
             'saldo' => $saldo,
             'kat' => $kat,
             'kas' => $kas,
-            'akun' => $akun
+            'akun' => $akun,
+            'forename' => $forename,
+            'surname' => $surname
         ]);
     }
 

@@ -1,6 +1,20 @@
 @extends('main')
-@section('tanggal',$today)
 @section('konten')
+<div class="container">
+    <div class="accordion pl-1 pr-1" id="accordionExample">
+        <div class="accordion-item border-0">
+            <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    <h5>{{$today}}</h5>
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <strong id="greeting"></strong> {{ucwords(Auth::user()->name ??'')}}. Do your best at every opportunity that you have.</div>
+            </div>
+        </div>
+    </div>
+</div>
 <main class="dash-content">
     <div class="container-fluid">
         <div class="row dash-row">
@@ -197,4 +211,21 @@
                 </div>
             </main>
     <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script>
+        var myDate = new Date();
+        var currentHour = myDate.getHours();
+        var msg;
+        if (currentHour <= 11)
+            msg = 'Good morning, ';
+        else if(currentHour == 12)
+            msg = 'Good noon, ';
+        else if (currentHour >= 12 && currentHour <= 17)
+            msg = 'Good afternoon, ';
+        else if (currentHour >= 18 && currentHour <= 19)
+            msg = 'Good evening, ';
+        else if (currentHour >= 20)
+            msg = 'Good night, ';
+
+        document.getElementById('greeting').innerHTML = msg;
+    </script>
 @endsection	

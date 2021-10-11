@@ -54,7 +54,7 @@
 	            	        <td colspan="10">
 	            		        <div class="content m-5">
 		            		        <div class="icon"><i class="far fa-sad-tear"></i></div>
-	                		        <div class="text ml-4">Data Kosong.</div>
+	                		        <div class="text2 ml-4">Data Kosong.</div>
                 		        </div>
             		        </td>
 	                    </tr>

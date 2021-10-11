@@ -13,7 +13,7 @@ a{
     font-size: 100px;
     padding-left: 25px;
 }
-.content .text {
+.content .text2 {
     font-size: 20px;
     font-weight: 500;
 }
@@ -62,3 +62,93 @@ a{
      border-radius: .25rem;
      border-left-color:#dc3545;
  }
+
+ /*Form*/
+ .form-control2 {
+     display: block;
+     width: 100%;
+     font-size: 1rem;
+     font-weight: 400;
+     line-height: 1.5;
+     border-color: #557061 !important;
+     border-style: solid !important;
+     border-width: 0 0 1px 0 !important;
+     color: #495957;
+     height: auto;
+     border-radius: 0;
+     background-color: #fff;
+     background-clip: padding-box;
+ }
+
+ .form-control2:focus {
+     color: #495057;
+     background-color: #fff;
+     border-color: #fff;
+     outline: 0;
+     box-shadow: none;
+ }
+
+ .input-control {
+     border: none;
+ }
+
+ .label-control:hover {
+     font-weight: bold;
+ }
+
+ .hover-control{
+     color: blanchedalmond;
+ }
+
+ .accordion-button:focus{
+     box-shadow: none;
+ }
+
+ /* image Akun */
+ .image_area {
+     position: relative;
+ }
+
+ .img {
+     object-fit: cover;
+ }
+
+ .preview {
+     overflow: hidden;
+     width: 160px;
+     height: 160px;
+     margin: 10px;
+     border: 1px solid red;
+ }
+
+ .modal-lg {
+     max-width: 1000px !important;
+ }
+
+ .overlay {
+     position: absolute;
+     bottom: 10px;
+     left: 0;
+     right: 0;
+     background-color: rgba(255, 255, 255, 0.5);
+     overflow: hidden;
+     height: 0;
+     transition: .5s ease;
+     width: 200px;
+ }
+
+ .image_area:hover .overlay {
+     height: 50%;
+     cursor: pointer;
+ }
+
+ .text {
+     color: #333;
+     font-size: 15px;
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -65%);
+     text-align: center;
+ }
+ 

@@ -15,24 +15,6 @@
         </ul>
     </div>
     @endif
-    @if(Session::has('a_kat'))
-    <div class="alert alert-success alert-dismissible" role="alert" id="liveAlert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        <i class="fas fa-check-circle"></i> {{Session::get('a_kat')}}
-    </div>
-    @endif
-    @if(Session::has('d_kat'))
-    <div class="alert alert-success alert-dismissible" role="alert" id="liveAlert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        <i class="fas fa-check-circle"></i> {{Session::get('d_kat')}}
-    </div>
-    @endif
-    @if(Session::has('u_kat'))
-    <div class="alert alert-success alert-dismissible" role="alert" id="liveAlert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        <i class="fas fa-check-circle"></i> {{Session::get('u_kat')}}
-    </div>
-    @endif
 
     <div class="d-flex flex-row-reverse">
         <form action="/searchkategori" method="get">
@@ -55,7 +37,7 @@
                     <thead class="table-control text-center">
                         <tr>
                             {{-- <th><input type="checkbox" id="master"></th> --}}
-                            <th width="10%" class="text-left">#</th>
+                            <th width="20%" class="pl-5 text-left">#</th>
                             <th>Kategori</th>
                             <th width="15%">Action</th>
                         </tr>    
@@ -65,7 +47,7 @@
                         @forelse($kat as $k)
                         <tr id="tr_{{$k->id}}">
                             {{-- <td><input type="checkbox" class="sub_chk" data-id="{{$k->id}}"></td> --}}
-                            <td>{{$id++}}</td>
+                            <td class="pl-5">{{$id++}}</td>
                             <td>{{ucwords($k->name)}}</td>
                             <td class="text-center">
                                 <button title="Edit" class="bg-transparent" style="border: none" data-bs-toggle="modal" data-bs-target="#edit{{$k->id}}"><i class="far fa-edit text-dark"></i></button>
@@ -128,9 +110,9 @@
                         @empty
                         <tr class="text-center">
                             <td colspan="7">
-                                <div class="content m-5">
+                                <div class="content mx-auto m-5">
                                     <div class="icon"><i class="far fa-sad-tear"></i></div>
-                                    <div class="text ml-4">Data Kosong.</div>
+                                    <div class="text2 ml-4">Data Kosong.</div>
                                 </div>
                             </td>
                         </tr>

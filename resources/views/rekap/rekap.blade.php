@@ -3,48 +3,6 @@
 @section('konten')
 <br>
 <div class="container">
-    @if(Session::has('s_debit'))
-    <div class="alert alert-success alert-dismissible" role="alert" id="liveAlert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        <i class="fas fa-check-circle"></i> {{Session::get('s_debit')}}
-    </div>
-    @endif
-    @if(Session::has('s_kredit'))
-    <div class="alert alert-success alert-dismissible" role="alert" id="liveAlert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        <i class="fas fa-check-circle"></i> {{Session::get('s_kredit')}}
-    </div>
-    @endif
-    @if(Session::has('a_rekap'))
-    <div class="alert alert-success alert-dismissible" role="alert" id="liveAlert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        <i class="fas fa-check-circle"></i> {{Session::get('a_rekap')}}
-    </div>
-    @endif
-    @if(Session::has('d_rekap'))
-    <div class="alert alert-success alert-dismissible" role="alert" id="liveAlert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        <i class="fas fa-check-circle"></i> {{Session::get('d_rekap')}}
-    </div>
-    @endif
-    @if(Session::has('u_rekap'))
-    <div class="alert alert-success alert-dismissible" role="alert" id="liveAlert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        <i class="fas fa-check-circle"></i> {{Session::get('u_rekap')}}
-    </div>
-    @endif
-    @if(Session::has('s_upin'))
-    <div class="alert alert-success alert-dismissible" role="alert" id="liveAlert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        <i class="fas fa-check-circle"></i> {{Session::get('s_upin')}}
-    </div>
-    @endif
-    @if(Session::has('s_upout'))
-    <div class="alert alert-success alert-dismissible" role="alert" id="liveAlert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        <i class="fas fa-check-circle"></i> {{Session::get('s_upout')}}
-    </div>
-    @endif
     @if(Session::has('g_delete'))
     <div class="alert alert-danger alert-dismissible" role="alert" id="liveAlert">
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -158,7 +116,7 @@
 	            	        <td colspan="10">
 	            		        <div class="content m-5">
 		            		        <div class="icon"><i class="far fa-sad-tear"></i></div>
-	                		        <div class="text ml-4">Data Kosong.</div>
+	                		        <div class="text2 ml-4">Data Kosong.</div>
                 		        </div>
             		        </td>
 	                    </tr>

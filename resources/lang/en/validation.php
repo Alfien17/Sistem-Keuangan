@@ -147,6 +147,9 @@ return [
             'unique' => 'The buku kas has already been taken.',
             'exists' => 'The selected Buku Kas is invalid.'
         ],
+        'telp' => [
+            'digits_between' => 'The Telepon must be between :min and :max digits.'
+        ]
     ],
 
     /*

@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Akun;
 use App\Models\Total;
@@ -15,11 +17,43 @@ class MainController extends Controller
 {
     public function main()
     {
-        return view('main');
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
+        return view('main',[
+            'forename' => $forename,
+            'surname' => $surname
+        ]);
     }
 
     public function dashboard()
     {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ',$nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
         $akun = Akun::count();
         $kas = Bukukas::count();
         $kat = Kategori::count();
@@ -66,11 +100,28 @@ class MainController extends Controller
             'okt' => $okt,
             'nov' => $nov,
             'des' => $des,
+            'forename' => $forename,
+            'surname' => $surname
         ]);
     }
 
     public function sortyear(Request $request)
     {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
         $akun = Akun::count();
         $kas = Bukukas::count();
         $kat = Kategori::count();
@@ -121,14 +172,35 @@ class MainController extends Controller
             'okt' => $okt,
             'nov' => $nov,
             'des' => $des,
+            'surname' => $surname,
+            'forename' => $forename
         ]);
     }
 
     // CRUD AKUN
     public function tambahakun()
     {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+        
         $akun = Akun::get();
-        return view('akun.tambahakun', ['akun' => $akun]);
+        return view('akun.tambahakun', [
+            'akun' => $akun,
+            'forename' => $forename,
+            'surname' => $surname
+        ]);
     }
 
     public function addakun(Request $request){
@@ -140,7 +212,7 @@ class MainController extends Controller
             'nama_akun' => $request->nama_akun,
             'kd_akun' => $request->kd_akun
         ]);
-	    return redirect('/main/akun')->with('a_akun','Akun berhasil ditambahkan.');
+	    return redirect('/main/akun')->with('success','Akun berhasil ditambahkan.');
 	}
 
     public function eakun(Request $request)
@@ -153,28 +225,47 @@ class MainController extends Controller
             'nama_akun' => $request->nama_akun,
             'kd_akun' => $request->kd_akun
         ]);
-        return redirect('/main/akun')->with('u_akun', 'Akun berhasil diubah');
+        return redirect('/main/akun')->with('success', 'Akun berhasil diubah');
     }
 
-    public function deleteakun(Request $request)
-    {
-        $ids = $request->ids;
-        Akun::whereIn('id', explode(",", $ids))->delete();
-        return response()->json(['success'=>"Data berhasil dihapus."]);
-    }
+    // public function deleteakun(Request $request)
+    // {
+    //     $ids = $request->ids;
+    //     Akun::whereIn('id', explode(",", $ids))->delete();
+    //     return response()->json(['success'=>"Data berhasil dihapus."]);
+    // }
 
     public function dakun($id)
     {
         Total::where('akun_id',$id)->delete();
         DB::table("akun")->delete($id);
-        return redirect('/main/akun')->with('d_akun', 'Akun berhasil dihapus.');
+        return redirect('/main/akun')->with('success', 'Akun berhasil dihapus.');
     }
 
     // CRUD BUKU KAS
     public function tambahkas()
     {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
         $kas = Bukukas::get();
-        return view('kas.tambahkas', ['kas' => $kas]);
+        return view('kas.tambahkas', [
+            'kas' => $kas,
+            'forename' => $forename,
+            'surname' => $surname
+        ]);
     }
 
     public function addkas(Request $request)
@@ -187,7 +278,7 @@ class MainController extends Controller
             'bk_kas' => $request->bk_kas,
             'tipe' => $request->tipe
         ]);
-        return redirect('/main/kas')->with('a_kas', 'Kas berhasil ditambahkan');
+        return redirect('/main/kas')->with('success', 'Kas berhasil ditambahkan');
     }
 
     public function ekas(Request $request)
@@ -200,89 +291,176 @@ class MainController extends Controller
             'bk_kas' => $request->bk_kas,
             'tipe' => $request->tipe
         ]);
-        return redirect('/main/kas')->with('u_kas', 'Kas berhasil diubah.');
+        return redirect('/main/kas')->with('success', 'Kas berhasil diubah.');
     }
 
-    public function deletekas(Request $request)
-    {
-        $ids = $request->ids;
-        Bukukas::whereIn('id', explode(",", $ids))->delete();
-        return response()->json(['success' => "Data berhasil dihapus."]);
-    }
+    // public function deletekas(Request $request)
+    // {
+    //     $ids = $request->ids;
+    //     Bukukas::whereIn('id', explode(",", $ids))->delete();
+    //     return response()->json(['success' => "Data berhasil dihapus."]);
+    // }
 
     public function dkas($id)
     {
         Bukukas::where('id', $id)->delete();
-        return redirect('/main/kas')->with('d_kas', 'Kas berhasil dihapus.');;
+        return redirect('/main/kas')->with('success', 'Kas berhasil dihapus.');;
     }
 
     // CRUD Kategori
     public function tambahkat()
     {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
         $kat = Kategori::get();
-        return view('kategori.tambahkat', ['kat' => $kat]);
+        return view('kategori.tambahkat', [
+            'kat' => $kat,
+            'surname' => $surname,
+            'forename' => $forename
+        ]);
     }
 
     public function addkat(Request $request)
     {
         $this->validate($request, ['name' => 'required|unique:kategori',]);
         kategori::create(['name' => $request->name]);
-        return redirect('/main/kategori')->with('a_kat', 'Kategori berhasil ditambahkan');
-    }
-
-    public function editkat($id)
-    {
-        $kat = Kategori::where('id', $id)->get();
-
-        return view('kategori.editkat', ['kat' => $kat]);
+        return redirect('/main/kategori')->with('success', 'Kategori berhasil ditambahkan');
     }
 
     public function ekat(Request $request)
     {
         $this->validate($request, ['name' => 'required|unique:kategori',]);
         Kategori::where('id', $request->id,)->update(['name' => $request->name]);
-        return redirect('/main/kategori')->with('u_kat', 'Kategori berhasil diubah');
+        return redirect('/main/kategori')->with('success', 'Kategori berhasil diubah');
     }
 
-    public function deletekat(Request $request)
-    {
-        $ids = $request->ids;
-        Kategori::whereIn('id', explode(",", $ids))->delete();
-        return response()->json(['success' => "Data berhasil dihapus"]);
-    }
+    // public function deletekat(Request $request)
+    // {
+    //     $ids = $request->ids;
+    //     Kategori::whereIn('id', explode(",", $ids))->delete();
+    //     return response()->json(['success' => "Data berhasil dihapus"]);
+    // }
 
     public function dkat($id)
     {
         Kategori::where('id', $id)->delete();
-        return redirect('/main/kategori')->with('d_kat', 'Kategori berhasil dihapus');
+        return redirect('/main/kategori')->with('success', 'Kategori berhasil dihapus');
     }
 
     // Search
     public function searchakun(Request $request)
     {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
         $search = $request->get('search');
         $akun = Akun::where('nama_akun', 'like', '%' . $search . '%')->get();
-        return view('akun.tambahakun', ['akun' => $akun]);
+        return view('akun.tambahakun', [
+            'akun' => $akun,
+            'forename' => $forename,
+            'surname' => $surname
+        ]);
     }
 
     public function searchkas(Request $request)
     {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+        
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
         $search = $request->get('search');
         $kas = Bukukas::where('bk_kas', 'like', '%' . $search . '%')->get();
-        return view('kas.tambahkas', ['kas' => $kas]);
+        return view('kas.tambahkas', [
+            'kas' => $kas,
+            'forename' => $forename,
+            'surname' => $surname
+        ]);
     }
 
     public function searchkat(Request $request)
     {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
         $search = $request->get('search');
         $kat = Kategori::where('name', 'like', '%' . $search . '%')->get();
-        return view('kategori.tambahkat', ['kat' => $kat]);
+        return view('kategori.tambahkat', [
+            'kat' => $kat,
+            'forename' => $forename,
+            'surname' => $surname
+        ]);
     }
 
     // Reset Data
     public function reset()
     {
-        return view('reset.resetview');
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
+        return view('reset.resetview',[
+            'forename' => $forename,
+            'surname' => $surname
+        ]);
     }
 
     public function delakun()
@@ -290,9 +468,9 @@ class MainController extends Controller
         if (Akun::exists()) {
             Akun::truncate();
             Total::truncate();
-            return redirect()->back()->with('s_dakun', 'Reset data akun berhasil');
+            return redirect()->back()->with('success', 'Reset data akun berhasil');
         } else {
-            return redirect()->back()->with('g_delete', 'Proses ditolak karena data kosong');
+            return redirect()->back()->with('warning', 'Proses ditolak karena data kosong');
         }
     }
 
@@ -300,9 +478,9 @@ class MainController extends Controller
     {
         if (Bukukas::exists()) {
             Bukukas::truncate();
-            return redirect()->back()->with('s_dkas', 'Reset data buku kas berhasil');
+            return redirect()->back()->with('success', 'Reset data buku kas berhasil');
         } else {
-            return redirect()->back()->with('g_delete', 'Proses ditolak karena data kosong');
+            return redirect()->back()->with('warning', 'Proses ditolak karena data kosong');
         }
     }
 
@@ -310,9 +488,9 @@ class MainController extends Controller
     {
         if (Kategori::exists()) {
             Kategori::truncate();
-            return redirect()->back()->with('s_dkat', 'Reset data kategori berhasil');
+            return redirect()->back()->with('success', 'Reset data kategori berhasil');
         } else {
-            return redirect()->back()->with('g_delete', 'Proses ditolak karena data kosong');
+            return redirect()->back()->with('warning', 'Proses ditolak karena data kosong');
         }
     }
 
@@ -322,9 +500,32 @@ class MainController extends Controller
             Keuangan::truncate();
             Total::truncate();
             File::deleteDirectory(public_path('/assets/image'));
-            return redirect()->back()->with('s_dkeu', 'Reset data keuangan berhasil');
+            return redirect()->back()->with('success', 'Reset data keuangan berhasil');
         } else {
-            return redirect()->back()->with('g_delete', 'Proses ditolak karena data kosong');
+            return redirect()->back()->with('warning', 'Proses ditolak karena data kosong');
         }
+    }
+
+    public function help()
+    {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
+        return view('help.helpview', [
+            'forename' => $forename,
+            'surname' => $surname
+        ]);
     }
 }

@@ -3,36 +3,6 @@
 @section('konten')
 <br>
 <div class="container">
-    @if(Session::has('s_dakun'))
-        <div class="alert alert-success alert-dismissible" role="alert" id="liveAlert">
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            <i class="fas fa-check-circle"></i> {{Session::get('s_dakun')}}
-        </div>
-    @endif
-    @if(Session::has('s_dkas'))
-        <div class="alert alert-success alert-dismissible" role="alert" id="liveAlert">
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            <i class="fas fa-check-circle"></i> {{Session::get('s_dkas')}}
-        </div>
-    @endif
-    @if(Session::has('s_dkat'))
-        <div class="alert alert-success alert-dismissible" role="alert" id="liveAlert">
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            <i class="fas fa-check-circle"></i> {{Session::get('s_dkat')}}
-        </div>
-    @endif
-    @if(Session::has('s_dkeu'))
-        <div class="alert alert-success alert-dismissible" role="alert" id="liveAlert">
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            <i class="fas fa-check-circle"></i> {{Session::get('s_dkeu')}}
-        </div>
-    @endif
-    @if(Session::has('g_delete'))
-        <div class="alert alert-danger alert-dismissible" role="alert" id="liveAlert">
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            <i class="fas fa-exclamation-triangle"></i> {{Session::get('g_delete')}}
-        </div>
-    @endif
 <div class="container">
     <div class="row">
         <div class="col-md-3">
@@ -149,6 +119,7 @@
             </div>
         </div>
     </div> 
+</div>
 
 </div>
 @endsection	

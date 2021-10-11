@@ -13,9 +13,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'AuthController@showFormLogin')->name('login');
+Route::get('login', 'AuthController@showFormLogin')->name('login');
+Route::post('login', 'AuthController@login');
+Route::post('logout', 'AuthController@logout')->name('logout');
+Route::get('register', 'AuthController@showFormRegister')->name('register');
+Route::post('register', 'AuthController@register');
+Route::post('/password', 'AuthController@editpsw');
+Route::get('/update-password/{parameter}', 'AuthController@password')->name('update');
+Route::post('/postpassword/{id}', 'AuthController@postpassword');
+
 Route::get('/main', 'MainController@main')->name('main');
 Route::get('/main', 'MainController@dashboard')->name('main');
 Route::get('/main/year', 'MainController@sortyear');
@@ -72,7 +79,15 @@ Route::post('/deletekas', 'MainController@delkas');
 Route::post('/deletekat', 'MainController@delkat');
 Route::post('/deletekeu', 'MainController@delkeu');
 
+Route::get('/main/editakun/{id}', 'EditController@editakun');
+Route::get('/main/edit-password/{id}', 'EditController@editpass')->name('editpass');
+Route::post('/posteditakun', 'EditController@posteditakun');
+Route::post('/main/editakun/imageakun/{id}', 'EditController@imageakun')->name('imageakun');
+Route::get('/dprofile/{id}', 'EditController@dprofile');
+Route::post('/posteditpass/{id}', 'EditController@posteditpass');
+
+Route::get('/main/help', 'MainController@help');
+
 Route::get('/main/keuangan/addout', 'KeuanganController@addout');
 Route::post('/addout', 'KeuanganController@postaddout');
-
 

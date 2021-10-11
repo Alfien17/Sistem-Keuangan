@@ -9,11 +9,27 @@ use App\Models\Bukukas;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class LaporanController extends Controller
 {
     public function jurnal()
     {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
         $keuangan = Keuangan::get();
         $kat = Kategori::get();
         $akun = Akun::get();
@@ -25,18 +41,54 @@ class LaporanController extends Controller
             'saldo' => $saldo,
             'kat' => $kat,
             'kas' => $kas,
-            'akun' => $akun
+            'akun' => $akun,
+            'surname' => $surname,
+            'forename' => $forename
         ]);
     }
 
     public function pilih()
     {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
         $akun = Akun::get();
-        return view('laporan.pilih', ['akun' => $akun]);
+        return view('laporan.pilih', [
+            'akun' => $akun,
+            'forename' => $forename,
+            'surname' => $surname
+        ]);
     }
 
     public function postpilih(Request $request)
     {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
         $this->validate($request, [
             'kd_akun' => 'required|exists:akun',
         ]);
@@ -55,7 +107,9 @@ class LaporanController extends Controller
             'kas' => $kas,
             'kat' => $kat,
             'akun2' => $akun2,
-            'saldo' => $saldo
+            'saldo' => $saldo,
+            'surname' => $surname,
+            'forename' => $forename
         ]);
     }
 }

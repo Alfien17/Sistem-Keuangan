@@ -15,24 +15,6 @@
         </ul>
     </div>
     @endif
-    @if(Session::has('a_kas'))
-    <div class="alert alert-success alert-dismissible" role="alert" id="liveAlert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        <i class="fas fa-check-circle"></i> {{Session::get('a_kas')}}
-    </div>
-    @endif
-    @if(Session::has('d_kas'))
-    <div class="alert alert-success alert-dismissible" role="alert" id="liveAlert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        <i class="fas fa-check-circle"></i> {{Session::get('d_kas')}}
-    </div>
-    @endif
-    @if(Session::has('u_kas'))
-    <div class="alert alert-success alert-dismissible" role="alert" id="liveAlert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        <i class="fas fa-check-circle"></i> {{Session::get('u_kas')}}
-    </div>
-    @endif
 
     <div class="d-flex flex-row-reverse">
         <form action="/searchkas" method="get">
@@ -145,7 +127,7 @@
                             <td colspan="7">
                                 <div class="content m-5">
                                     <div class="icon"><i class="far fa-sad-tear"></i></div>
-                                    <div class="text ml-4">Data Kosong.</div>
+                                    <div class="text2 ml-4">Data Kosong.</div>
                                 </div>
                             </td>
                         </tr>

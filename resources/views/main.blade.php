@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="/fontawesome-free-5.15.3-web/css/all.css">
     <link rel="stylesheet" href="/css/spur.css">
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" type="text/css" href="/css/responsive.bootstrap.min.css">
@@ -85,33 +85,61 @@
                         <i class="fas fa-cog"></i> Lainnya </a>
                     <div class="dash-nav-dropdown-menu">
                         <a href="/main/reset-data" class="dash-nav-dropdown-item"><i class="fas fa-sync mr-2"></i> Reset Data </a>
-                        <a href="blank.html" class="dash-nav-dropdown-item"><i class="fas fa-user-alt mr-2"></i> Akun </a>
-                        <a href="content.html" class="dash-nav-dropdown-item"><i class="fas fa-sign-out-alt mr-2"></i> Logout </a>
+                        <a href="/main/editakun/{{Auth::user()->id ??''}}" class="dash-nav-dropdown-item"><i class="fas fa-user-alt mr-2"></i> Akun </a>
+                        <a href="/main/help" class="dash-nav-dropdown-item"><i class="fas fa-question-circle mr-2"></i> Bantuan dan tips </a>
+                        <div class="hover-control">
+                            <a class="dash-nav-dropdown-item" data-bs-toggle="modal" data-bs-target="#logout" style="cursor: pointer"><i class="fas fa-sign-out-alt mr-2"></i> Logout </a>
+                        </div>
                     </div>
                 </div>
             </nav>
         </div>
+
+        <div class="modal fade" id="logout" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-exclamation-triangle text-danger"></i> Alert</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">Anda yakin ingin logout?</div>
+                    <div class="modal-footer">
+                        <form action="{{ route('logout') }}" method="post">
+                            @csrf
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-outline-danger">Yes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="dash-app">
             <header class="dash-toolbar">
                 <a href="#!" class="menu-toggle">
                     <i class="fas fa-bars"></i>
                 </a>
-                <p class="pt-3" title="" id="greeting"></p>
-                <p class="ml-1 pt-3">Hi</p>
                 {{-- <div class="tools">
                     <div class="clock">
                         <button type="submit" class="btn" id="time" disabled></button>
                     </div>
                 </div> --}}
                 <div class="tools mr-lg-4">
-                    <a class="tools-item">
+                    <a class="tools-item" title="Clock">
                         <div class="clock mr-4">
                             <button type="submit" class="btn" id="time" disabled></button>
                         </div>
                     </a>
-                    <a class="tools-item ml-2 tools-control">
-                        <img src="/img/default.png" alt="..." width="30" height="30" class="rounded-circle border border-white">
-                    </a>
+                    <div class="dropdown">
+                        <a class="tools-item ml-2 tools-control col-auto dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer" title="Profile">
+                            <img src="{{url('/assets/'.Auth::user()->image ??'')}}" alt="..." width="30" height="30" class="rounded-circle border border-white" style="object-fit: cover;">
+                            <p class="pt-3 ml-2 mr-2">{{ucwords($forename)}} {{ucwords($surname)}}</p>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <a class="dropdown-item" href="/main/editakun/{{Auth::user()->id ??''}}"><i class="fas fa-user-alt mr-2"></i> Akun</a>    
+                            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#logout" style="cursor: pointer"><i class="fas fa-sign-out-alt mr-2"></i> Logout</a>     
+                        </div>
+                    </div>
                 </div>
             </header>
             <div class="container mb-3">
@@ -119,7 +147,6 @@
                 <!-- Bagian Judul -->
                 <br>
                     <h4 class="container">@yield('judul_halaman')</h4>
-                    <h5 style="margin-left: 36px">@yield('tanggal')</h5>
 			    <!-- Bagian Konten -->
 			    @yield('konten')
             </div>
@@ -137,7 +164,7 @@
     <script src="/js/buttons.print.min.js"></script>
     <script src="/js/buttons.colVis.min.js"></script>
     <script src="/js/dataTables.responsive.min.js"></script>
-	<script src="/js/bootstrap.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
     <script src="/js/spur.js"></script>
     <script src="/js/bootstrap-imageupload.js"></script>
     <script>
@@ -152,23 +179,7 @@
         }
         setInterval(time, 1000);
     </script> 
-    <script>
-        var myDate = new Date();
-        var currentHour = myDate.getHours();
-        var msg;
-        if (currentHour <= 11)
-            msg = 'Good morning, ';
-        else if(currentHour == 12)
-            msg = 'Good noon, ';
-        else if (currentHour >= 12 && currentHour <= 17)
-            msg = 'Good afternoon, ';
-        else if (currentHour >= 18 && currentHour <= 19)
-            msg = 'Good evening, ';
-        else if (currentHour >= 20)
-            msg = 'Good night, ';
-
-        document.getElementById('greeting').innerHTML = msg;
-    </script>
+    @include('sweetalert::alert')
 </body>
 
 </html>

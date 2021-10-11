@@ -1,0 +1,86 @@
+.ass{
+    width: 100%;
+    margin-left: 15px;
+}
+.as{
+    width: 293px;
+    margin-left: 30px;
+}
+.a{
+    margin-left: 215px;
+}
+.ad{
+    margin-left: 45px;
+}
+.s{
+    margin-left: 170px;
+    margin-top: -35px;
+    width: 293px;
+    margin-bottom:21px;
+}
+.up{
+    margin-left: 225px;
+}
+.ui{
+    margin-left:130px;
+}
+
+.card-body .wrapper {
+    position: relative;
+    height: 300px;
+    width: 100%;
+    border-radius: 10px;
+    background: #fff;
+    border: 2px dashed #c2cdda;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.wrapper .image {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wrapper .image img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.content .icon {
+    font-size: 100px;
+    padding-left: 25px;
+}
+
+.content .text {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.wrapper #cancel-btn {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    font-size: 20px;
+    cursor: pointer;
+    display: none;
+}
+
+.active:hover #cancel-btn {
+    display: block;
+}
+
+.wrapper #cancel-btn:hover {
+    color: #e74c3c;
+}
+
+.image-preview {
+    display: none;
+    width: 100%;
+}

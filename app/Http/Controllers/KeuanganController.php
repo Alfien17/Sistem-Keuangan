@@ -77,7 +77,6 @@ class KeuanganController extends Controller
 
     public function postaddin(Request $request)
     {
-        dd($request->debit);
         $this->validate($request, [
             'tanggal' => 'required',
             'kd_akun' => 'required|exists:akun',

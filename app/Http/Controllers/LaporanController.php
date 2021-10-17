@@ -112,4 +112,70 @@ class LaporanController extends Controller
             'forename' => $forename
         ]);
     }
+
+    public function pilih2()
+    {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
+        $kas = Bukukas::get();
+        return view('laporan.pilih2', [
+            'kas' => $kas,
+            'forename' => $forename,
+            'surname' => $surname
+        ]);
+    }
+
+    public function postpilih2(Request $request)
+    {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
+        $this->validate($request, [
+            'bk_kas' => 'required|exists:bukukas',
+        ]);
+
+        $input = Bukukas::where('bk_kas', $request->bk_kas)->first();
+        $kat = Kategori::get();
+        $akun = Akun::get();
+        $kas = Bukukas::get();
+        $data = Keuangan::where('kas_id', $input->id)->get();
+        $saldo = DB::select("select id, @b := @b + debit - kredit as saldo from (select @b := 0.0) as dummy cross join keuangan WHERE kas_id = '$input->id'");
+        $kas2 = Bukukas::where('id', $input->id)->first();
+
+        return view('laporan.view2', [
+            'data' => $data,
+            'akun' => $akun,
+            'kas' => $kas,
+            'kat' => $kat,
+            'kas2' => $kas2,
+            'saldo' => $saldo,
+            'surname' => $surname,
+            'forename' => $forename
+        ]);
+    }
 }

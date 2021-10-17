@@ -65,12 +65,17 @@
     cursor: pointer;
 }
 
+.box small{
+    text-decoration: none;
+    cursor: pointer;
+}
+
 .box .form-control2 {
     padding: 8px 10px;
     margin-bottom: 10px;
     border: none;
     background-color: transparent;
-    border-bottom: 2px solid #171f2c;
+    border-bottom: 2px solid #2D3E50;
     border-radius: 0px;
     color: #171f2c;
     font-size: 15px;
@@ -81,7 +86,7 @@
     height: 40px;
     padding: 5px 0;
     border: none;
-    background-color: #171f2c;
+    background-color: #2D3E50;
     font-size: 18px;
     color: #fafafa;
     border-radius: 20px;
@@ -147,4 +152,8 @@ label:focus,
     outline: 0px !important;
     -webkit-appearance: none;
     box-shadow: none !important;
+}
+
+.bg-dark2{
+    background-color: #2D3E50;
 }

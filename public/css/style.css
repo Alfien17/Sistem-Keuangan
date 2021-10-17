@@ -1,6 +1,7 @@
 a{
   text-decoration: none;
 }
+
 .card-body-icon {
     position: absolute;
     z-index: 0;
@@ -150,5 +151,14 @@ a{
      left: 50%;
      transform: translate(-50%, -65%);
      text-align: center;
+ }
+
+ /* Button */
+#btn-control{
+    color: gray;
+}
+
+#btn-control:hover {
+     color: #fff;
  }
  

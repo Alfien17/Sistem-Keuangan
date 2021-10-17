@@ -28,7 +28,7 @@
         <meta name="theme-color" content="#ffffff">
 
     </head>
-<body class="bg-dark">
+<body class="bg-dark2">
     <div class="container">
         <div class="col-md-4 offset-md-4 mt-5">
             @foreach($user as $u)
@@ -64,7 +64,6 @@
                     </div>
                 </form>
             @endforeach
-            @include('sweetalert::alert')
         </div>
     </div>
     <script src="/js/jquery.min.js"></script>

@@ -74,38 +74,51 @@
                 </a>
             </header>
             <nav class="dash-nav-list" id="sidebar">
-                <a href="/main" class="dash-nav-item">
+                <a href="/main" class="dash-nav-item" id="{{ Route::currentRouteNamed('main') ? 'active' : '' }}">
                     <i class="fas fa-tachometer-alt"></i> Dashboard </a>
-                <a href="/main/akun" class="dash-nav-item">
+                <a href="/main/akun" class="dash-nav-item" id="{{ Route::currentRouteNamed('dataakun') ? 'active' : '' }}">
                     <i class="far fa-plus-square"></i>Tambah Akun</a>
-                <a href="/main/kas" class="dash-nav-item">
+                <a href="/main/kas" class="dash-nav-item" id="{{ Route::currentRouteNamed('datakas') ? 'active' : '' }}">
                     <i class="far fa-plus-square"></i>Tambah Buku Kas</a>
-                <a href="/main/kategori" class="dash-nav-item">
+                <a href="/main/kategori" class="dash-nav-item" id="{{ Route::currentRouteNamed('datakat') ? 'active' : '' }}">
                     <i class="far fa-plus-square"></i>Tambah Kategori</a>
-                <div class="dash-nav-dropdown">
+                <div class="dash-nav-dropdown 
+                    {{ Route::currentRouteNamed('masuk') ? 'show' : '' }} 
+                    {{ Route::currentRouteNamed('rekap') ? 'show' : '' }}
+                    {{ Route::currentRouteNamed('keluar') ? 'show' : '' }}">
                     <a href="#!" class="dash-nav-item dash-nav-dropdown-toggle">
                         <i class="fas fa-donate"></i> Keuangan </a>
                     <div class="dash-nav-dropdown-menu">
-                        <a href="/main/keuangan/addin" class="dash-nav-dropdown-item">Tambah Debit</a>
-                        <a href="/main/keuangan/addout" class="dash-nav-dropdown-item">Tambah Kredit</a>
-                        <a href="/main/keuangan" class="dash-nav-dropdown-item">Rekap</a>
+                        <a href="/main/keuangan/addin" class="dash-nav-dropdown-item" id="{{ Route::currentRouteNamed('masuk') ? 'active' : '' }}">Tambah Debit</a>
+                        <a href="/main/keuangan/addout" class="dash-nav-dropdown-item" id="{{ Route::currentRouteNamed('keluar') ? 'active' : '' }}">Tambah Kredit</a>
+                        <a href="/main/keuangan" class="dash-nav-dropdown-item" id="{{ Route::currentRouteNamed('rekap') ? 'active' : '' }}">Rekap</a>
                     </div>
                 </div>
-                <div class="dash-nav-dropdown">
+                <div class="dash-nav-dropdown
+                    {{ Route::currentRouteNamed('jurnal') ? 'show' : '' }} 
+                    {{ Route::currentRouteNamed('lakun') ? 'show' : '' }}
+                    {{ Route::currentRouteNamed('lkas') ? 'show' : '' }}">
                     <a href="#!" class="dash-nav-item dash-nav-dropdown-toggle">
                         <i class="fas fa-file"></i> Laporan </a>
                     <div class="dash-nav-dropdown-menu">
-                        <a href="/main/jurnal" class="dash-nav-dropdown-item"><i class="far fa-file-alt mr-2"></i>Jurnal Umum</a>
-                        <a href="/main/laporan-specific" class="dash-nav-dropdown-item"><i class="far fa-file-alt mr-2"></i>Per Akun</a>
+                        <a href="/main/jurnal" class="dash-nav-dropdown-item" id="{{ Route::currentRouteNamed('jurnal') ? 'active' : '' }}"><i class="far fa-file-alt mr-2"></i>Jurnal Umum</a>
+                        <a href="/main/laporan-akun" class="dash-nav-dropdown-item" id="{{ Route::currentRouteNamed('lakun') ? 'active' : '' }}"><i class="far fa-file-alt mr-2"></i>Per Akun</a>
+                        <a href="/main/laporan-kas" class="dash-nav-dropdown-item" id="{{ Route::currentRouteNamed('lkas') ? 'active' : '' }}"><i class="far fa-file-alt mr-2"></i>Per Buku Kas</a>
                     </div>
                 </div>
-                <div class="dash-nav-dropdown">
+                <div class="dash-nav-dropdown
+                    {{ Route::currentRouteNamed('reset') ? 'show' : '' }} 
+                    {{ Route::currentRouteNamed('editprofil') ? 'show' : '' }}
+                    {{ Route::currentRouteNamed('help') ? 'show' : '' }}">
                     <a href="#!" class="dash-nav-item dash-nav-dropdown-toggle">
                         <i class="fas fa-cog"></i> Lainnya </a>
                     <div class="dash-nav-dropdown-menu">
-                        <a href="/main/reset-data" class="dash-nav-dropdown-item"><i class="fas fa-sync mr-2"></i> Reset Data </a>
-                        <a href="/main/editakun/{{Auth::user()->id ??''}}" class="dash-nav-dropdown-item"><i class="fas fa-user-alt mr-2"></i> Akun </a>
-                        <a href="/main/help" class="dash-nav-dropdown-item"><i class="fas fa-question-circle mr-2"></i> Bantuan dan tips </a>
+                        <a href="/main/reset-data" class="dash-nav-dropdown-item" id="{{ Route::currentRouteNamed('reset') ? 'active' : '' }}">
+                            <i class="fas fa-sync mr-2"></i> Reset Data </a>
+                        <a href="/main/editakun/{{Auth::user()->id ??''}}" class="dash-nav-dropdown-item" id="{{ Route::currentRouteNamed('editprofil') ? 'active' : '' }}">
+                            <i class="fas fa-user-alt mr-2"></i> Akun </a>
+                        <a href="/main/help" class="dash-nav-dropdown-item" id="{{ Route::currentRouteNamed('help') ? 'active' : '' }}">
+                            <i class="fas fa-question-circle mr-2"></i> Bantuan dan tips </a>
                         <div class="hover-control">
                             <a class="dash-nav-dropdown-item" data-bs-toggle="modal" data-bs-target="#logout" style="cursor: pointer"><i class="fas fa-sign-out-alt mr-2"></i> Logout </a>
                         </div>

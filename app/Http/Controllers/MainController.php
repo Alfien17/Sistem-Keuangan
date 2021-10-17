@@ -57,8 +57,10 @@ class MainController extends Controller
         $akun = Akun::count();
         $kas = Bukukas::count();
         $kat = Kategori::count();
-        $debit = Keuangan::where('status','debit')->sum('debit');
-        $kredit = Keuangan::where('status', 'kredit')->sum('kredit');
+        $d_debit = Keuangan::where('status','debit')->count();
+        $d_kredit = Keuangan::where('status', 'kredit')->count();
+        $debit = Keuangan::where('status','debit')->where('akun_id','!=',0)->sum('debit');
+        $kredit = Keuangan::where('status', 'kredit')->where('akun_id','!=', 0)->sum('kredit');
         $saldo = $debit - $kredit;
         $today = Carbon::now()->isoFormat('dddd, D MMMM Y');
         $kode = Total::get();
@@ -81,6 +83,8 @@ class MainController extends Controller
             'kas' => $kas,
             'kat' => $kat,
             'akun' => $akun,
+            'd_debit' => $d_debit,
+            'd_kredit' => $d_kredit,
             'today' => $today,
             'debit' => $debit,
             'kredit' => $kredit,
@@ -125,6 +129,8 @@ class MainController extends Controller
         $akun = Akun::count();
         $kas = Bukukas::count();
         $kat = Kategori::count();
+        $d_debit = Keuangan::where('status', 'debit')->count();
+        $d_kredit = Keuangan::where('status', 'kredit')->count();
         $debit = Keuangan::where('status', 'debit')->sum('debit');
         $kredit = Keuangan::where('status', 'kredit')->sum('kredit');
         $saldo = $debit - $kredit;
@@ -153,6 +159,8 @@ class MainController extends Controller
             'kas' => $kas,
             'kat' => $kat,
             'akun' => $akun,
+            'd_debit' => $d_debit,
+            'd_kredit' => $d_kredit,
             'today' => $today,
             'debit' => $debit,
             'kredit' => $kredit,
@@ -215,17 +223,38 @@ class MainController extends Controller
 	    return redirect('/main/akun')->with('success','Akun berhasil ditambahkan.');
 	}
 
-    public function eakun(Request $request)
+    public function eakun(Request $request, $id)
     {
-        $this->validate($request, [
-            'nama_akun' => 'required|unique:akun',
-            'kd_akun' => 'required|unique:akun'
-        ]);
-        Akun::where('id', $request->id,)->update([
-            'nama_akun' => $request->nama_akun,
-            'kd_akun' => $request->kd_akun
-        ]);
-        return redirect('/main/akun')->with('success', 'Akun berhasil diubah');
+        $data = Akun::where('id',$id)->first();
+
+        if($request->nama_akun == $data->nama_akun){
+            if($request->kd_akun != $data->kd_akun){
+                $this->validate($request, [
+                    'kd_akun' => 'required|unique:akun'
+                ]);
+            }
+            Akun::where('id', $request->id,)->update([
+                'nama_akun' => $request->nama_akun,
+                'kd_akun' => $request->kd_akun
+            ]);
+            return redirect('/main/akun')->with('success', 'Akun berhasil diubah');
+
+        } elseif ($request->nama_akun != $data->nama_akun) {
+            if ($request->kd_akun == $data->kd_akun){
+                $this->validate($request, [
+                    'nama_akun' => 'required|unique:akun',
+                ]); 
+            }
+            $this->validate($request, [
+                'nama_akun' => 'required|unique:akun',
+                'kd_akun' => 'required|unique:akun'
+            ]); 
+            Akun::where('id', $request->id,)->update([
+                'nama_akun' => $request->nama_akun,
+                'kd_akun' => $request->kd_akun
+            ]);
+            return redirect('/main/akun')->with('success', 'Akun berhasil diubah');
+        }
     }
 
     // public function deleteakun(Request $request)
@@ -237,6 +266,7 @@ class MainController extends Controller
 
     public function dakun($id)
     {
+        Keuangan::where('akun_id',$id)->update(['akun_id' => 0]);
         Total::where('akun_id',$id)->delete();
         DB::table("akun")->delete($id);
         return redirect('/main/akun')->with('success', 'Akun berhasil dihapus.');
@@ -468,6 +498,7 @@ class MainController extends Controller
         if (Akun::exists()) {
             Akun::truncate();
             Total::truncate();
+            Keuangan::query()->update(['akun_id' => 0]);
             return redirect()->back()->with('success', 'Reset data akun berhasil');
         } else {
             return redirect()->back()->with('warning', 'Proses ditolak karena data kosong');

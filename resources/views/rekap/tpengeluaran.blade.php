@@ -64,7 +64,7 @@
             <div class="row">
                 <label class="col-sm-2 col-form-label">Keterangan</label>
                     <div class="col-sm-5">
-                        <input type="text" name="ket" class="form-control {{$errors->has('ket')?'is-invalid':''}}" value="{{old('ket')}}" autocomplete="off" placeholder="Ex Qurban...">
+                        <input type="text" name="ket" class="form-control {{$errors->has('ket')?'is-invalid':''}}" value="{{old('ket')}}" autocomplete="off" placeholder="Ex Qurban... (boleh dikosongkan)">
                         @error('ket')
                         <div class="invalid-feedback">{{'The Keterangan field is required.'}}</div>
                         @enderror
@@ -134,7 +134,7 @@
         </div>
         <div class="form-group">
             <div class="col-sm-7 text-right">
-            	<a class="btn btn-light" href="/main">Cancel</a>
+            	<a class="btn btn-light" href="/main/keuangan/addout">Cancel</a>
                 <input type="submit" class="btn btn-primary" value="Submit">
             </div>
         </div>

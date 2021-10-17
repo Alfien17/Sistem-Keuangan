@@ -12470,7 +12470,7 @@ body {
 }
 
 .dash-nav.dash-nav-dark {
-    background-color: #181F2C;
+    background-color: #2D3E50;
 }
 
 .dash-nav.dash-nav-dark a {
@@ -12538,6 +12538,10 @@ body {
 }
 
 .dash-nav-dark .dash-nav-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+#active {
     background: rgba(255, 255, 255, 0.04);
 }
 

@@ -28,7 +28,7 @@
     <meta name="theme-color" content="#ffffff">
 
 </head>
-<body class="bg-dark">
+<body class="bg-dark2">
     <div class="container">
         <div class="col-md-4">
             <div class="box">
@@ -61,6 +61,12 @@
                                 <small><span class="fas fa-exclamation-triangle"></span> {{ Session::get('fail') }}</small>
                             </div>
                         @endif
+                        @if (Session::has('fail2'))
+                            <div class="alert alert-danger alert-dismissible" role="alert" id="liveAlert">
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <small><span class="fas fa-exclamation-triangle"></span> {{ Session::get('fail2') }}</small>
+                            </div>
+                        @endif
                         <div class="form-floating">
                             <input type="email" class="form-control form-control2" id="floatingInput" placeholder="email" name="email" autocomplete="off">
                             <label for="floatingInput">Email</label>
@@ -69,15 +75,15 @@
                             <input type="password" class="form-control form-control2" id="floatingInput" placeholder="password" name="password">
                             <label for="floatingInput">Password</label>
                         </div>
+                        <div class="d-flex flex-row-reverse">
+                            <small href="" title="Lupa Password" data-bs-toggle="modal" data-bs-target="#password">Lupa Password?</small>
+                        </div>
                     </div>
 
                     <div class="card-footer border-0">
                         <button type="submit">LOGIN</button>
                         <p class="text-center pt-4">Belum punya akun? <a href="{{ route('register') }}">Register</a> sekarang!</p>
-                        <div class="text-center">
-                            <span href="" title="Lupa Password" data-bs-toggle="modal" data-bs-target="#password">Lupa Password?</span>
-                        </div>
-                        <div class="text-center pt-2 mb-2">
+                        <div class="text-center mb-2">
                             <span href="" title="Help" data-bs-toggle="modal" data-bs-target="#help">Help?</span>
                         </div>
                     </div>
@@ -91,7 +97,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Verifikasi Password</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Verifikasi Email</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -99,9 +105,9 @@
                     {{ csrf_field() }}   
                         <div class="form-group">
                             <div class="row">
-                                <label class="col-4 col-form-label">Email</label>
-                                <div class="col-sm-7">
-                                    <input type="text" name="email" class="form-control" required="required" autocomplete="off">
+                                <label class="col-2 col-form-label">Email</label>
+                                <div class="col-sm-10">
+                                    <input type="email" name="email" class="form-control" required="required" autocomplete="off">
                                 </div>
                             </div>
                         </div>
@@ -133,7 +139,7 @@
                             </h4>
                             <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
-                                    Itu merupakan fitur <strong>session expired</strong>, dimana halaman akan kembali ke login ketika user tidak melakukan aktifitas
+                                    Itu merupakan fitur <strong>session expired</strong>, dimana halaman akan kembali ke login ketika user tidak melakukan aktivitas
                                     selama <strong>2 jam</strong>.
                                 </div>
                             </div>

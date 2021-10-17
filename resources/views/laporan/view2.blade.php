@@ -1,12 +1,12 @@
 @extends('main')
 @section('konten')
-<h4 class="container">{{$akun2->kd_akun}} | {{ucwords($akun2->nama_akun)}} </h4>
+<h4 class="container">{{ucwords($kas2->bk_kas)}}</h4>
 <br>
 <div class="container">
     <nav aria-label="breadcrumb">
     <ol class="breadcrumb bg-transparent">
         <li class="breadcrumb-item text-black"><a href="/main">Home</a></li>
-        <li class="breadcrumb-item text-black"><a href="/main/laporan-akun">Pilih-akun</a></li>
+        <li class="breadcrumb-item text-black"><a href="/main/laporan-kas">Pilih-Kas</a></li>
         <li class="breadcrumb-item active" aria-current="page">View</li>
     </ol>
     </nav>
@@ -82,14 +82,14 @@
                     {
                         text: '<i class="far fa-file-excel"></i> Excel',
                         extend: 'excel',
-                        title: 'Rekap Akun {{$akun2->kd_akun}}',
-                        messageTop: 'Nama Akun : {{ucwords($akun2->nama_akun)}}          Kode Akun : {{$akun2->kd_akun}}',
+                        title: 'Rekap Buku Kas {{ucwords($kas2->bk_kas)}}',
+                        messageTop: 'Nama Buku Kas : {{ucwords($kas2->bk_kas)}}          Tipe : {{$kas2->tipe}}',
                     },
                     {
                         text: '<i class="far fa-file-pdf"></i> PDF',
                         extend: 'pdf',
-                        title: 'Rekap Akun {{$akun2->kd_akun}}',
-                        messageTop: 'Nama Akun : {{ucwords($akun2->nama_akun)}}          Kode Akun : {{$akun2->kd_akun}}',
+                        title: 'Rekap Buku Kas {{ucwords($kas2->bk_kas)}}',
+                        messageTop: 'Nama Buku Kas : {{ucwords($kas2->bk_kas)}}          Tipe : {{$kas2->tipe}}',
                     },
                 ],
                 dom: 

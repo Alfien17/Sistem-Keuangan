@@ -77,11 +77,11 @@ class KeuanganController extends Controller
 
     public function postaddin(Request $request)
     {
+        dd($request->debit);
         $this->validate($request, [
             'tanggal' => 'required',
             'kd_akun' => 'required|exists:akun',
             'bk_kas' => 'required|exists:bukukas',
-            'ket' => 'required',
             'kat' => 'required',
             'debit' => 'required|numeric',
         ]);
@@ -169,7 +169,6 @@ class KeuanganController extends Controller
             'tanggal' => 'required',
             'kd_akun' => 'required|exists:akun',
             'bk_kas' => 'required|exists:bukukas',
-            'ket' => 'required',
             'kat' => 'required',
             'kredit' => 'required|numeric',
         ]);
@@ -292,7 +291,6 @@ class KeuanganController extends Controller
             'tanggal' => 'required',
             'kd_akun' => 'required|exists:akun',
             'bk_kas' => 'required|exists:bukukas',
-            'ket' => 'required',
             'kat' => 'required',
             'debit' => 'required|numeric',
 
@@ -311,7 +309,6 @@ class KeuanganController extends Controller
         $selisih = $ids->total - $total;
         $kodeakun = Akun::where('id', $ids->akun_id)->first();
         $kodebaru = Total::where('kd_akun', $request->kd_akun)->first();
-
         if(empty($kodeakun)){
             if(empty($idtotal)){
                 Total::create([
@@ -333,9 +330,17 @@ class KeuanganController extends Controller
                     . $kodeakun->kd_akun . ' di bawah nol.');
                 }else{
                     $data2 = Total::where('kd_akun', $kodeakun->kd_akun)->first();
-                    $selisihlama = $kodelama->total - $total;
-                    $data2->total = $selisihlama;
-                    $data2->update();
+                    if(empty($data2)){
+                        Total::create([
+                            'akun_id' => $akun_id->id,
+                            'kd_akun' => $request->kd_akun,
+                            'total' => $total
+                        ]);
+                    }else{
+                        $selisihlama = $kodelama->total - $total;
+                        $data2->total = $selisihlama;
+                        $data2->update();
+                    }
                 }
 
                 if($hasil2 < 0){
@@ -400,7 +405,6 @@ class KeuanganController extends Controller
             'tanggal' => 'required',
             'kd_akun' => 'required|exists:akun',
             'bk_kas' => 'required|exists:bukukas',
-            'ket' => 'required',
             'kat' => 'required',
             'kredit' => 'required|numeric',
 
@@ -423,19 +427,24 @@ class KeuanganController extends Controller
                 . $request->kd_akun . ') belum melakukan tambah debit. Lakukan tambah debit dahulu!');
             }else{
                 $data = Total::where('akun_id', $akun_id->id)->first();
-                $data->total = $data->total + $total;
-                $data->update();
+                if($data->total < $request->kredit){
+                    return redirect()->back()->with('g_upout', 'Proses ditolak karena saldo dari akun '
+                    . $request->kd_akun . ' tidak cukup. Batas melakukan kredit adalah Rp. ' . number_format((float)$sisa)); 
+                }else{
+                    $data->total = $data->total + $total;
+                    $data->update();
 
-                Keuangan::where('id', $request->id)->update([
-                    'tanggal' => $request->tanggal,
-                    'ket' => $request->ket,
-                    'kredit' => $request->kredit,
-                    'total' => $total,
-                    'akun_id' => $akun_id->id,
-                    'kas_id' => $kas_id->id,
-                    'kat_id' => $kat_id->id
-                ]);
-                return redirect('/main/keuangan')->with('success', 'Data berhasil diubah');
+                    Keuangan::where('id', $request->id)->update([
+                        'tanggal' => $request->tanggal,
+                        'ket' => $request->ket,
+                        'kredit' => $request->kredit,
+                        'total' => $total,
+                        'akun_id' => $akun_id->id,
+                        'kas_id' => $kas_id->id,
+                        'kat_id' => $kat_id->id
+                    ]);
+                    return redirect('/main/keuangan')->with('success', 'Data berhasil diubah');
+                }
             }
         }
         else{
@@ -677,7 +686,7 @@ class KeuanganController extends Controller
         $image = Keuangan::where('id', $id)->first();
         if($image->image != 'default/default.png'){
             if ($request->hasfile('image')) {
-                File::delete(public_path() . '/assets/image/' . $image->image);
+                File::delete(public_path() . '/assets/' . $image->image);
                 $image = $request->file('image');
                 $imageName = "image/" . time() . "_" . $image->getClientOriginalName();
                 $imgLoc = 'assets/image';

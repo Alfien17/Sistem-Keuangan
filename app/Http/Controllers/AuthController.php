@@ -18,17 +18,7 @@ class AuthController extends Controller
     {
         if (Auth::check()) { // true sekalian session field di users nanti bisa dipanggil via Auth
             //Login Success
-            $auth = Auth::user();
-            $nama = $auth->name;
-            $pecah = explode(' ', $nama);
-            $forename = $pecah[0];
-            if (empty($pecah[1])) {
-                $surname = "";
-            } else {
-                $surname = $pecah[1];
-            }
-
-            return redirect('/main')->with('success', 'Selamat Datang, '.$forename.' '.$surname);
+            return redirect('/main');
         }
         return view('login');
     }
@@ -136,10 +126,6 @@ class AuthController extends Controller
 
     public function editpsw(Request $request)
     {
-        $details = [
-            'title' => 'IAC | Sistem Keuangan',
-            'body' => 'Update Password'
-        ];
         $email = $request->email;
         $name = User::where('email', $request->email)->first();
 
@@ -158,7 +144,7 @@ class AuthController extends Controller
             );
             return redirect()->back()->with('success','Link berhasil terkirim ke email Anda. Silahkan cek email.');
         } else
-            return redirect()->back()->with('fail', 'Email tidak terdaftar.');
+            return redirect()->back()->with('fail2', 'Email tidak terdaftar.');
     }
 
     public function link(){
@@ -180,6 +166,6 @@ class AuthController extends Controller
         ]);
 
         User::where('email', $email->email)->update(['password' => bcrypt($request->password)]);
-        return redirect()->back()->with('success', 'Password berhasil diubah');
+        return view('editakun.success');
     }
 }

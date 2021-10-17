@@ -25,42 +25,42 @@ Route::post('/postpassword/{id}', 'AuthController@postpassword');
 
 Route::get('/main', 'MainController@main')->name('main');
 Route::get('/main', 'MainController@dashboard')->name('main');
-Route::get('/main/year', 'MainController@sortyear');
+Route::get('/main/year', 'MainController@sortyear')->name('main');
 
 Route::get('/main/akun', 'MainController@tambahakun')->name('dataakun');
 Route::post('/addakun', 'MainController@addakun');
 Route::put('/editakun/{id}', 'MainController@eakun');
 Route::delete('deleteakun', 'MainController@deleteakun');
 Route::delete('/dakun/{id}', 'MainController@dakun');
-Route::get('/searchakun', 'MainController@searchakun');
+Route::get('/searchakun', 'MainController@searchakun')->name('dataakun');
 
 Route::get('/main/kas', 'MainController@tambahkas')->name('datakas');
 Route::post('/addkas', 'MainController@addkas');
 Route::put('/editkas/{id}', 'MainController@ekas');
 Route::delete('deletekas', 'MainController@deletekas');
 Route::delete('/dkas/{id}', 'MainController@dkas');
-Route::get('/searchkas', 'MainController@searchkas');
+Route::get('/searchkas', 'MainController@searchkas')->name('datakas');
 
 Route::get('/main/kategori', 'MainController@tambahkat')->name('datakat');
 Route::post('/addkategori', 'MainController@addkat');
 Route::put('/editkategori/{id}', 'MainController@ekat');
 Route::delete('deletekat', 'MainController@deletekat');
 Route::delete('/dkat/{id}', 'MainController@dkat');
-Route::get('/searchkategori', 'MainController@searchkat');
+Route::get('/searchkategori', 'MainController@searchkat')->name('datakat');
 
-Route::get('/main/keuangan', 'KeuanganController@rekap');
-Route::get('/main/keuangan/addin', 'KeuanganController@addin');
-Route::get('/main/keuangan/addout', 'KeuanganController@addout');
+Route::get('/main/keuangan', 'KeuanganController@rekap')->name('rekap');
+Route::get('/main/keuangan/addin', 'KeuanganController@addin')->name('masuk');
+Route::get('/main/keuangan/addout', 'KeuanganController@addout')->name('keluar');
 Route::post('/addin', 'KeuanganController@postaddin');
 Route::post('/addout', 'KeuanganController@postaddout');
-Route::get('/main/keuangan/update/{id}', 'KeuanganController@update');
+Route::get('/main/keuangan/update/{id}', 'KeuanganController@update')->name('rekap');
 Route::post('/updatein/{id}', 'KeuanganController@postupdatein');
 Route::post('/updateout/{id}', 'KeuanganController@postupdateout');
 Route::delete('deleterekap', 'KeuanganController@deleterekap');
 Route::delete('/drekap/{id}', 'KeuanganController@drekap');
-Route::get('/main/keuangan/detail/{id}', 'KeuanganController@detail');
-Route::get('/searchrekap', 'KeuanganController@searchrekap');
-Route::get('/dimage/{id}', 'KeuanganController@dimage');
+Route::get('/main/keuangan/detail/{id}', 'KeuanganController@detail')->name('rekap');
+Route::get('/searchrekap', 'KeuanganController@searchrekap')->name('rekap');
+Route::post('/dimage/{id}', 'KeuanganController@dimage');
 Route::post('/eimage/{id}', 'KeuanganController@eimage');
 
 Route::get('/autocompleteakun', 'KeuanganController@acakun')->name('autocompleteakun');
@@ -70,24 +70,22 @@ Route::get('/autocompletekas', 'KeuanganController@ackas')->name('autocompleteka
 Route::get('/autocompletekat', 'KeuanganController@ackat')->name('autocompletekat');
 
 Route::get('/main/jurnal', 'LaporanController@jurnal')->name('jurnal');
-Route::get('/main/laporan-specific', 'LaporanController@pilih');
-Route::post('/main/laporan-specific/view', 'LaporanController@postpilih');
+Route::get('/main/laporan-akun', 'LaporanController@pilih')->name('lakun');
+Route::post('/main/laporan-akun/view', 'LaporanController@postpilih')->name('lakun');
+Route::get('/main/laporan-kas', 'LaporanController@pilih2')->name('lkas');
+Route::post('/main/laporan-kas/view', 'LaporanController@postpilih2')->name('lkas');
 
-Route::get('/main/reset-data', 'MainController@reset');
+Route::get('/main/reset-data', 'MainController@reset')->name('reset');
 Route::post('/deleteakun', 'MainController@delakun');
 Route::post('/deletekas', 'MainController@delkas');
 Route::post('/deletekat', 'MainController@delkat');
 Route::post('/deletekeu', 'MainController@delkeu');
 
-Route::get('/main/editakun/{id}', 'EditController@editakun');
-Route::get('/main/edit-password/{id}', 'EditController@editpass')->name('editpass');
+Route::get('/main/editakun/{id}', 'EditController@editakun')->name('editprofil');
 Route::post('/posteditakun', 'EditController@posteditakun');
 Route::post('/main/editakun/imageakun/{id}', 'EditController@imageakun')->name('imageakun');
 Route::get('/dprofile/{id}', 'EditController@dprofile');
-Route::post('/posteditpass/{id}', 'EditController@posteditpass');
 
-Route::get('/main/help', 'MainController@help');
+Route::get('/main/help', 'MainController@help')->name('help');
 
-Route::get('/main/keuangan/addout', 'KeuanganController@addout');
-Route::post('/addout', 'KeuanganController@postaddout');
 

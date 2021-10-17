@@ -122,7 +122,7 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-sm-7 text-right">
-                                                <a class="btn btn-light" href="/main">Cancel</a>
+                                                <a class="btn btn-light" href="/main/editakun/{{Auth::user()->id ??''}}">Cancel</a>
                                                 <button type="submit" class="btn btn-primary">Update</button>
                                             </div>
                                         </div>
@@ -141,7 +141,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Verifikasi Password</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Verifikasi Email</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -149,9 +149,9 @@
                     {{ csrf_field() }}   
                         <div class="form-group">
                             <div class="row">
-                                <label class="col-4 col-form-label">Email</label>
-                                <div class="col-sm-7">
-                                    <input type="text" name="email" class="form-control" required="required" autocomplete="off" value="{{Auth::user()->email ??''}}">
+                                <label class="col-2 col-form-label">Email</label>
+                                <div class="col-sm-10">
+                                    <input type="email" name="email" class="form-control" readonly value="{{Auth::user()->email ??''}}">
                                 </div>
                             </div>
                         </div>

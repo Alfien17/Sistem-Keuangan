@@ -28,7 +28,7 @@
         <meta name="theme-color" content="#ffffff">
 
     </head>
-<body class="bg-dark">
+<body class="bg-dark2">
     <div class="container">
         <div class="col-md-4 offset-md-4 mt-5">
                 <form action="{{ route('register') }}" method="post" class="box">
@@ -62,11 +62,11 @@
                         @endif
                         
                         <div class="form-floating">
-                            <input type="text" class="form-control form-control2" id="floatingInput" placeholder="email" name="name" autocomplete="disabled" value="{{old('name')}}">
+                            <input type="text" class="form-control form-control2" id="floatingInput" placeholder="email" name="name" autocomplete="off" value="{{old('name')}}">
                             <label for="floatingInput">Nama Lengkap</label>
                         </div>
                         <div class="form-floating">
-                            <input type="email" class="form-control form-control2" id="floatingInput2" placeholder="email" name="email" autocomplete="disabled" value="{{old('email')}}">
+                            <input type="email" class="form-control form-control2" id="floatingInput2" placeholder="email" name="email" autocomplete="off" value="{{old('email')}}">
                             <label for="floatingInput2">Email</label>
                         </div>
                         <div class="form-floating">

@@ -91,7 +91,7 @@
                     <div class="row">
                         <label class="col-sm-3 col-form-label">Keterangan</label>
                         <div class="col-sm-8">
-                            <input type="text" id="img" name="ket" class="form-control {{$errors->has('ket')?'is-invalid':''}}" value="{{$d->ket}}" autocomplete="off" placeholder="Ex Qurban...">
+                            <input type="text" id="img" name="ket" class="form-control {{$errors->has('ket')?'is-invalid':''}}" value="{{$d->ket}}" autocomplete="off" placeholder="Ex Qurban... (boleh dikosongkan)">
                             @error('ket')
                                 <div class="invalid-feedback">{{'The Keterangan field is required.'}}</div>
                             @enderror
@@ -171,37 +171,59 @@
 
             <div class="col-md-5">
                 <form action="/eimage/{{$d->id}}" method="post" enctype="multipart/form-data">
-                {{ csrf_field() }}
-                <div class="form-group">
-                    <div class="row">
-                        <label class="col-sm-3 col-form-label">Gambar</label>
-                        <div class="col-sm-5">
-                            <div class="card-body p-0" style="width: 300px;">
-                                <div class="wrapper">
-                                    <div class="imageupload panel-default">
-                                        <div class="file-tab mt-2 text-center">
-                                            <label class="btn btn-outline-secondary btn-file" style="border: none">
-                                                <span>Choose File</span>
-                                                <!-- The file is stored here. -->
-                                                <input type="file" name="image" accept="image/png, image/jpeg, image/jpg, image/tiff">
-                                            </label>
+                    {{ csrf_field() }}
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-3 col-form-label">Gambar</label>
+                            <div class="col-sm-5">
+                                <div class="card-body p-0" style="width: 300px;">
+                                    <div class="wrapper">
+                                        <div class="imageupload panel-default">
+                                            <div class="file-tab mt-2 text-center">
+                                                <label class="btn btn-outline-secondary btn-file" style="border: none">
+                                                    <span>Choose File</span>
+                                                    <!-- The file is stored here. -->
+                                                    <input type="file" name="image" accept="image/png, image/jpeg, image/jpg, image/tiff">
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="text-right col-sm-11">
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                <a class="btn btn-outline-secondary" style="border: none" href="/dimage/{{$d->id}}">Remove</a>
-                                <button type="submit" class="btn btn-outline-secondary" style="border: none">Save</button>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="text-right col-sm-11">
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <a id="btn-control" class="btn btn-outline-secondary" style="border: none" data-bs-toggle="modal" data-bs-target="#delete{{$d->id}}">Remove</a>
+                                    <button type="submit" class="btn btn-outline-secondary" style="border: none">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                {{-- Modal Delete --}}
+                <div class="modal fade" id="delete{{$d->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-exclamation-triangle text-danger"></i> Alert</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">Anda yakin ingin menghapus gambar dan mengembalikannya ke default?</div>
+                            <div class="modal-footer">
+                                <form action="/dimage/{{$d->id}}" method="post">
+                                    @csrf
+                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-outline-danger">Yes</button>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 @if(Session::has('g_img'))
                     <div class="alert alert-light alert-dismissible text-danger" role="alert" id="liveAlert">
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -221,7 +243,6 @@
                     </div>
                 @endif
             </div>
-        </form>
     </div>
 </div>
     

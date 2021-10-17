@@ -109,7 +109,7 @@
         </div>
     
         <div class="row">
-            <div class="col-xl-6">
+            <div class="col-xl-8">
                 <div class="card spur-card">
                     <div class="card-header">
                         <div class="spur-card-icon">
@@ -169,7 +169,7 @@
                         </div>
                 </div>
             </div>
-                        <div class="col-xl-6">
+                        <div class="col-xl-4">
                             <div class="card spur-card">
                                 <div class="card-header">
                                     <div class="spur-card-icon">
@@ -200,6 +200,22 @@
                                                 <i class="fas fa-inbox"></i>
                                             </div>
                                             Jumlah Kategori : {{$kat}}
+                                            <div class="notification-text"></div>
+                                            <span class="notification-time"></span>
+                                        </a>
+                                        <a href="/main/keuangan" class="notification">
+                                            <div class="notification-icon">
+                                                <i class="fas fa-inbox"></i>
+                                            </div>
+                                            Jumlah Record Debit : {{$d_debit}}
+                                            <div class="notification-text"></div>
+                                            <span class="notification-time"></span>
+                                        </a>
+                                        <a href="/main/keuangan" class="notification">
+                                            <div class="notification-icon">
+                                                <i class="fas fa-inbox"></i>
+                                            </div>
+                                            Jumlah Record Kredit : {{$d_kredit}}
                                             <div class="notification-text"></div>
                                             <span class="notification-time"></span>
                                         </a>

@@ -5,11 +5,24 @@
 <div class="container">
     <nav aria-label="breadcrumb">
     <ol class="breadcrumb bg-transparent">
-        <li class="breadcrumb-item text-black"><a href="/main">Home</a></li>
-        <li class="breadcrumb-item text-black"><a href="/main/laporan-akun">Pilih-akun</a></li>
+        <li class="breadcrumb-item text-black"><a class="text-dark" href="/main">Home</a></li>
+        <li class="breadcrumb-item text-black"><a class="text-dark" href="/main/laporan-akun">Pilih-akun</a></li>
         <li class="breadcrumb-item active" aria-current="page">View</li>
     </ol>
     </nav>
+    <div class="dropdown">
+        <button class="btn btn-custom dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            Toggle Column
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="toggle-vis dropdown-item cursor" data-column="0">No</a></li>
+            <li><a class="toggle-vis dropdown-item cursor" data-column="1">Tanggal</a></li>
+            <li><a class="toggle-vis dropdown-item cursor" data-column="2">Keterangan</a></li>
+            <li><a class="toggle-vis dropdown-item cursor" data-column="3">Debit</a></li>
+            <li><a class="toggle-vis dropdown-item cursor" data-column="4">Kredit</a></li>
+            <li><a class="toggle-vis dropdown-item cursor" data-column="5">Saldo</a></li>
+        </ul>
+    </div>
     <div class="card shadow mt-2">
         <div class="card-body">
             <div class="table-responsive">
@@ -44,7 +57,11 @@
                             <td>
                                 @foreach ($saldo as $s)
                                     @if ($s->id == $d->id)
-                                    Rp. {{number_format((float)$s->saldo)}}
+                                        @if ($s->saldo > 0)
+                                            Rp. {{number_format((float)$s->saldo)}}
+                                        @else
+                                            Rp. {{number_format((float)$s->saldo*-1)}}
+                                        @endif
                                     @endif
                             @endforeach
                             </td>
@@ -82,13 +99,19 @@
                     {
                         text: '<i class="far fa-file-excel"></i> Excel',
                         extend: 'excel',
-                        title: 'Rekap Akun {{$akun2->kd_akun}}',
+                        title: 'Rekap Akun {{$akun2->kd_akun}} {{$month2}} {{$year2}}',
                         messageTop: 'Nama Akun : {{ucwords($akun2->nama_akun)}}          Kode Akun : {{$akun2->kd_akun}}',
                     },
                     {
                         text: '<i class="far fa-file-pdf"></i> PDF',
                         extend: 'pdf',
-                        title: 'Rekap Akun {{$akun2->kd_akun}}',
+                        title: 'Rekap Akun {{$akun2->kd_akun}} {{$month2}} {{$year2}}',
+                        messageTop: 'Nama Akun : {{ucwords($akun2->nama_akun)}}          Kode Akun : {{$akun2->kd_akun}}',
+                    },
+                    {
+                        text: '<i class="fas fa-print"></i> Print',
+                        extend: 'print',
+                        title: 'Rekap Akun {{$akun2->kd_akun}} {{$month2}} {{$year2}}',
                         messageTop: 'Nama Akun : {{ucwords($akun2->nama_akun)}}          Kode Akun : {{$akun2->kd_akun}}',
                     },
                 ],
@@ -100,6 +123,14 @@
             
             table.buttons().container()
             .appendTo( '#table_wrapper .col-md-5:eq(0)' );
+
+        $('a.toggle-vis').on( 'click', function (e) {
+            e.preventDefault();
+                // Get the column API object
+                var column = table.column( $(this).attr('data-column') );
+                // Toggle the visibility
+                column.visible( ! column.visible() );
+            } );
         } );
     </script>
 @endsection	

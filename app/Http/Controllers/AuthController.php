@@ -3,88 +3,101 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Crypt;
-
 
 class AuthController extends Controller
 {
     public function showFormLogin()
     {
-        if (Auth::check()) { // true sekalian session field di users nanti bisa dipanggil via Auth
-            //Login Success
-            return redirect('/main');
+        $year = Carbon::now()->format('Y');
+        if (Auth::check()) 
+        {
+            $auth = Auth::user();
+            if ($auth->status_vrf == '0') 
+            {
+                return redirect('/main');
+            }
         }
-        return view('login');
+        return view('login',['year'=>$year]);
     }
 
     public function login(Request $request)
     {
         $rules = [
-            'email'                 => 'required|email',
+            'username'              => 'required|alpha_num',
             'password'              => 'required|string'
         ];
-
         $messages = [
-            'email.required'        => 'Email wajib diisi',
-            'email.email'           => 'Email tidak valid',
-            'password.required'     => 'Password wajib diisi',
-            'password.string'       => 'Password harus berupa string'
+            'username.alpha_num'    => 'Username hanya diisi dengan huruf dan angka!',
+            'username.required'     => 'Username wajib diisi!',
+            'password.required'     => 'Password wajib diisi!',
+            'password.string'       => 'Password harus berupa string!'
         ];
-
         $validator = Validator::make($request->all(), $rules, $messages);
-
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput($request->all);
         }
-
         $data = [
-            'email'     => $request->input('email'),
-            'password'  => $request->input('password'),
+            'username'  => $request->username,
+            'password'  => $request->password,
         ];
-
         Auth::attempt($data);
 
-        if (Auth::check()) { // true sekalian session field di users nanti bisa dipanggil via Auth
-            //Login Success
+        if (Auth::check()) 
+        {
             $auth = Auth::user();
-            $nama = $auth->name;
-            $pecah = explode(' ', $nama);
-            $forename = $pecah[0];
-            if (empty($pecah[1])) {
-                $surname = "";
-            } else {
-                $surname = $pecah[1];
+            if ($auth->status_vrf == '0')
+            {
+                $nama = $auth->name;
+                $pecah = explode(' ', $nama);
+                $forename = $pecah[0];
+                if (empty($pecah[1])) {
+                    $surname = "";
+                } else {
+                    $surname = $pecah[1];
+                }
+                return redirect('/main')->with('success', 'Selamat Datang, ' . $forename . ' ' . $surname);
+            } 
+            else 
+            {
+                Session::flash('error', 'Anda belum melakukan verifikasi email!');
+                return redirect()->back();
             }
-
-            return redirect('/main')->with('success', 'Selamat Datang, ' . $forename . ' ' . $surname);
-        } else { // false
-
-            //Login Fail
-            Session::flash('error', 'Email atau password salah');
-            return redirect()->route('login');
+        }
+        else
+        {
+            Session::flash('error', 'Username atau Password salah');
+            return redirect()->back();
         }
     }
 
     public function showFormRegister()
     {
-        return view('register');
+        $year = Carbon::now()->format('Y');
+        return view('register',['year'=>$year]);
     }
 
     public function register(Request $request)
     {
         $rules = [
+            'username'              => 'required|alpha_num|min:5|max:10|unique:users',
             'name'                  => 'required|min:3|max:35',
             'email'                 => 'required|email|unique:users',
             'password'              => 'required|confirmed'
         ];
 
         $messages = [
+            'username.required'     => 'Username wajib diisi',
+            'username.alpha_num'    => 'Username hanya diisi dengan huruf dan angka!',
+            'username.min'          => 'Username minimal 5 karakter',
+            'username.max'          => 'Username maksimal 10 karakter',
+            'username.unique'       => 'Username sudah terdaftar',
             'name.required'         => 'Nama Lengkap wajib diisi',
             'name.min'              => 'Nama lengkap minimal 3 karakter',
             'name.max'              => 'Nama lengkap maksimal 35 karakter',
@@ -100,46 +113,86 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput($request->all);
         }
+        $now = date('Y-m-d H:i:s');
+        $limit = date("Y-m-d H:i:s", strtotime('+2 hours', strtotime($now)));
 
-        $user = new User;
-        $user->name = ucwords(strtolower($request->name));
-        $user->email = strtolower($request->email);
-        $user->password = Hash::make($request->password);
-        $user->email_verified_at = \Carbon\Carbon::now();
-        $user->image = 'default/default2.png';
-        $simpan = $user->save();
+        User::create([
+            'username' => $request->username,
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'status_update' => '0',
+            'status_vrf' => '1',
+            'bagian' => 'supervisor',
+            'image' => 'default/default2.png',
+            'encrypt_id' => Crypt::encrypt($request->email),
+            'expired_time' => $limit
+        ]);
+        
+        $user = User::where('email', $request->email)->get();
+        $nama = $request->name;
+        $email = $request->email;
+            Mail::send('editakun.link2',['user' => $user],
+            function ($mail) use ($email, $nama) {
+                $mail->to($email, 'Admin IAC')
+                    ->subject('Hi ' . $nama. ', Verification Your Account');
+            }
+        );
+        return redirect()->back()->with('success', 'Link verifikasi berhasil terkirim ke email Anda. Silahkan cek email. Batas verifikasi email adalah 2 jam');
+    }
 
-        if ($simpan) {
-            Session::flash('success', 'Register berhasil! Silahkan login untuk mengakses data');
-            return redirect()->route('login');
+    public function verifikasi($encrypt_id)
+    {
+        $data = Crypt::decrypt($encrypt_id);
+        $user = User::where('email', $data)->get();
+        $find_email = User::where('email', $data)->first();
+        $year = Carbon::now()->format('Y');
+
+        if ($find_email->expired_time >= date("Y-m-d H:i:s")) {
+            if ($find_email->status_vrf == '1' && $find_email->encrypt_id == $encrypt_id) {
+                return view('editakun.verifikasi', ['user' => $user, 'year' => $year]);
+            } else {
+                return view('editakun.gagal2', ['year' => $year]);
+            }
         } else {
-            Session::flash('errors', ['' => 'Register gagal! Silahkan ulangi beberapa saat lagi']);
-            return redirect()->route('register');
+            return view('editakun.gagal2', ['year' => $year]);
         }
+    }
+
+    public function postverif($id)
+    {
+        $email = User::where('id', $id)->first();
+        User::where('email', $email->email)->update(['status_vrf' => '0']);
+        return redirect()->back()->with('success', 'Verifikasi email berhasil.');
     }
 
     public function logout()
     {
-        Auth::logout(); // menghapus session yang aktif
+        Auth::logout();
         return redirect()->route('login')->with('success','Logout berhasil');
     }
 
     public function editpsw(Request $request)
     {
         $email = $request->email;
-        $name = User::where('email', $request->email)->first();
+        $data = User::where('email', $request->email)->first();
+        $now = date('Y-m-d H:i:s');
+        $limit = date("Y-m-d H:i:s", strtotime('+2 hours', strtotime($now)));
 
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
         ]);
         if ($validator->fails()) {
+            User::where('email', $request->email)->update([
+                'status_update' => '1',
+                'encrypt_id' => Crypt::encrypt($data->id),
+                'expired_time' => $limit
+            ]);
             $user = User::where('email', $request->email)->get();
-            // Mail::to($email)->send(new TestMail($details));
-            // $this->password($user->id);
             Mail::send('editakun.link',['user' => $user],
-                function($mail) use($email,$name){
+                function($mail) use($email,$data){
                     $mail->to($email,'Admin IAC')
-                    ->subject('Hi '.$name->name.', Update your Password');
+                    ->subject('Hi '.$data->name.', Update your Password');
                 }
             );
             return redirect()->back()->with('success','Link berhasil terkirim ke email Anda. Silahkan cek email.');
@@ -147,14 +200,22 @@ class AuthController extends Controller
             return redirect()->back()->with('fail2', 'Email tidak terdaftar.');
     }
 
-    public function link(){
-        return view('editakun.link');
-    }
+    public function password($encrypt_id)
+    {
+        $data = Crypt::decrypt($encrypt_id);
+        $user = User::where('id', $data)->get();
+        $find_id = User::where('id',$data)->first();
+        $year = Carbon::now()->format('Y');
 
-    public function password($id){
-        $data = Crypt::decrypt($id);
-        $user = User::where('id',$data)->get();
-        return view('editakun.password',['user' => $user]);
+        if($find_id->expired_time >= date("Y-m-d H:i:s")){
+            if($find_id->status_update == '1' && $find_id->encrypt_id == $encrypt_id){
+                return view('editakun.password', ['user' => $user, 'year' => $year]); 
+            } else {
+                return view('editakun.gagal', ['year' => $year]);
+            }
+        }else{
+            return view('editakun.gagal', ['year' => $year]);
+        }
     }
 
     public function postpassword(Request $request, $id)
@@ -165,7 +226,10 @@ class AuthController extends Controller
             'password' => 'required|confirmed|min:5'
         ]);
 
-        User::where('email', $email->email)->update(['password' => bcrypt($request->password)]);
-        return view('editakun.success');
+        User::where('email', $email->email)->update([
+            'password' => bcrypt($request->password),
+            'status_update' => '0'
+        ]);
+        return redirect()->back()->with('success', 'Password berhasil diubah.');
     }
 }

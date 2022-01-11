@@ -5,7 +5,7 @@
 <div class="container">
     @if(Session::has('g_debit'))
         <div class="alert alert-danger alert-dismissible" role="alert" id="liveAlert">
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
             <i class="fas fa-exclamation-triangle"></i> {{Session::get('g_debit')}}
         </div>
     @endif
@@ -15,9 +15,15 @@
             <div class="row">
                 <label class="col-sm-2 col-form-label">Tanggal</label>
                     <div class="col-sm-5">
-                        <input type="date" name="tanggal" class="form-control {{$errors->has('tanggal')?'is-invalid':''}}"  value="{{old('tanggal', $keuangan->tanggal ?? '')}}" >
+                        <input type="date" name="tanggal" class="form-control effect-1 {{$errors->has('tanggal')?'is-invalid':''}}"  value="{{old('tanggal', $keuangan->tanggal ?? '')}}" required>
+                        <span class="focus-border"></span>
+                        <div class="valid-tooltip">
+                            Great!
+                        </div>
                         @error('tanggal')
-                        <div class="invalid-feedback">{{'The Tanggal field is required.'}}</div>
+                            <div class="invalid-tooltip">
+                                {{$message}}
+                            </div>
                         @enderror
                     </div>
             </div>
@@ -26,14 +32,20 @@
             <div class="row">
                 <label class="col-sm-2 col-form-label">Kode Akun</label>
                      <div class="col-sm-5">
-                         <input name="kd_akun" list="datalistOptions" id="exampleDataList" value="{{old('kd_akun')}}" autocomplete="off" class="form-control {{$errors->has('kd_akun')?'is-invalid':''}}" type="text" placeholder="Ex 1-101...">
-                         <datalist id="datalistOptions">
-                         @foreach ($akun as $a)
+                        <input name="kd_akun" list="datalistOptions" id="exampleDataList" value="{{old('kd_akun')}}" autocomplete="off" class="form-control effect-1 {{$errors->has('kd_akun')?'is-invalid':''}}" type="text" placeholder="Ex 1-101..." required>
+                        <datalist id="datalistOptions">
+                        @foreach ($akun as $a)
                             <option value="{{$a->kd_akun}}">{{ucwords($a->nama_akun)}}
                         @endforeach
                         </datalist>
+                        <span class="focus-border"></span>
+                        <div class="valid-tooltip">
+                            Great!
+                        </div>
                         @error('kd_akun')
-                        <div class="invalid-feedback">{{$message}}</div>
+                            <div class="invalid-tooltip">
+                                {{$message}}
+                            </div>
                         @enderror
                     </div>
             </div>
@@ -42,14 +54,20 @@
             <div class="row">
                 <label class="col-sm-2 col-form-label">Buku Kas</label>
                      <div class="col-sm-5">
-                        <input name="bk_kas" list="datalistOptions2" id="exampleDataList" value="{{old('bk_kas')}}" autocomplete="off" class="form-control {{$errors->has('bk_kas')?'is-invalid':''}}" type="text" placeholder="Ex BSI...">
+                        <input name="bk_kas" list="datalistOptions2" id="exampleDataList" value="{{old('bk_kas')}}" autocomplete="off" class="form-control effect-1 {{$errors->has('bk_kas')?'is-invalid':''}}" type="text" placeholder="Ex BSI... (Boleh dikosongkan)" required>
                         <datalist id="datalistOptions2">
-                         @foreach ($kas as $k)
+                        @foreach ($kas as $k)
                             <option value="{{ucwords($k->bk_kas)}}">
                         @endforeach
                         </datalist>
+                        <span class="focus-border"></span>
+                        <div class="valid-tooltip">
+                            Great!
+                        </div>
                         @error('bk_kas')
-                        <div class="invalid-feedback">{{$message}}</div>
+                            <div class="invalid-tooltip">
+                                {{$message}}
+                            </div>
                         @enderror
                     </div>
             </div>
@@ -58,10 +76,8 @@
             <div class="row">
                 <label class="col-sm-2 col-form-label">Keterangan</label>
                     <div class="col-sm-5">
-                        <input type="text" name="ket" class="form-control {{$errors->has('ket')?'is-invalid':''}}" value="{{old('ket')}}" autocomplete="off" placeholder="Ex Qurban... (boleh dikosongkan)">
-                        @error('ket')
-                        <div class="invalid-feedback">{{'The Keterangan field is required.'}}</div>
-                        @enderror
+                        <input type="text" name="ket" class="form-control effect-1" value="{{old('ket')}}" autocomplete="off" placeholder="Ex Qurban... (boleh dikosongkan)">
+                        <span class="focus-border"></span>
                     </div>
             </div>
         </div>
@@ -69,7 +85,7 @@
             <div class="row">
                 <label class="col-sm-2 col-form-label">Kategori</label>
                     <div class="col-sm-5">
-                        <select class="form-control {{$errors->has('kat')?'is-invalid':''}}" name="kat">
+                        <select class="effect-1 {{$errors->has('kat')?'is-invalid':''}} form-select " name="kat" required onmousedown="if(this.options.length>5){this.size=5;}"  onchange='this.size=5;' onblur="this.size=0;">
                             <option value="" hidden="true">-Pilih-</option> 
                             @forelse($kat as $k)
                                 <option value="{{ $k->name }}" {{ old('kat') == $k->name ? "selected" : "" }}>{{ ucwords($k->name) }}</option>
@@ -77,8 +93,14 @@
                                 <option value="" disabled>Silahkan tambah kategori di Tambah Kategori</option>
                             @endforelse
                         </select>
+                        <span class="focus-border"></span>
+                        <div class="valid-tooltip">
+                            Great!
+                        </div>
                         @error('kat')
-                        <div class="invalid-feedback">{{'The Kategori field is required.'}}</div>
+                            <div class="invalid-tooltip">
+                                {{$message}}
+                            </div>
                         @enderror
                     </div>
             </div>
@@ -87,10 +109,24 @@
             <div class="row">
                 <label class="col-sm-2 col-form-label">Jumlah Uang</label>
                     <div class="col-sm-5">
-                        <input type="number" min="0" name="debit" class="form-control {{$errors->has('debit')?'is-invalid':''}}" value="{{old('debit')}}" autocomplete="off" placeholder="Masukkan Jumlah Uang...">
-                        @error('debit')
-                        <div class="invalid-feedback">{{'The Jumlah Uang field is required.'}}</div>
-                        @enderror
+                        <div class="row">
+                            <div class="col-6">
+                               <input type="number" min="1" name="debit" class="form-control effect-1 {{$errors->has('debit')?'is-invalid':''}}" value="{{old('debit')}}" autocomplete="off" 
+                                placeholder="Masukkan Jumlah Uang..." required id="inputAngka"> 
+                                <span class="focus-border"></span>
+                                <div class="valid-tooltip">
+                                    Great!
+                                </div>
+                                @error('debit')
+                                    <div class="invalid-tooltip">
+                                        {{$message}}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="col-6 pt-2">
+                                Rp. <span id="showTextRibuan"></span>
+                            </div>
+                        </div>
                     </div>
             </div>
         </div>
@@ -102,23 +138,12 @@
                             <div class="wrapper">
                                 <div class="imageupload panel-default">
                                     <div class="file-tab mt-2 text-center">
-                                        <label class="btn btn-outline-secondary btn-file" style="border: none">
+                                        <label class="btn btn-outline-custom3 btn-file">
                                             <span>Choose File</span>
                                             <!-- The file is stored here. -->
                                             <input type="file" name="image" accept="image/png, image/jpeg, image/jpg, image/tiff">
                                         </label>
-                                        <button type="button" style="border: none" class="btn btn-outline-secondary mb-2">Remove</button>
-                                    </div>
-                                    <div class="url-tab">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control hasclear" placeholder="Image URL">
-                                            <div class="input-group-btn">
-                                                <button type="button" class="btn btn-outline-secondary">Submit</button>
-                                            </div>
-                                        </div>
-                                        <button type="button" class="btn btn-outline-secondary">Remove</button>
-                                        <!-- The URL is stored here. -->
-                                        <input type="hidden" name="image-url">
+                                        <button type="button" class="btn btn-outline-custom3 mb-2">Remove</button>
                                     </div>
                                 </div>
                             </div>
@@ -128,13 +153,14 @@
         </div>
         <div class="form-group">
             <div class="col-sm-7 text-right">
-            	<a class="btn btn-light" href="/main/keuangan/addin">Cancel</a>
-                <input type="submit" class="btn btn-primary" value="Submit">
+            	<a type="button" class="btn btn-outline-custom" href="/main/keuangan/addin">Cancel</a>
+        </form>
+                <button type="submit" class="btn btn-custom">Submit</button>
             </div>
         </div>
-    </form>
 </div>
         <script type="text/javascript" src="/js/jquery.min.js"></script>
+        <script type="text/javascript" src="/js/convert.js"></script>
         <script src="/js/bootstrap-imageupload.js"></script>
         <script>
             var $imageupload = $('.imageupload');
@@ -155,34 +181,4 @@
                 $(this).blur();
             });
         </script>
-        {{-- <script type="text/javascript" src="/js/typeahead2.min.js"></script>
-        <script type="text/javascript">
-            const typeahead = document.querySelector(".typeahead");
-            var path1 = "{{ route('autocompleteakun2') }}";
-            if (typeahead) {  
-                $(typeahead).typeahead({
-                source:  function (terms, process) 
-                {
-                return $.get(path1, { terms: terms }, function (akun) {
-                    return process(akun);
-                    });
-                }
-                });
-            }
-        </script>  
-        <script type="text/javascript" src="/js/typeahead4.min.js"></script> 
-        <script type="text/javascript">
-            const typeahead2 = document.querySelector(".typeahead2");
-            var path = "{{ route('autocompletekas') }}";
-            if (typeahead2) { 
-            $(typeahead2).typeahead({
-            source:  function (terms, process) 
-            {
-            return $.get(path, { terms: terms }, function (data) {
-                return process(data);
-                });
-            }
-            });
-        }
-        </script>    --}}
 @endsection	

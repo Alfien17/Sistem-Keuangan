@@ -5,8 +5,8 @@
 <div class="container">
     <nav aria-label="breadcrumb">
     <ol class="breadcrumb bg-transparent">
-        <li class="breadcrumb-item text-black"><a href="/main">Home</a></li>
-        <li class="breadcrumb-item text-black"><a href="/main/keuangan">Rekap</a></li>
+        <li class="breadcrumb-item text-black"><a class="text-dark" href="/main">Home</a></li>
+        <li class="breadcrumb-item text-black"><a class="text-dark" href="/main/keuangan">Rekap</a></li>
         <li class="breadcrumb-item active" aria-current="page">Detail</li>
     </ol>
     </nav>
@@ -36,11 +36,11 @@
                             <label>:</label>
                         </div>
                         <div class="col-8">
-                            @foreach ($akun as $a)
-                                @if($d->akun_id == $a->id)
-                                <label>{{$a->kd_akun}} - {{ucwords($a->nama_akun)}}</label>
-                                @endif
-                            @endforeach
+                            @if(!empty($d->akun->kd_akun))
+                                <label>{{$d->akun->kd_akun}}</label>
+                            @else
+                                <label></label>
+                            @endif
                         </div>
                     </div>
                     <div class="row">
@@ -51,11 +51,11 @@
                             <label>:</label>
                         </div>
                         <div class="col-8">
-                            @foreach ($kas as $a)
-                                @if($d->kas_id == $a->id)
-                                <label>{{ucwords($a->bk_kas)}}</label>
-                                @endif
-                            @endforeach
+                            @if(!empty($d->kas->bk_kas))
+                                <label>{{ucwords($d->kas->bk_kas)}}</label>
+                            @else
+                                <label></label>
+                            @endif
                         </div>
                     </div>
                     <div class="row">
@@ -66,11 +66,11 @@
                             <label>:</label>
                         </div>
                         <div class="col-8">
-                            @foreach ($kas as $a)
-                                @if($d->kas_id == $a->id)
-                                <label>{{$a->tipe}}</label>
-                                @endif
-                            @endforeach
+                            @if(!empty($d->kas->tipe))
+                                <label>{{ucwords($d->kas->tipe)}}</label>
+                            @else
+                                <label></label>
+                            @endif
                         </div>
                     </div>
                     <div class="row">
@@ -92,11 +92,11 @@
                             <label>:</label>
                         </div>
                         <div class="col-8">
-                            @foreach ($kat as $a)
-                                @if($d->kat_id == $a->id)
-                                <label>{{ucwords($a->name)}}</label>
-                                @endif
-                            @endforeach
+                            @if(!empty($d->kategori->name))
+                                <label>{{ucwords($d->kategori->name)}}</label>
+                            @else
+                                <label></label>
+                            @endif
                         </div>
                     </div>
                     <div class="row">
@@ -115,24 +115,19 @@
                         </div>
                     </div>
                     <div class="dropdown-divider"></div>
-                    <div class="row">
-                        <div class="col-3">
-                            <label>
-                                Saldo Akun 
-                                @foreach ($akun as $a)
-                                    @if($d->akun_id == $a->id)
-                                    {{$a->kd_akun}}
-                                @endif
-                                @endforeach
-                                </label>
+                    @if(!empty($d->akun->kd_akun))
+                        <div class="row">
+                            <div class="col-3">
+                                <label>Saldo Akun {{$d->akun->kd_akun}}</label>
+                            </div>
+                            <div class="col-1">
+                                <label>:</label>
+                            </div>
+                            <div class="col-8">
+                                <label>Rp. {{number_format((float)$total)}}</label>
+                            </div>
                         </div>
-                        <div class="col-1">
-                            <label>:</label>
-                        </div>
-                        <div class="col-8">
-                            <label>Rp. {{number_format((float)$total)}}</label>
-                        </div>
-                    </div>
+                    @endif
                     <div class="row">
                         <div class="col-3">
                             <strong>Saldo Total</strong>

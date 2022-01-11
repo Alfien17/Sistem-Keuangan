@@ -3,19 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 class EditController extends Controller
 {
-    public function editakun($id)
+    public function editakun()
     {
         // Check Login
         if (!Auth::user()) {
             return redirect('/login');
         }
 
+        $year = Carbon::now()->format('Y');
         $auth = Auth::user();
         $nama = $auth->name;
         $pecah = explode(' ', $nama);
@@ -26,17 +28,17 @@ class EditController extends Controller
             $surname = $pecah[1]; 
         }
         
-        $akun = User::where('id', $id)->get();
         return view('editakun.viewedit',[
-            'akun' => $akun,
             'forename' => $forename,
-            'surname' => $surname
+            'surname' => $surname,
+            'year' => $year
         ]);
     }
 
     public function posteditakun(Request $request)
     {
         $this->validate($request, [
+            'username' => 'required|alpha_num|min:5|max:10',
             'name' => 'required|min:3|max:35',
             'telp' => 'numeric|digits_between:10,13',
             'email' => 'required|email',
@@ -44,6 +46,7 @@ class EditController extends Controller
 
 
         User::where('id', $request->id)->update([
+            'username' => $request->username,
             'name' => $request->name,
             'telp' => $request->telp,
             'email' => $request->email,
@@ -57,6 +60,10 @@ class EditController extends Controller
         $image = User::where('id', $id)->first();
         if ($image->image != 'default/default2.png') {
             if ($request->hasfile('image')) {
+                $this->validate($request, [
+                    'image' => 'mimes:jpeg,jpg,png,gif|required|max:20000'
+                ]);
+
                 File::delete(public_path() . '/assets/' . $image->image);
                 $image = $request->file('image');
                 $imageName = "profile/" . time() . "_" . $image->getClientOriginalName();
@@ -67,6 +74,10 @@ class EditController extends Controller
             } 
         }else {
             if ($request->hasfile('image')) {
+                $this->validate($request, [
+                    'image' => 'mimes:jpeg,jpg,png,gif|required|max:20000'
+                ]);
+
                 $image = $request->file('image');
                 $imageName = "profile/" . time() . "_" . $image->getClientOriginalName();
                 $imgLoc = 'assets/profile';

@@ -7,11 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 class Akun extends Model
 {
     protected $table = "akun";
-    protected $fillable = ['nama_akun', 'kd_akun'];
+    protected $fillable = ['nama_akun','kd_akun','posisi','check','katakun_id'];
 
     public function keuangan()
     {
-        return $this->hasMany('App\Models\Keuangan');
+        return $this->hasOne('App\Models\Keuangan');
+    }
+
+    public function total()
+    {
+        return $this->hasOne('App\Models\Total');
+    }
+
+    public function katakun()
+    {
+        return $this->belongsTo('App\Models\KategoriAkun');
     }
     
 }

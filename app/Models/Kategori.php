@@ -8,4 +8,9 @@ class Kategori extends Model
 {
      protected $table = "kategori";
      protected $fillable = ['name'];
+
+     public function keuangan()
+     {
+          return $this->hasOne('App\Models\Keuangan');
+     }
 }

@@ -1,6 +1,6 @@
 @extends('main')
 @section('konten')
-<div class="container">
+<div class="container pt-3">
     <div class="accordion pl-1 pr-1" id="accordionExample">
         <div class="accordion-item border-0">
             <h2 class="accordion-header" id="headingTwo">
@@ -15,6 +15,7 @@
         </div>
     </div>
 </div>
+@if(Auth::user()->bagian != 'admin')
 <main class="dash-content">
     <div class="container-fluid">
         <div class="row dash-row">
@@ -65,15 +66,9 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title ml-2" id="exampleModalLabel">Saldo</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        {{-- <div class="row">
-                            <label class="col-4 col-form-label text-left">Nama Akun</label>
-                            <div class="col-sm-5">
-                                <input type="text" id="nama_akun" name="nama_akun" class="form-control" required="required" autocomplete="off">
-                            </div>
-                        </div> --}}
                         <table class="table table-borderless">
                             @forelse ($kode as $k)
                             @if($k->total!=0)
@@ -101,9 +96,6 @@
 		                    </tr>
 		                </table>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -115,7 +107,7 @@
                         <div class="spur-card-icon">
                             <i class="fas fa-chart-bar"></i>
                         </div>
-                        <div class="spur-card-title">Rekap Keuangan Tahun {{$year}}</div>
+                        <div class="spur-card-title">Rekap Keuangan Tahun @if(empty($year2)){{$year}}@else{{$year2}}@endif</div>
                             <div class="spur-card-menu">
                                 <div class="d-flex flex-row-reverse">
                                     <form action="/main/year" method="get">
@@ -143,12 +135,11 @@
                                             "Jan","Feb","Mar","Apr","Mei","Jun","Jul","Ags","Sep","Okt","Nov","Des"
                                         ],
                                         datasets: [{
-                                            label: 'Blue',
                                             data: [
                                                 {{$jan}},{{$feb}},{{$mar}},{{$apr}},{{$mei}},{{$jun}},
                                                 {{$jul}},{{$ags}},{{$sep}},{{$okt}},{{$nov}},{{$des}}    
                                             ],
-                                            backgroundColor: window.chartColors.primary,
+                                            backgroundColor: '#2D3E50',
                                             borderColor: 'transparent'
                                         }]
                                     },
@@ -169,63 +160,129 @@
                         </div>
                 </div>
             </div>
-                        <div class="col-xl-4">
-                            <div class="card spur-card">
-                                <div class="card-header">
-                                    <div class="spur-card-icon">
-                                        <i class="fas fa-bell"></i>
-                                    </div>
-                                    <div class="spur-card-title"> Informasi Data </div>
+            
+            <div class="col-xl-4">
+                <div class="card spur-card">
+                    <div class="card-header">
+                        <div class="spur-card-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="spur-card-title"> Waktu </div>
+                    </div>
+                    <div class="card-body ">
+                        <div class="notifications">
+                            <a class="notification">
+                                <div class="notification-icon">
+                                    <i class="fas fa-inbox"></i>
                                 </div>
-                                <div class="card-body ">
-                                    <div class="notifications">
-                                        <a href="/main/akun" class="notification">
-                                            <div class="notification-icon">
-                                                <i class="fas fa-inbox"></i>
-                                            </div>
-                                            Jumlah Akun : {{$akun}}
-                                            <div class="notification-text"></div>
-                                            <span class="notification-time"></span>
-                                        </a>
-                                        <a href="/main/kas" class="notification">
-                                            <div class="notification-icon">
-                                                <i class="fas fa-inbox"></i>
-                                            </div>
-                                            Jumlah Buku Kas : {{$kas}}
-                                            <div class="notification-text"></div>
-                                            <span class="notification-time"></span>
-                                        </a>
-                                        <a href="/main/kategori" class="notification">
-                                            <div class="notification-icon">
-                                                <i class="fas fa-inbox"></i>
-                                            </div>
-                                            Jumlah Kategori : {{$kat}}
-                                            <div class="notification-text"></div>
-                                            <span class="notification-time"></span>
-                                        </a>
-                                        <a href="/main/keuangan" class="notification">
-                                            <div class="notification-icon">
-                                                <i class="fas fa-inbox"></i>
-                                            </div>
-                                            Jumlah Record Debit : {{$d_debit}}
-                                            <div class="notification-text"></div>
-                                            <span class="notification-time"></span>
-                                        </a>
-                                        <a href="/main/keuangan" class="notification">
-                                            <div class="notification-icon">
-                                                <i class="fas fa-inbox"></i>
-                                            </div>
-                                            Jumlah Record Kredit : {{$d_kredit}}
-                                            <div class="notification-text"></div>
-                                            <span class="notification-time"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                                <span id="time"><span>
+                                <div class="notification-text"></div>
+                                <span class="notification-time"></span>
+                            </a>
                         </div>
                     </div>
                 </div>
-            </main>
+                <div class="card spur-card">
+                    <div class="card-header">
+                        <div class="spur-card-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="spur-card-title"> Informasi Data </div>
+                    </div>
+                    <div class="card-body ">
+                        <div class="notifications">
+                            <a href="/main/akun" class="notification">
+                                <div class="notification-icon">
+                                    <i class="fas fa-inbox"></i>
+                                </div>
+                                Jumlah Akun : {{$akun}}
+                                <div class="notification-text"></div>
+                                <span class="notification-time"></span>
+                            </a>
+                            <a href="/main/kas" class="notification">
+                                <div class="notification-icon">
+                                    <i class="fas fa-inbox"></i>
+                                </div>
+                                Jumlah Buku Kas : {{$kas}}
+                                <div class="notification-text"></div>
+                                <span class="notification-time"></span>
+                            </a>
+                            <a href="/main/kategori" class="notification">
+                                <div class="notification-icon">
+                                    <i class="fas fa-inbox"></i>
+                                </div>
+                                Jumlah Kategori : {{$kat}}
+                                <div class="notification-text"></div>
+                                <span class="notification-time"></span>
+                            </a>
+                            <a href="/main/keuangan" class="notification">
+                                <div class="notification-icon">
+                                    <i class="fas fa-inbox"></i>
+                                </div>
+                                Jumlah Record Debit : {{$d_debit}}
+                                <div class="notification-text"></div>
+                                <span class="notification-time"></span>
+                            </a>
+                            <a href="/main/keuangan" class="notification">
+                                <div class="notification-icon">
+                                    <i class="fas fa-inbox"></i>
+                                </div>
+                                Jumlah Record Kredit : {{$d_kredit}}
+                                <div class="notification-text"></div>
+                                <span class="notification-time"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+@else
+<main class="dash-content">
+    <div class="container-fluid">
+        <div class="row dash-row">
+            <div class="col-xl-8">
+                <div class="stats stats-secondary">
+                    <div class="card-body-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="stats-title"> Jumlah User </h3>
+                    <div class="stats-content">
+                        <div class="stats-data">
+                            <div class="stats-number">{{$juser}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="card spur-card">
+                    <div class="card-header">
+                        <div class="spur-card-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="spur-card-title"> Waktu </div>
+                    </div>
+                    <div class="card-body ">
+                        <div class="notifications">
+                            <a class="notification">
+                                <div class="notification-icon">
+                                    <i class="fas fa-inbox"></i>
+                                </div>
+                                <span id="time"><span>
+                                <div class="notification-text"></div>
+                                <span class="notification-time"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+@endif
+
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script>
         var myDate = new Date();
@@ -244,4 +301,16 @@
 
         document.getElementById('greeting').innerHTML = msg;
     </script>
+    <script>
+        var span = document.getElementById('time');
+        function time() {
+            var d = new Date();
+            var s = d.getSeconds();
+            var m = d.getMinutes();
+            var h = d.getHours();
+            span.textContent = 
+                ("0" + h).substr(-2) + ":" + ("0" + m).substr(-2) + ":" + ("0" + s).substr(-2);
+        }
+        setInterval(time, 1000);
+    </script> 
 @endsection	

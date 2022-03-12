@@ -3,12 +3,13 @@ a{
 }
 
 .card-body-icon {
-    position: absolute;
+    background-color: #2D3E50;
     z-index: 0;
-    top: 25px;
-    right: 35px;
-    opacity: 0.4;
-    font-size: 90px;
+    font-size: 20px;
+    text-align: center;
+    color: #fff;
+    border-radius: 6px;
+    padding: 0 4px 0 4px;
 }
 .content .icon {
     font-size: 100px;
@@ -61,7 +62,7 @@ a{
      border: 1px solid #e9ecef;
      border-left-width: .25rem;
      border-radius: .25rem;
-     border-left-color:#dc3545;
+     border-left-color:#2D3E50;
  }
 
  /*Form*/
@@ -230,6 +231,16 @@ a{
 
  .btn-outline-custom3:hover {
      background-color: #dddedf;
+ }
+
+ .btn-outline-custom4 {
+     color: #2D3E50;
+     border-color: #2D3E50;
+ }
+
+ .btn-outline-custom4:hover {
+     background-color: #2D3E50;
+     color: #fff;
  }
 
 select[name="example_length"]:focus,

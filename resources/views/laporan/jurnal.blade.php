@@ -1,7 +1,8 @@
 @extends('main')
-@section('judul_halaman','Jurnal Umum')
 @section('konten')
-<br>
+<h4 class="container">Jurnal Umum</h4>
+<h6 class="container pb-2">{{$month2}} {{ucfirst($year2)}}</h6>
+
 <div class="container">
     <nav aria-label="breadcrumb">
     <ol class="breadcrumb bg-transparent">
@@ -46,37 +47,45 @@
                         </tr>
                     </thead>
                     <tbody class=" text-left">
-                    <?php $id = 1 ?>
-                    @forelse($keuangan as $k)
-                        <tr>
-                            <td>{{$id++}}</td>
-                            <td>{{date('d F Y', strtotime($k->tanggal))}}</td>
-                            <td>{{$k->akun->kd_akun}}</td>
-                            <td>{{ucwords($k->kas->bk_kas)}}</td>
-                            <td>{{$k->kas->tipe}}</td>
-                            <td>{{ucwords($k->akun->nama_akun)}}</td>
-                            <td>{{ucfirst($k->ket)}}</td>
-                            <td>{{ucwords($k->kategori->name)}}</td>
-                            @if ($k->debit==0)
+                        <?php $id = 1 ?>
+                        @forelse($keuangan as $k)
+                            @if ($k->status == 'debit')
+                            <tr>
+                                <td>{{$id++}}</td>
+                                <td>{{date('d F Y', strtotime($k->tanggal))}}</td>
+                                <td title="{{ucfirst($k->akun->nama_akun)}}" style="cursor: pointer">{{$k->akun->kd_akun}}</td>
+                                <td>{{ucwords($k->kas->bk_kas)}}</td>
+                                <td>{{ucwords($k->kas->tipe)}}</td>
+                                <td>{{ucwords($k->akun->nama_akun)}}</td>
+                                <td>{{ucfirst($k->ket1)}}</td>
+                                <td>{{ucwords($k->kategori->name)}}</td>
+                                <td>Rp. {{number_format((float)$k->total)}}</td>
                                 <td></td>
-                            @else
-                                <td>Rp. {{number_format((float)$k->debit)}}</td>
+                            </tr>
                             @endif
-                            @if ($k->kredit==0)
-                                <td></td>  
-                            @else
-                                <td>Rp. {{number_format((float)$k->kredit)}}</td> 
+                            @if ($k->status == 'kredit')
+                                <tr>
+                                    <td>{{$id++}}</td>
+                                    <td>{{date('d F Y', strtotime($k->tanggal))}}</td>
+                                    <td title="{{ucwords($k->akun->nama_akun)}}" style="cursor: pointer">{{$k->akun->kd_akun}}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="pl-lg-4">{{ucwords($k->akun->nama_akun)}}</td>
+                                    <td>{{ucfirst($k->ket2)}}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Rp. {{number_format((float)$k->total*-1)}}</td>
+                                </tr>
                             @endif
-                        </tr>
                         @empty
-	                    <tr class="text-center">
-	            	        <td colspan="10">
-	            		        <div class="content m-5">
-		            		        <div class="icon"><i class="far fa-sad-tear"></i></div>
-	                		        <div class="text2 ml-4">Data Kosong.</div>
-                		        </div>
-            		        </td>
-	                    </tr>
+                            <tr class="text-center">
+                                <td colspan="10">
+                                    <div class="content m-5">
+                                        <div class="icon"><i class="far fa-sad-tear"></i></div>
+                                        <div class="text2 ml-4">Data Kosong.</div>
+                                    </div>
+                                </td>
+                            </tr>
                         @endforelse
                         <tr>
                             <td></td>
@@ -87,8 +96,8 @@
                             <td></td> 
                             <td></td>
                             <th>TOTAL</th>
-                            <th>Rp. {{number_format((float)$debit)}}</th>
-                            <th>Rp. {{number_format((float)$kredit*-1)}}</th>
+                            <th>Rp. {{number_format((float)$total_d)}}</th>
+                            <th> Rp. {{number_format((float)$total_k*-1)}}</th>
                         </tr>
                     </tbody>
                 </table>

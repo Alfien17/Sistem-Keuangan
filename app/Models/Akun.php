@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Akun extends Model
 {
     protected $table = "akun";
-    protected $fillable = ['nama_akun','kd_akun','posisi','check','katakun_id'];
+    protected $fillable = ['nama_akun','kd_akun','posisi','katakun_id','tipe'];
 
     public function keuangan()
     {

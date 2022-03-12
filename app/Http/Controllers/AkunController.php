@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use App\Models\Akun;
 use App\Models\KategoriAkun;
-use App\Models\Total;
+use Illuminate\Support\Facades\File; 
 
 class AkunController extends Controller
 {
@@ -30,8 +29,8 @@ class AkunController extends Controller
             $surname = $pecah[1];
         }
 
-        $akun = Akun::get();
-        $kategori = KategoriAkun::get();
+        $akun = Akun::orderBy('kd_akun','ASC')->get();
+        $kategori = KategoriAkun::orderBy('kode','ASC')->get();
         return view('akun.tambahakun', [
             'akun' => $akun,
             'kategori' => $kategori,
@@ -48,15 +47,15 @@ class AkunController extends Controller
             'kd_akun' => 'required|unique:akun',
             'posisi' => 'required|in:debit,kredit'
         ]);
-        $check = ($request->has('check')) ? 'true' : 'false';
+
         Akun::create([
             'nama_akun' => $request->nama_akun,
             'kd_akun' => $request->kd_akun,
             'posisi' => $request->posisi,
             'katakun_id' => $request->kategori,
-            'check' => $check
+            'tipe' => $request->tipe
         ]);
-        return redirect('/main/akun')->with('success', 'Akun berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Akun berhasil ditambahkan.');
     }
 
     public function eakun(Request $request, $id)
@@ -75,12 +74,11 @@ class AkunController extends Controller
                 'kd_akun' => $request->kd_akun,
                 'posisi' => $request->posisi,
                 'katakun_id' => $request->kategori,
+                'tipe' => $request->tipe
             ]);
-            Total::where('id', $request->id,)->update([
-                'kd_akun' => $request->kd_akun
-            ]);
-            return redirect('/main/akun')->with('success', 'Akun berhasil diubah');
-        } elseif ($request->nama_akun != $data->nama_akun) {
+            return redirect()->back()->with('success', 'Akun berhasil diubah');
+        } 
+        elseif ($request->nama_akun != $data->nama_akun) {
             if ($request->kd_akun != $data->kd_akun) {
                 $this->validate($request, [
                     'nama_akun' => 'required|unique:akun',
@@ -97,18 +95,16 @@ class AkunController extends Controller
                 'kd_akun' => $request->kd_akun,
                 'posisi' => $request->posisi,
                 'katakun_id' => $request->kategori,
+                'tipe' => $request->tipe
             ]);
-            Total::where('id', $request->id,)->update([
-                'kd_akun' => $request->kd_akun
-            ]);
-            return redirect('/main/akun')->with('success', 'Akun berhasil diubah');
+            return redirect()->back()->with('success', 'Akun berhasil diubah');
         }
     }
 
     public function dakun($id)
     {
-        DB::table("akun")->delete($id);
-        return redirect('/main/akun')->with('success', 'Akun berhasil dihapus.');
+        Akun::where('id',$id)->delete();
+        return redirect()->back()->with('success', 'Akun berhasil dihapus.');
     }
 
     public function addkatakun(Request $request)
@@ -121,7 +117,7 @@ class AkunController extends Controller
             'akun' => $request->akun,
             'kode' => $request->kode
         ]);
-        return redirect('/main/akun')->with('success', 'Kategori Akun berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Kategori Akun berhasil ditambahkan.');
     }
 
     public function ekatakun(Request $request, $id)
@@ -138,7 +134,7 @@ class AkunController extends Controller
                 'akun' => $request->akun,
                 'kode' => $request->kode
             ]);
-            return redirect('/main/akun')->with('success', 'Kategori Akun berhasil diubah');
+            return redirect()->back()->with('success', 'Kategori Akun berhasil diubah');
         } 
         elseif ($request->akun != $data->akun) {
             if ($request->kode != $data->kode) {
@@ -154,14 +150,27 @@ class AkunController extends Controller
                 'akun' => $request->akun,
                 'kode' => $request->kode
             ]);
-            return redirect('/main/akun')->with('success', 'Akun berhasil diubah');
+            return redirect()->back()->with('success', 'Akun berhasil diubah');
         }
     }
 
     public function dkatakun($id)
     {
-        DB::table("kategori_akun")->delete($id);
-        return redirect('/main/akun')->with('success', 'Kategori Akun berhasil dihapus.');
+        KategoriAkun::where('id',$id)->delete();
+        return redirect()->back()->with('success', 'Kategori Akun berhasil dihapus.');
+    }
+
+    // Reset Akun
+    public function delakun()
+    {
+        if (Akun::exists()) {
+            Akun::query()->delete();
+            KategoriAkun::query()->delete();
+            File::deleteDirectory(public_path('/assets/image'));
+            return redirect()->back()->with('success', 'Reset data akun berhasil');
+        } else {
+            return redirect()->back()->with('warning', 'Proses ditolak karena data kosong');
+        }
     }
     
 }

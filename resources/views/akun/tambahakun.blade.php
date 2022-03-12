@@ -26,7 +26,7 @@
                     </div>
                 </div>
             @endif
-
+            {{-- Data Akun --}}
             <div class="card shadow mt-2">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -34,11 +34,11 @@
                             <thead class="table-control text-center">
                                 <tr>
                                     <th class="text-left">#</th>
-                                    <th data-priority="1">Nama Akun</th> 
-                                    <th>Kode Akun</th>
+                                    <th data-priority="3">Nama Akun</th> 
+                                    <th data-priority="1">Kode Akun</th>
                                     <th>Neraca Keuangan</th>
-                                    <th>Saldo < 0</th>
-                                    <th>Kategori</th>
+                                    <th data-priority="5">Tipe</th>
+                                    <th data-priority="4">Kategori</th>
                                     @if(Auth::user()->bagian == 'cashier' || Auth::user()->bagian == 'accounting')
                                         <th data-priority="2">Action</th>
                                     @endif
@@ -52,14 +52,16 @@
                                     <td>{{ucwords(substr($a->nama_akun,0,23))}}</td>
                                     <td>{{$a->kd_akun}}</td>
                                     <td class="text-center">{{ucwords($a->posisi)}}</td>
-                                    <td class="text-center">
-                                        @if($a->check == 'true')
-                                            <span class="badge rounded-pill bg-success">Yes</span>
-                                        @else
-                                            <span class="badge rounded-pill bg-danger">No</span>
-                                        @endif
-                                    </td>
-                                    <td>{{$a->katakun->kode}}</td>
+                                    @if ($a->tipe == 'tidak')
+                                        <td>-</td>
+                                    @else
+                                        <td>{{ucfirst($a->tipe)}}</td>
+                                    @endif
+                                    @if (!empty($a->katakun->kode))
+                                        <td>{{$a->katakun->kode}}</td>
+                                    @else
+                                        <td></td>
+                                    @endif
                                     @if(Auth::user()->bagian == 'cashier' || Auth::user()->bagian == 'accounting')
                                         <td class="text-center">
                                             <button type="button" class="btn btn-outline-custom2" title="Edit"  data-bs-toggle="modal" data-bs-target="#edit{{$a->id}}"><i class="far fa-edit"></i></button>
@@ -123,6 +125,19 @@
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <div class="row">
+                                                                        <label class="col-4 col-form-label">Tipe</label>
+                                                                        <div class="col-sm-5">
+                                                                            <select class="effect-1 form-select" name="tipe" required onfocus='this.size=3;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+                                                                                <option value="{{$a->tipe}}" selected hidden="true">{{ucfirst($a->tipe)}}</option> 
+                                                                                <option value="pendapatan">Pendapatan</option>
+                                                                                <option value="biaya">Biaya</option>
+                                                                                <option value="tidak">Tidak Keduanya</option>   
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <div class="row">
                                                                         <label class="col-4 col-form-label">Posisi di Neraca Saldo</label>
                                                                         <div class="col-sm-5 pt-2">
                                                                             <div class="form-check">
@@ -140,8 +155,8 @@
                                                                     <div class="row">
                                                                         <label class="col-4 col-form-label">Kategori</label>
                                                                         <div class="col-sm-5">
-                                                                            <select class="effect-1 form-select" name="kategori" required onmousedown="if(this.options.length>5){this.size=5;}"  onchange='this.size=5;' onblur="this.size=0;"> 
-                                                                                @if(!empty($a->katakun_id))
+                                                                            <select class="effect-1 form-select" name="kategori" required onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();'> 
+                                                                                @if(!empty($a->katakun->kode))
                                                                                     <option value="{{ $a->katakun_id }}" hidden>{{$a->katakun->kode}} - {{ ucwords($a->katakun->akun) }}</option>
                                                                                 @else
                                                                                     <option value="" hidden="true">-Pilih-</option> 
@@ -195,11 +210,11 @@
                     </div>
                 </div>
             @endif
-
+            {{-- Data Kategori Akun --}}
             <div class="card shadow mt-2">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table style="font-size:13px" class="table table-striped table-hover display nowrap" cellspacing="0" width="100%">
+                        <table id="table2" style="font-size:13px" class="table table-striped table-hover display nowrap" cellspacing="0" width="100%">
                             <thead class="table-control text-center">
                                 <tr>
                                     <th data-priority="1">Kode</th> 
@@ -228,11 +243,11 @@
                                                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body" style="font-size:15px">
-                                                            Anda yakin ingin menghapus akun <br>
+                                                            Anda yakin ingin menghapus kategori akun <br>
                                                             {{ucwords($k->akun)}}? Dengan <br>
-                                                            menghapus akun, data keuangan pada akun <br>
-                                                            {{ucwords($k->akun)}} 
-                                                            akan ikut terhapus.
+                                                            menghapus kategori akun, data keuangan pada kategori akun <br>
+                                                            {{ucwords($k->akun)}} dan akun <br>
+                                                            yang ada di dalam kategori akan ikut terhapus.
                                                         </div>
                                                         <div class="modal-footer">
                                                             <form action="/dkat-akun/{{$k->id}}" method="post">
@@ -334,6 +349,19 @@
                         </div>
                         <div class="form-group">
                             <div class="row">
+                                <label class="col-4 col-form-label">Tipe</label>
+                                <div class="col-sm-5">
+                                    <select class="effect-1 form-select" name="tipe" required onfocus='this.size=3;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+                                        <option value="" hidden="true">-Pilih-</option> 
+                                        <option value="pendapatan">Pendapatan</option>
+                                        <option value="biaya">Biaya</option>
+                                        <option value="tidak">Tidak Keduanya</option>   
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
                                 <label class="col-4 col-form-label">Posisi di Neraca Saldo</label>
                                 <div class="col-sm-5 pt-2">
                                     <div class="form-check">
@@ -351,7 +379,7 @@
                             <div class="row">
                                 <label class="col-4 col-form-label">Kategori</label>
                                 <div class="col-sm-5">
-                                    <select class="effect-1 form-select" name="kategori" required onmousedown="if(this.options.length>5){this.size=5;}"  onchange='this.size=5;' onblur="this.size=0;">
+                                    <select class="effect-1 form-select" name="kategori" required onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
                                         <option value="" hidden="true">-Pilih-</option> 
                                         @forelse($kategori as $k)
                                             <option value="{{ $k->id }}" {{ old('kategori') == $k->akun ? "selected" : "" }}>{{$k->kode}} - {{ ucwords($k->akun) }}</option>
@@ -360,13 +388,6 @@
                                         @endforelse
                                     </select>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" name="check" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Izinkan akun memiliki saldo kurang dari 0 (nol)</label>
                             </div>
                         </div>
                 </div>
@@ -435,6 +456,26 @@
                 "<'row'<'col-2 text-left'l><'col-10 text-right 'f>>" +
                 "<'row'<'col-sm-12'tr>>"+
                 "<'row'<'col-md-6'i><'col-md-6'p>>",
+            });
+		} );
+	</script>
+    <script type="text/javascript">
+		$(document).ready(function() {
+		    $('#table2').DataTable({
+                "order": [[ 0, "asc" ]],
+                language: {
+                    search: "",
+                    searchPlaceholder: "Search..."
+                },
+                responsive: true,
+                lengthMenu:[
+                    [10,25,50,100,-1],
+                    [10,25,50,100,"All"]
+                ],
+                dom: 
+                "<'row'<'col-2 text-left'l>>" +
+                "<'row'<'col-sm-12'tr>>"+
+                "<'row'<'col-sm-12'p>>",
             });
 		} );
 	</script>

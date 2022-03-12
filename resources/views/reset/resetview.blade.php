@@ -3,30 +3,29 @@
 @section('konten')
 <br>
 <div class="container">
-<div class="container">
     <div class="row">
         <div class="col-md-3">
             <div class="bd-callout">
                 <h5>Reset Data Akun</h5>
-                <button role="button" title="Reset Data Akun" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteakun">Reset</button>
+                <button type="button" title="Reset Data Akun" class="btn btn-outline-custom4" data-bs-toggle="modal" data-bs-target="#deleteakun">Reset</button>
             </div>
         </div>
         <div class="col-md-3">
             <div class="bd-callout">
                 <h5>Reset Data Buku Kas</h5>
-                <button role="button" title="Reset Data Buku Kas" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deletekas">Reset</button>
+                <button type="button" title="Reset Data Buku Kas" class="btn btn-outline-custom4" data-bs-toggle="modal" data-bs-target="#deletekas">Reset</button>
             </div>
         </div>
         <div class="col-md-3">
             <div class="bd-callout">
                 <h5>Reset Data Kategori</h5>
-                <button role="button" title="Reset Data Kategori" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deletekat">Reset</button>
+                <button type="button" title="Reset Data Kategori" class="btn btn-outline-custom4" data-bs-toggle="modal" data-bs-target="#deletekat">Reset</button>
             </div>
         </div>
         <div class="col-md-3">
             <div class="bd-callout">
                 <h5>Reset Data Keuangan</h5>
-                <button role="button" title="Reset Data Keuangan" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deletekeu">Reset</button>
+                <button type="button" title="Reset Data Keuangan" class="btn btn-outline-custom4" data-bs-toggle="modal" data-bs-target="#deletekeu">Reset</button>
             </div>
         </div>
     </div>

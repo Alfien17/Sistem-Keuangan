@@ -11,7 +11,7 @@
                 <div class="col-sm-5">
                     <div class="row">
                         <div class="col-6">
-                            <select class="effect-1 {{$errors->has('bulan')?'is-invalid':''}} form-select " name="bulan" required onmousedown="if(this.options.length>5){this.size=5;}"  onchange='this.size=5;' onblur="this.size=0;">
+                            <select class="effect-1 {{$errors->has('bulan')?'is-invalid':''}} form-select " name="bulan" required onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
                                 <option value="" hidden="true">-Pilih Bulan-</option> 
                                 @foreach($month as $m)
                                 <option value="{{($m->month)}}">{{($m->month)}}</option>
@@ -30,7 +30,7 @@
                             @enderror
                         </div>
                         <div class="col-6">
-                            <select class="effect-1 {{$errors->has('tahun')?'is-invalid':''}} form-select " name="tahun" required onmousedown="if(this.options.length>5){this.size=5;}"  onchange='this.size=5;' onblur="this.size=0;">
+                            <select class="effect-1 {{$errors->has('tahun')?'is-invalid':''}} form-select " name="tahun" required onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
                                 <option value="" hidden="true">-Pilih Tahun-</option> 
                                 @foreach($year2 as $y)
                                 <option value="{{($y->year2)}}">{{($y->year2)}}</option>

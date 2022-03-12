@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" type="text/css" href="/fontawesome-free-5.15.3-web/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/fontawesome-free-6.0.0-web/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="/css/spur.css">
     <link rel="stylesheet" type="text/css" href="/css/sidebar.css">
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css">
@@ -43,7 +43,7 @@
         <div class="sidebar close">
             <div class="logo-details">
                 <img class="mr-4 ml-3 mt-1" src="/img/alpin.png" alt="">
-                <span class="logo_name">IAC</span>
+                <span class="logo_name">IAC Finance</span>
             </div>
             <ul class="nav-links">
                 <li id="{{ Route::currentRouteNamed('main') ? 'active' : '' }}">
@@ -58,7 +58,7 @@
                 @if(Auth::user()->bagian != 'admin')
                     <li id="{{ Route::currentRouteNamed('dataakun') ? 'active' : '' }}">
                         <a href="/main/akun">
-                            <i class='fas fa-folder' ></i>
+                            <i class="fa-solid fa-folder"></i>
                             <span class="link_name">Data Akun</span>
                         </a>
                         <ul class="sub-menu blank">
@@ -67,7 +67,7 @@
                     </li>
                     <li id="{{ Route::currentRouteNamed('datakas') ? 'active' : '' }}">
                         <a href="/main/kas">
-                            <i class='fas fa-folder' ></i>
+                            <i class="fa-solid fa-folder"></i>
                             <span class="link_name">Data Kas</span>
                         </a>
                         <ul class="sub-menu blank">
@@ -76,7 +76,7 @@
                     </li>
                     <li id="{{ Route::currentRouteNamed('datakat') ? 'active' : '' }}">
                         <a href="/main/kategori">
-                            <i class='fas fa-folder' ></i>
+                            <i class="fa-solid fa-folder"></i>
                             <span class="link_name">Data Kategori</span>
                         </a>
                         <ul class="sub-menu blank">
@@ -88,7 +88,7 @@
                     class="{{ Route::currentRouteNamed('masuk') ? 'showMenu' : '' }}{{ Route::currentRouteNamed('keluar') ? 'showMenu' : '' }}{{ Route::currentRouteNamed('rekap') ? 'showMenu' : '' }}">
                         <div class="iocn-link">
                             <a href="#">
-                                <i class='fas fa-donate' ></i>
+                                <i class="fa-solid fa-circle-dollar-to-slot"></i>
                                 <span class="link_name">Keuangan</span>
                             </a>
                             <i class='bx bxs-chevron-down arrow' ></i>
@@ -96,9 +96,7 @@
                         <ul class="sub-menu">
                             <li><a class="link_name" href="#">Keuangan</a></li>
                             @if(Auth::user()->bagian == 'cashier' || Auth::user()->bagian == 'accounting')
-                                <li><a href="/main/keuangan/addin" id="{{ Route::currentRouteNamed('masuk') ? 'active' : '' }}">Tambah Debit</a></li>
-                                <li><a href="/main/keuangan/addout" id="{{ Route::currentRouteNamed('keluar') ? 'active' : '' }}">Tambah Kredit</a></li>
-                                {{-- <li><a href="/main/keuangan/in-out" id="{{ Route::currentRouteNamed('multi') ? 'active' : '' }}">Tambah Kredit dan Kredit</a></li> --}}
+                                <li><a href="/main/keuangan/tambah" id="{{ Route::currentRouteNamed('keu') ? 'active' : '' }}">Tambah Data Keuangan</a></li>
                             @endif
                             <li><a href="/main/keuangan" id="{{ Route::currentRouteNamed('rekap') ? 'active' : '' }}">Rekap</a></li>
                         </ul>
@@ -106,7 +104,7 @@
                 @else
                     <li id="{{ Route::currentRouteNamed('datauser') ? 'active' : '' }}">
                         <a href="/main/datauser">
-                            <i class='fas fa-folder' ></i>
+                            <i class="fa-solid fa-folder"></i>
                             <span class="link_name">Data User</span>
                         </a>
                         <ul class="sub-menu blank">
@@ -168,7 +166,7 @@
                             </a>
                             <div class="job">{{ucfirst(Auth::user()->bagian)}}</div>
                         </div>
-                        <i class='bx bx-log-out' data-bs-toggle="modal" data-bs-target="#logout" title="Logout"></i>
+                        <i class='fa-solid fa-arrow-right-from-bracket' data-bs-toggle="modal" data-bs-target="#logout" title="Logout"></i>
                     </div>
                 </li>
             </ul>
@@ -246,7 +244,7 @@
     <script src="/js/buttons.colVis.min.js"></script>
     <script src="/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/fixedheader/3.2.0/js/dataTables.fixedHeader.min.js"></script>
-
+    
 	<script src="/js/bootstrap.min.js"></script>
     <script src="/js/spur.js"></script>
     <script src="/js/sidebar.js"></script>
@@ -254,28 +252,28 @@
 
     @livewireScripts
     <script>
-    var new_scroll_position = 0;
-    var last_scroll_position;
-    var header = document.getElementById("header");
+        var new_scroll_position = 0;
+        var last_scroll_position;
+        var header = document.getElementById("header");
 
-    window.addEventListener('scroll', function(e) {
-    last_scroll_position = window.scrollY;
+        window.addEventListener('scroll', function(e) {
+        last_scroll_position = window.scrollY;
 
-    // Scrolling down
-    if (new_scroll_position < last_scroll_position && last_scroll_position > 100) {
-        // header.removeClass('slideDown').addClass('slideUp');
-        header.classList.remove("slideDown");
-        header.classList.add("slideUp");
+        // Scrolling down
+        if (new_scroll_position < last_scroll_position && last_scroll_position > 100) {
+            // header.removeClass('slideDown').addClass('slideUp');
+            header.classList.remove("slideDown");
+            header.classList.add("slideUp");
 
-    // Scrolling up
-    } else if (new_scroll_position > last_scroll_position) {
-        // header.removeClass('slideUp').addClass('slideDown');
-        header.classList.remove("slideUp");
-        header.classList.add("slideDown");
-    }
+        // Scrolling up
+        } else if (new_scroll_position > last_scroll_position) {
+            // header.removeClass('slideUp').addClass('slideDown');
+            header.classList.remove("slideUp");
+            header.classList.add("slideDown");
+        }
 
-    new_scroll_position = last_scroll_position;
-    });
+        new_scroll_position = last_scroll_position;
+        });
     </script>
     @include('sweetalert::alert')
 </body>

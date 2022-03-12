@@ -1,7 +1,7 @@
 @extends('main')
 @section('judul_halaman','Neraca Saldo')
 @section('konten')
-<br>
+<h6 class="container pb-2">{{$month2}} {{ucfirst($year2)}}</h6>
 <div class="container">
     <nav aria-label="breadcrumb">
     <ol class="breadcrumb bg-transparent">
@@ -35,40 +35,48 @@
                     </thead>
                     <tbody class=" text-left">
                         @forelse($kategori as $k)
-                        <tr>
-                            <th class="text-center">{{$k->kode}}</th>
-                            <th>{{ucwords($k->akun)}}</th>
-                            <td></td>
-                            <td></td>
-                        </tr>
+                            <tr>
+                                <th class="text-center">{{$k->kode}}</th>
+                                <th>{{ucwords($k->akun)}}</th>
+                                <td></td>
+                                <td></td>
+                            </tr>
                             @foreach($data as $d)
                                 @if($k->id == $d->katakun_id)
                                     <tr>
                                         <td class="text-center">{{$d->kd_akun}}</td>
                                         <td>{{ucwords($d->nama_akun)}}</td>
                                         @if($d->posisi == 'debit')
-                                            @foreach($saldo as $s)
-                                                @if ($s->kd_akun == $d->kd_akun)
-                                                    <td>
+                                            <td>
+                                                @foreach($saldo as $s)
+                                                    @if ($s->kd_akun == $d->kd_akun)
                                                         @if(!empty($s->sum))
+                                                            @if($s->sum>0)
                                                             Rp. {{number_format((float)$s->sum)}}
+                                                            @else
+                                                            Rp. {{number_format((float)$s->sum*-1)}}
+                                                            @endif
                                                         @endif
-                                                    </td>
-                                                @endif
-                                            @endforeach
+                                                    @endif
+                                                @endforeach
+                                            </td>
                                         @else
                                             <td></td>
                                         @endif
                                         @if($d->posisi == 'kredit')
+                                            <td>
                                             @foreach($saldo as $s)
                                                 @if ($s->kd_akun == $d->kd_akun)
-                                                    <td>
-                                                        @if(!empty($s->sum))
+                                                    @if(!empty($s->sum))
+                                                        @if ($s->sum > 0)
+                                                            Rp. {{number_format((float)$s->sum)}}
+                                                        @else
                                                             Rp. {{number_format((float)$s->sum*-1)}}
                                                         @endif
-                                                    </td>
+                                                    @endif
                                                 @endif
                                             @endforeach
+                                            </td>
                                         @else
                                             <td></td>
                                         @endif
@@ -90,9 +98,17 @@
                             <th>TOTAL</th>
                             @foreach($total as $t)
                                 @if($t->posisi == 'debit')
+                                    @if($t->sum>0)
                                     <th>Rp. {{number_format((float)$t->sum)}}</th>
-                                @else
+                                    @else
                                     <th>Rp. {{number_format((float)$t->sum*-1)}}</th>
+                                    @endif
+                                @else
+                                    @if($t->sum>0)
+                                    <th>Rp. {{number_format((float)$t->sum)}}</th>
+                                    @else
+                                    <th>Rp. {{number_format((float)$t->sum*-1)}}</th>
+                                    @endif
                                 @endif
                             @endforeach
                         </tr>

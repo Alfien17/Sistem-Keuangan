@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login | Sistem Keuangan IAC</title>
+    <title>Login | IAC Finance</title>
     <link rel="stylesheet" href="/fontawesome-free-5.15.3-web/css/all.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/main.css">
@@ -161,6 +161,17 @@
                             <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
                                     Silahkan untuk kembali ke halaman login dan <strong>refresh page</strong> terlebih dahulu sebelum mencoba login kembali.
+                                </div>
+                            </div>
+                            <h4 class="accordion-header" id="heading9">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse9" aria-expanded="false" aria-controls="collapse9">
+                                    <p>Email yang digunakan untuk regristasi</p>
+                                </button>
+                            </h4>
+                            <div id="collapse9" class="accordion-collapse collapse" aria-labelledby="heading9" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    Pastikan untuk menggunakan email yang aktif pada saat regristasi, karena pada saat melakukan ubah password link akan
+                                    dikirimkan ke email yang Anda gunakan.
                                 </div>
                             </div>
                             <h4 class="accordion-header" id="heading3">

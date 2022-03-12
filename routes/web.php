@@ -27,6 +27,7 @@ Route::post('/postverif/{id}', 'AuthController@postverif');
 
 Route::group(['middleware' => ['auth', 'bagian1']], function () 
 {
+    // Cashier dan Accounting
     Route::post('/addakun', 'AkunController@addakun');
     Route::put('/editakun/{id}', 'AkunController@eakun');
     Route::delete('/dakun/{id}', 'AkunController@dakun');
@@ -35,65 +36,61 @@ Route::group(['middleware' => ['auth', 'bagian1']], function ()
     Route::put('/editkat-akun/{id}', 'AkunController@ekatakun');
     Route::delete('/dkat-akun/{id}', 'AkunController@dkatakun');
 
-    Route::post('/addkas', 'MainController@addkas');
-    Route::put('/editkas/{id}', 'MainController@ekas');
-    Route::delete('/dkas/{id}', 'MainController@dkas');
+    Route::post('/addkas', 'BukuKasController@addkas');
+    Route::put('/editkas/{id}', 'BukuKasController@ekas');
+    Route::delete('/dkas/{id}', 'BukuKasController@dkas');
 
-    Route::post('/addkategori', 'MainController@addkat');
-    Route::put('/editkategori/{id}', 'MainController@ekat');
-    Route::delete('/dkat/{id}', 'MainController@dkat');
+    Route::post('/addkategori', 'KategoriController@addkat');
+    Route::put('/editkategori/{id}', 'KategoriController@ekat');
+    Route::delete('/dkat/{id}', 'KategoriController@dkat');
 
-    Route::get('/main/keuangan/addin', 'KeuanganController@addin')->name('masuk');
-    Route::get('/main/keuangan/addout', 'KeuanganController@addout')->name('keluar');
-    Route::post('/addin', 'KeuanganController@postaddin');
-    Route::post('/addout', 'KeuanganController@postaddout');
-    Route::get('/main/keuangan/update/{id}', 'KeuanganController@update')->name('rekap');
-    Route::post('/updatein/{id}', 'KeuanganController@postupdatein');
-    Route::post('/updateout/{id}', 'KeuanganController@postupdateout');
+    Route::get('/main/keuangan/tambah', 'KeuanganController@addkeu')->name('keu');
+    Route::post('/tambah', 'KeuanganController@postaddkeu');
+    Route::get('/main/keuangan/update/{id}', 'KeuanganController@editkeu')->name('rekap');
+    Route::post('/updatekeu/{id}', 'KeuanganController@postupdatekeu');
     Route::delete('/drekap/{id}', 'KeuanganController@drekap');
-    Route::post('/dimage/{id}', 'KeuanganController@dimage');
-    Route::post('/eimage/{id}', 'KeuanganController@eimage');
 
     Route::get('/main/reset-data', 'MainController@reset')->name('reset');
-    Route::post('/deleteakun', 'MainController@delakun');
-    Route::post('/deletekas', 'MainController@delkas');
-    Route::post('/deletekat', 'MainController@delkat');
-    Route::post('/deletekeu', 'MainController@delkeu');
+    Route::post('/deleteakun', 'AkunController@delakun');
+    Route::post('/deletekas', 'BukuKasController@delkas');
+    Route::post('/deletekat', 'KategoriController@delkat');
+    Route::post('/deletekeu', 'KeuanganController@delkeu');
 });
 
 Route::group(['middleware' => ['auth', 'bagian2']], function () 
 {
+    // Hanya Accounting
     Route::get('/main/laporan-jurnal', 'LaporanController@pilihjurnal')->name('jurnal');
     Route::post('/main/laporan-jurnal/view', 'LaporanController@jurnal')->name('jurnal');
-    Route::get('/main/laporan-akun', 'LaporanController@pilih')->name('lakun');
-    Route::post('/main/laporan-akun/view', 'LaporanController@postpilih')->name('lakun');
-    Route::get('/main/laporan-kas', 'LaporanController@pilih2')->name('lkas');
-    Route::post('/main/laporan-kas/view', 'LaporanController@postpilih2')->name('lkas');
+    Route::get('/main/laporan-akun', 'LaporanController@pilihakun')->name('lakun');
+    Route::post('/main/laporan-akun/view', 'LaporanController@postpilihakun')->name('lakun');
+    Route::get('/main/laporan-kas', 'LaporanController@pilihbkkas')->name('lkas');
+    Route::post('/main/laporan-kas/view', 'LaporanController@postpilihbkkas')->name('lkas');
     Route::get('/main/laporan-neracasaldo', 'LaporanController@pilihnersal')->name('nersal');
     Route::post('/main/laporan-neracasaldo/view', 'LaporanController@nersal')->name('nersal');
 });
 
 Route::group(['middleware' => ['auth', 'bagian3']], function () 
 {
+    // Hanya Admin
     Route::get('/main/datauser', 'UserController@user')->name('datauser');
     Route::get('/main/datauser/detail/{id}', 'UserController@detailuser')->name('datauser');
     Route::put('/euser/{id}', 'UserController@euser');
 });
 
+// Semua
 Route::get('/main', 'MainController@main')->name('main');
 Route::get('/main', 'MainController@dashboard')->name('main');
-Route::get('/main/year', 'MainController@sortyear')->name('main');
+Route::get('/main/chart1', 'MainController@sortyear1')->name('main');
+Route::get('/main/chart2', 'MainController@sortyear2')->name('main');
 Route::get('/main/akun', 'AkunController@tambahakun')->name('dataakun');
-Route::get('/main/kas', 'MainController@tambahkas')->name('datakas');
-Route::get('/main/kategori', 'MainController@tambahkat')->name('datakat');
+Route::get('/main/kas', 'BukuKasController@tambahkas')->name('datakas');
+Route::get('/main/kategori', 'KategoriController@tambahkat')->name('datakat');
 Route::get('/main/keuangan', 'KeuanganController@rekap')->name('rekap');
 Route::get('/main/keuangan/detail/{id}', 'KeuanganController@detail')->name('rekap');
 Route::get('/main/help', 'MainController@help')->name('help');
-Route::get('/main/profil', 'EditController@editakun')->name('editprofil');
+Route::get('/main/profil', 'AuthController@editakun')->name('editprofil');
 
-Route::post('/posteditakun', 'EditController@posteditakun');
-Route::post('/main/profil/imageakun/{id}', 'EditController@imageakun')->name('imageakun');
-Route::get('/dprofile/{id}', 'EditController@dprofile');
-
-// Route::get('/main/keuangan/in-out', 'KeuanganController@multi')->name('multi');
-// Route::post('/in-out', 'KeuanganController@postmulti');
+Route::post('/posteditakun', 'AuthController@posteditakun');
+Route::post('/main/profil/imageakun/{id}', 'AuthController@imageakun')->name('imageakun');
+Route::get('/dprofile/{id}', 'AuthController@dprofile');

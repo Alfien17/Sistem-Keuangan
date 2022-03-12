@@ -12904,8 +12904,9 @@ body {
 
 .stats {
     padding: 18px 23px;
-    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+    -webkit-box-shadow: 4px 4px 8px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 4px 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -12915,8 +12916,14 @@ body {
     -webkit-flex-direction: column;
     -ms-flex-direction: column;
     flex-direction: column;
-    min-height: 170px;
+    min-height: 100px;
     margin-bottom: 30px;
+    border-radius: 5px;
+}
+
+.stats:hover{
+    -webkit-box-shadow: 8px 8px 16px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 8px 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
 .stats-content {
@@ -12932,9 +12939,11 @@ body {
 }
 
 .stats-title {
-    font-size: 26px;
+    font-size: 17px;
     font-weight: 600;
     letter-spacing: .04em;
+    text-align: right;
+    color: #2D3E50;
 }
 
 .stats-icon {
@@ -12942,11 +12951,8 @@ body {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: end;
-    -webkit-align-items: flex-end;
-    -ms-flex-align: end;
-    align-items: flex-end;
-    font-size: 20px;
+    text-align: start;
+    font-size: 10px;
 }
 
 .stats-data {
@@ -12967,10 +12973,9 @@ body {
 }
 
 .stats-number {
-    font-size: 2.77vmax;
+    font-size: 23px;
     line-height: 33px;
     font-weight: 600;
-    margin-bottom: 10px;
 }
 
 .stats-change {
@@ -13018,7 +13023,7 @@ body {
 
 .stats-light {
     color: #212529;
-    background: #f8f9fa;
+    background: #e5e5e5;
 }
 
 .stats-dark {

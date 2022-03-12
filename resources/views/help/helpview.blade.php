@@ -27,6 +27,17 @@
                     Silahkan untuk kembali ke halaman login dan <strong>refresh page</strong> terlebih dahulu sebelum mencoba login kembali.
                 </div>
             </div>
+            <h4 class="accordion-header" id="heading9">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse9" aria-expanded="false" aria-controls="collapse9">
+                    <p>Email yang digunakan untuk regristasi</p>
+                </button>
+            </h4>
+            <div id="collapse9" class="accordion-collapse collapse" aria-labelledby="heading9" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    Pastikan untuk menggunakan email yang aktif pada saat regristasi, karena pada saat melakukan ubah password link akan
+                    dikirimkan ke email yang Anda gunakan.
+                </div>
+            </div>
             <h4 class="accordion-header" id="heading3">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
                     <p>Lupa Password</p>
@@ -40,49 +51,46 @@
                     <strong>Ketiga</strong>, masukkan password baru dan Konfirmasi password.
                 </div>
             </div>
+            @if(Auth::user()->bagian == 'cashier' || Auth::user()->bagian == 'accounting')
             <h4 class="accordion-header" id="heading4">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
-                    <p>Aturan tambah debit dan kredit</p>
+                    <p>Tambah dan Ubah Data Keuangan</p>
                 </button>
             </h4>
             <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="heading4" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    <strong>Pertama</strong>, pastikan akun tersedia pada input.<br>
-                    <strong>Kedua</strong>, tambah debit terlebih dahulu sebelum kredit.<br>
-                    <strong>Ketiga</strong>, besarnya jumlah kredit <strong>tidak lebih besar dari</strong> besarnya saldo pada akun. 
+                    Pastikan akun, buku kas, dan kategori tersedia pada input.<br>
+                    Akun pada debit dan kredit <strong>tidak boleh sama.</strong><br>
+                    Debit dan kredit otomatis terbentuk dengan sekali submit.
                 </div>
             </div>
             <h4 class="accordion-header" id="heading5">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
-                    <p>Aturan edit debit dan kredit</p>
+                    <p>Peringatan sebelum melakukan hapus akun, kategori akun, buku kas, dan kategori</p>
                 </button>
             </h4>
             <div id="collapse5" class="accordion-collapse collapse" aria-labelledby="heading5" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    <strong>Pertama</strong>, pastikan akun tersedia pada input.<br>
-                    <strong>Kedua</strong>, sebelum melakukan edit kredit, pastikan jumlah keuangan pada akun yang dituju cukup dan tidak melebihi batas.<br>
-                    <strong>Ketiga</strong>, cara menghitung batas kredit adalah sebagai berikut:<br>
-                    <div class="row">
-                        <div class="col-3">Saldo akun 1-101 (S)</div> <div class="col-2"> = Rp. 500,000</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-3">Besar kredit sebelum diedit (K)</div> <div class="col-2"> = Rp. 20,000</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-3">Batas edit kredit (S+K)</div> <div class="col-2"> = Rp. 520,000</div>
-                    </div>
-                    Maka, batas edit kredit yang dapat dilakukan pada akun 1-101 adalah Rp. 520,000.
+                    <strong>Hapus Akun </strong><br>
+                    Yang akan terhapus : <strong>akun</strong> yang dipilih dan <strong> data keuangan</strong> yang berhubungan dengan akun.<br>
+                    <strong>Hapus Kategori Akun </strong><br>
+                    Yang akan terhapus : <strong>kategori akun</strong> yang dipilih, <strong>akun-akun</strong> yang ada pada kategori, dan <strong>data keuangan</strong> yang berhubungan dengan akun.<br>
+                    <strong>Hapus Buku Kas </strong><br>
+                    Yang akan terhapus : <strong>buku kas</strong> yang dipilih dan <strong>data keuangan</strong> yang berhubungan dengan akun.<br>
+                    <strong>Hapus Kategori </strong><br>
+                    Yang akan terhapus : <strong>kategori</strong> yang dipilih dan <strong>data keuangan</strong> yang berhubungan dengan akun.<br>
                 </div>
             </div>
             <h4 class="accordion-header" id="heading6">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6">
-                    <p>Aturan hapus debit dan kredit</p>
+                    <p>Relasi yang terdapat pada database</p>
                 </button>
             </h4>
             <div id="collapse6" class="accordion-collapse collapse" aria-labelledby="heading6" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    Hapus debit dan kredit akan membatasi user dalam menghapus data (terutama debit) jika <strong> jumlah keuangan debit pada suatu akun 
-                    ternyata lebih sedikit daripada jumlah keuangan kreditnya</strong>, karena akan memungkinkan saldo pada akun tersebut dibawah nol.
+                    Tabel-tabel yang terdapat pada aplikasi ini <strong>berhubungan satu sama lainnya</strong>. Sehingga ketika
+                    menghapus satu data pada tabel A (contoh tabel akun), maka pada tabel B (contoh tabel rekap keuangan) akan ikut terhapus pada
+                    data yang memiliki relasi dengan tabel A.
                 </div>
             </div>
             <h4 class="accordion-header" id="heading7">
@@ -97,6 +105,17 @@
                     <strong style="cursor: pointer"><a href="/main/reset-data" class="text-dark" style="text-decoration: none"> Reset Data</a></strong>.
                 </div>
             </div>
+            <h4 class="accordion-header" id="heading8">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse8" aria-expanded="false" aria-controls="collapse8">
+                    <p>Terdapat checkbox di bawah gambar ketika melakukan ubah data keuangan</p>
+                </button>
+            </h4>
+            <div id="collapse8" class="accordion-collapse collapse" aria-labelledby="heading8" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    Jika Anda menceklis checkbox yang ada di bawah gambar lalu menekan tombol update, maka gambar pada data keuangan tersebut akan terhapus dan menjadi gambar default. 
+                </div>
+            </div>
+            @endif
         </div>
     </div>
     </div>

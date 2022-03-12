@@ -102,7 +102,7 @@
                                                             <div class="row">
                                                                 <label class="col-4 col-form-label">Cash/Cashless</label>
                                                                 <div class="col-sm-5">
-                                                                    <select name="tipe" class="form-select effect" required>
+                                                                    <select name="tipe" class="form-select effect" required onfocus='this.size=3;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
                                                                         <option value="{{$k->tipe}}" selected hidden>{{$k->tipe}}</option>
                                                                         <option value="Cash">Cash</option>
                                                                         <option value="Cashless">Cashless</option>
@@ -162,7 +162,7 @@
                             <div class="row">
                                 <label class="col-4 col-form-label">Cash/Cashless</label>
                                 <div class="col-sm-5">
-                                    <select name="tipe" class="form-select effect" required>
+                                    <select name="tipe" class="form-select effect" required onfocus='this.size=3;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
                                         <option hidden="true">-Pilih-</option>
                                         <option value="Cash" @if (old('tipe')=='Cash' ) selected @endif>Cash</option>
                                         <option value="Cashless" @if (old('tipe')=='Cashless' ) selected @endif>Cashless</option>

@@ -6,14 +6,11 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Akun;
-use App\Models\KategoriAkun;
-use App\Models\Total;
 use App\Models\Bukukas;
 use App\Models\Kategori;
-use App\Models\Keuangan;
+use App\Models\DataKeuangan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File; 
 
 class MainController extends Controller
 {
@@ -57,70 +54,81 @@ class MainController extends Controller
             $surname = $pecah[1];
         }
 
+        $sortakun = Akun::get();
+
         $juser = User::count();
-        $akun = Akun::count();
+        $akun = Akun::get();
         $kas = Bukukas::count();
         $kat = Kategori::count();
-        $d_debit = Keuangan::where('status','debit')->count();
-        $d_kredit = Keuangan::where('status', 'kredit')->count();
-        $debit = Keuangan::where('status','debit')->where('akun_id','!=',0)->sum('debit');
-        $kredit = Keuangan::where('status', 'kredit')->where('akun_id','!=', 0)->sum('kredit');
-        $saldo = $debit - $kredit;
-        $today = Carbon::now()->isoFormat('dddd, D MMMM Y');
-        $kode = Total::get();
-        $year = Carbon::now()->format('Y');
-        $sort = Keuangan::select(DB::raw('YEAR(tanggal) year'))->groupBy('year')->get();
+        $keu = DataKeuangan::count();
+        $countakun = Akun::count();
 
-        $jan = Keuangan::whereYear('tanggal', $year)->whereMonth('tanggal', '01')->sum('total');
-        $feb = Keuangan::whereYear('tanggal', $year)->whereMonth('tanggal', '02')->sum('total');
-        $mar = Keuangan::whereYear('tanggal', $year)->whereMonth('tanggal', '03')->sum('total');
-        $apr = Keuangan::whereYear('tanggal', $year)->whereMonth('tanggal', '04')->sum('total');
-        $mei = Keuangan::whereYear('tanggal', $year)->whereMonth('tanggal', '05')->sum('total');
-        $jun = Keuangan::whereYear('tanggal', $year)->whereMonth('tanggal', '06')->sum('total');
-        $jul = Keuangan::whereYear('tanggal', $year)->whereMonth('tanggal', '07')->sum('total');
-        $ags = Keuangan::whereYear('tanggal', $year)->whereMonth('tanggal', '08')->sum('total');
-        $sep = Keuangan::whereYear('tanggal', $year)->whereMonth('tanggal', '09')->sum('total');
-        $okt = Keuangan::whereYear('tanggal', $year)->whereMonth('tanggal', '10')->sum('total');
-        $nov = Keuangan::whereYear('tanggal', $year)->whereMonth('tanggal', '11')->sum('total');
-        $des = Keuangan::whereYear('tanggal', $year)->whereMonth('tanggal', '12')->sum('total');
+        $today = Carbon::now()->isoFormat('dddd, D MMMM Y');
+        $year = Carbon::now()->format('Y');
+        $sort = DataKeuangan::select(DB::raw('YEAR(tanggal) year'))->groupBy('year')->get();
+        $month = DataKeuangan::select(DB::raw("DATE_FORMAT(tanggal, '%M') month , MONTH(tanggal) month2"))
+        ->orderBy('month2', "asc")->get()->unique('month');
+        $month2 = DataKeuangan::select(DB::raw("DATE_FORMAT(tanggal, '%M') month , MONTH(tanggal) month2, YEAR(tanggal) year"))
+        ->orderBy('year', "asc")->get();
+
+        $pemasukkan = DataKeuangan::join('akun','akun.id','=','tbl_keuangan.akun_id')->where('tipe','pendapatan')->sum('total');
+        $pemasukkan2 = $pemasukkan*-1;
+        $biaya = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')->where('tipe', 'biaya')->sum('total');
+        $saldo = $pemasukkan2 - $biaya;
+        $ratio = $biaya / ($pemasukkan2) *100;
+
+        $cardin = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')->select(DB::raw("kd_akun, SUM(total)*-1 pendapatan"))
+            ->where('tipe','pendapatan')->groupBy('kd_akun')->orderBy('pendapatan','DESC')->get();
+        $cardout = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')->select(DB::raw("kd_akun, SUM(total) biaya"))
+        ->where('tipe', 'biaya')->groupBy('kd_akun')->orderBy('biaya', 'DESC')->get();
+        $chart = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')
+            ->select(DB::raw("DATE_FORMAT(tanggal, '%M') month,
+            SUM(CASE WHEN tipe = 'pendapatan' THEN total ELSE '0' END*-1) - SUM(CASE WHEN tipe = 'biaya' THEN total ELSE '0' END) total"))
+            ->whereYear('tanggal', $year)->groupBy('month')->get();
+        $cardrat = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')
+            ->select(DB::raw("DATE_FORMAT(tanggal, '%M') month,
+            SUM(CASE WHEN tipe = 'biaya' THEN total ELSE '0' END) / SUM(CASE WHEN tipe = 'pendapatan' THEN total ELSE '0' END*-1)*100 ratio"))
+            ->groupBy('month')->get();
+
+        $chart2 = DB::select("SELECT kd_akun, SUM(total) as total FROM akun JOIN tbl_keuangan keu ON keu.akun_id = akun.id 
+            WHERE posisi = 'debit' AND YEAR (tanggal) = '$year' GROUP BY(kd_akun)");
+        $chart3 = DB::select("SELECT kd_akun, SUM(total) as total FROM akun JOIN tbl_keuangan keu ON keu.akun_id = akun.id 
+            WHERE posisi = 'kredit' AND YEAR (tanggal) = '$year' GROUP BY(kd_akun)");
+
         return view('dashboard.dashboard', [
             'kas' => $kas,
             'kat' => $kat,
+            'keu' => $keu,
             'akun' => $akun,
-            'd_debit' => $d_debit,
-            'd_kredit' => $d_kredit,
             'today' => $today,
-            'debit' => $debit,
-            'kredit' => $kredit,
+            'pemasukkan2' => $pemasukkan2,
+            'biaya' => $biaya,
             'saldo' => $saldo,
-            'kode' => $kode,
+            'ratio' => $ratio,
+            'sortakun' => $sortakun,
             'sort' => $sort,
             'year' => $year,
-            'jan' => $jan,
-            'feb' => $feb,
-            'mar' => $mar,
-            'apr' => $apr,
-            'mei' => $mei,
-            'jun' => $jun,
-            'jul' => $jul,
-            'ags' => $ags,
-            'sep' => $sep,
-            'okt' => $okt,
-            'nov' => $nov,
-            'des' => $des,
             'forename' => $forename,
             'surname' => $surname,
-            'juser' => $juser
+            'juser' => $juser,
+            'month' => $month,
+            'month2' => $month2,
+            'chart' => $chart,
+            'chart2' => $chart2,
+            'chart3' => $chart3,
+            'cardin' => $cardin,
+            'cardout' => $cardout,
+            'cardrat' => $cardrat,
+            'countakun' => $countakun
         ]);
     }
 
-    public function sortyear(Request $request)
+    public function sortyear1(Request $request)
     {
         // Check Login
         if (!Auth::user()) {
             return redirect('/login');
         }
-        
         $auth = Auth::user();
         $nama = $auth->name;
         $pecah = explode(' ', $nama);
@@ -131,76 +139,89 @@ class MainController extends Controller
             $surname = $pecah[1];
         }
 
-        $year = Carbon::now()->format('Y');
-        $akun = Akun::count();
+        $sortakun = Akun::get();
+
+        $juser = User::count();
+        $akun = Akun::get();
         $kas = Bukukas::count();
         $kat = Kategori::count();
-        $d_debit = Keuangan::where('status', 'debit')->count();
-        $d_kredit = Keuangan::where('status', 'kredit')->count();
-        $debit = Keuangan::where('status', 'debit')->sum('debit');
-        $kredit = Keuangan::where('status', 'kredit')->sum('kredit');
-        $saldo = $debit - $kredit;
-        $today = Carbon::now()->isoFormat('dddd, D MMMM Y');
-        $kode = Total::get();
+        $keu = DataKeuangan::count();
+
+        $countakun = Akun::count();
+
+        $pemasukkan = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')->where('tipe', 'pendapatan')->sum('total');
+        $pemasukkan2 = $pemasukkan * -1;
+        $biaya = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')->where('tipe', 'biaya')->sum('total');
+        $saldo = $pemasukkan2 - $biaya;
+        $ratio = $biaya / ($pemasukkan2) * 100;
+
+        $cardin = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')->select(DB::raw("kd_akun, SUM(total)*-1 pendapatan"))
+        ->where('tipe', 'pendapatan')->groupBy('kd_akun')->orderBy('pendapatan', 'DESC')->get();
+        $cardout = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')->select(DB::raw("kd_akun, SUM(total) biaya"))
+        ->where('tipe', 'biaya')->groupBy('kd_akun')->orderBy('biaya', 'DESC')->get();
+        $cardrat = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')
+        ->select(DB::raw("DATE_FORMAT(tanggal, '%M') month,
+            SUM(CASE WHEN tipe = 'biaya' THEN total ELSE '0' END) / SUM(CASE WHEN tipe = 'pendapatan' THEN total ELSE '0' END*-1)*100 ratio"))
+        ->groupBy('month')->get();
+
         if(!empty($request->sortir)){
             $year2 = $request->get('sortir');
         }else{
             $year2 = Carbon::now()->format('Y');
         }
-        $sort = Keuangan::select(DB::raw('YEAR(tanggal) year'))->groupBy('year')->get();
+        $year = Carbon::now()->format('Y');
 
-        $jan = Keuangan::whereYear('tanggal', $year2)->whereMonth('tanggal', '01')->sum('total');
-        $feb = Keuangan::whereYear('tanggal', $year2)->whereMonth('tanggal', '02')->sum('total');
-        $mar = Keuangan::whereYear('tanggal', $year2)->whereMonth('tanggal', '03')->sum('total');
-        $apr = Keuangan::whereYear('tanggal', $year2)->whereMonth('tanggal', '04')->sum('total');
-        $mei = Keuangan::whereYear('tanggal', $year2)->whereMonth('tanggal', '05')->sum('total');
-        $jun = Keuangan::whereYear('tanggal', $year2)->whereMonth('tanggal', '06')->sum('total');
-        $jul = Keuangan::whereYear('tanggal', $year2)->whereMonth('tanggal', '07')->sum('total');
-        $ags = Keuangan::whereYear('tanggal', $year2)->whereMonth('tanggal', '08')->sum('total');
-        $sep = Keuangan::whereYear('tanggal', $year2)->whereMonth('tanggal', '09')->sum('total');
-        $okt = Keuangan::whereYear('tanggal', $year2)->whereMonth('tanggal', '10')->sum('total');
-        $nov = Keuangan::whereYear('tanggal', $year2)->whereMonth('tanggal', '11')->sum('total');
-        $des = Keuangan::whereYear('tanggal', $year2)->whereMonth('tanggal', '12')->sum('total');
+        $chart = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')
+        ->select(DB::raw("DATE_FORMAT(tanggal, '%M') month,
+            SUM(CASE WHEN tipe = 'pendapatan' THEN total ELSE '0' END*-1) - SUM(CASE WHEN tipe = 'biaya' THEN total ELSE '0' END) total"))
+        ->whereYear('tanggal',$year2)->groupBy('month')->get();
+        $chart2 = DB::select("SELECT kd_akun, SUM(total) as total FROM akun JOIN tbl_keuangan keu ON keu.akun_id = akun.id 
+            WHERE posisi = 'debit' AND YEAR (tanggal) = '$year' GROUP BY(kd_akun)");
+        $chart3 = DB::select("SELECT kd_akun, SUM(total) as total FROM akun JOIN tbl_keuangan keu ON keu.akun_id = akun.id 
+            WHERE posisi = 'kredit' AND YEAR (tanggal) = '$year' GROUP BY(kd_akun)");
+
+        $today = Carbon::now()->isoFormat('dddd, D MMMM Y');
+        $year = Carbon::now()->format('Y');
+        $sort = DataKeuangan::select(DB::raw('YEAR(tanggal) year'))->groupBy('year')->get();
+        $month = DataKeuangan::select(DB::raw("DATE_FORMAT(tanggal, '%M') month , MONTH(tanggal) month2"))
+        ->orderBy('month2', "asc")->get()->unique('month');
+        $month2 = DataKeuangan::select(DB::raw("DATE_FORMAT(tanggal, '%M') month , MONTH(tanggal) month2, YEAR(tanggal) year"))
+        ->orderBy('year', "asc")->get();
         return view('dashboard.dashboard', [
             'kas' => $kas,
             'kat' => $kat,
             'akun' => $akun,
-            'd_debit' => $d_debit,
-            'd_kredit' => $d_kredit,
+            'keu' => $keu,
             'today' => $today,
-            'debit' => $debit,
-            'kredit' => $kredit,
+            'pemasukkan2' => $pemasukkan2,
+            'biaya' => $biaya,
             'saldo' => $saldo,
-            'kode' => $kode,
+            'ratio' => $ratio,
+            'sortakun' => $sortakun,
             'sort' => $sort,
             'year' => $year,
             'year2' => $year2,
-            'jan' => $jan,
-            'feb' => $feb,
-            'mar' => $mar,
-            'apr' => $apr,
-            'mei' => $mei,
-            'jun' => $jun,
-            'jul' => $jul,
-            'ags' => $ags,
-            'sep' => $sep,
-            'okt' => $okt,
-            'nov' => $nov,
-            'des' => $des,
+            'forename' => $forename,
             'surname' => $surname,
-            'forename' => $forename
+            'juser' => $juser,
+            'month' => $month,
+            'month2' => $month2,
+            'chart' => $chart,
+            'chart2' => $chart2,
+            'chart3' => $chart3,
+            'cardin' => $cardin,
+            'cardout' => $cardout,
+            'cardrat' => $cardrat,
+            'countakun' => $countakun
         ]);
     }
-    
-    // CRUD BUKU KAS
-    public function tambahkas()
+
+    public function sortyear2(Request $request)
     {
         // Check Login
         if (!Auth::user()) {
             return redirect('/login');
         }
-
-        $year = Carbon::now()->format('Y');
         $auth = Auth::user();
         $nama = $auth->name;
         $pecah = explode(' ', $nama);
@@ -211,111 +232,83 @@ class MainController extends Controller
             $surname = $pecah[1];
         }
 
-        $kas = Bukukas::get();
-        return view('kas.tambahkas', [
+        $sortakun = Akun::get();
+        
+        $juser = User::count();
+        $akun = Akun::get();
+        $kas = Bukukas::count();
+        $kat = Kategori::count();
+        $keu = DataKeuangan::count();
+
+        $countakun = Akun::count();
+
+        $pemasukkan = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')->where('tipe', 'pendapatan')->sum('total');
+        $pemasukkan2 = $pemasukkan * -1;
+        $biaya = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')->where('tipe', 'biaya')->sum('total');
+        $saldo = $pemasukkan2 - $biaya;
+        $ratio = $biaya / ($pemasukkan2) * 100;
+
+        $cardin = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')->select(DB::raw("kd_akun, SUM(total)*-1 pendapatan"))
+        ->where('tipe', 'pendapatan')->groupBy('kd_akun')->orderBy('pendapatan', 'DESC')->get();
+        $cardout = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')->select(DB::raw("kd_akun, SUM(total) biaya"))
+        ->where('tipe', 'biaya')->groupBy('kd_akun')->orderBy('biaya', 'DESC')->get();
+        $cardrat = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')
+        ->select(DB::raw("DATE_FORMAT(tanggal, '%M') month,
+            SUM(CASE WHEN tipe = 'biaya' THEN total ELSE '0' END) / SUM(CASE WHEN tipe = 'pendapatan' THEN total ELSE '0' END*-1)*100 ratio"))
+        ->groupBy('month')->get();
+
+        if (!empty($request->sortir2)) {
+            $year3 = $request->get('sortir2');
+        } else {
+            $year3 = Carbon::now()->format('Y');
+        }
+        $year = Carbon::now()->format('Y');
+
+        $chart = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')
+        ->select(DB::raw("DATE_FORMAT(tanggal, '%M') month,
+            SUM(CASE WHEN tipe = 'pendapatan' THEN total ELSE '0' END*-1) - SUM(CASE WHEN tipe = 'biaya' THEN total ELSE '0' END) total"))
+        ->whereYear('tanggal', $year)->groupBy('month')->get();
+        $chart2 = DB::select("SELECT kd_akun, SUM(total) as total FROM akun JOIN tbl_keuangan keu ON keu.akun_id = akun.id 
+            WHERE posisi = 'debit' AND YEAR (tanggal) = '$year3' GROUP BY(kd_akun)");
+        $chart3 = DB::select("SELECT kd_akun, SUM(total) as total FROM akun JOIN tbl_keuangan keu ON keu.akun_id = akun.id 
+            WHERE posisi = 'kredit' AND YEAR (tanggal) = '$year3' GROUP BY(kd_akun)");
+
+        $today = Carbon::now()->isoFormat('dddd, D MMMM Y');
+        $year = Carbon::now()->format('Y');
+        $sort = DataKeuangan::select(DB::raw('YEAR(tanggal) year'))->groupBy('year')->get();
+        $month = DataKeuangan::select(DB::raw("DATE_FORMAT(tanggal, '%M') month , MONTH(tanggal) month2"))
+        ->orderBy('month2', "asc")->get()->unique('month');
+        $month2 = DataKeuangan::select(DB::raw("DATE_FORMAT(tanggal, '%M') month , MONTH(tanggal) month2, YEAR(tanggal) year"))
+        ->orderBy('year', "asc")->get();
+        return view('dashboard.dashboard', [
             'kas' => $kas,
-            'forename' => $forename,
-            'surname' => $surname,
-            'year' => $year
-        ]);
-    }
-
-    public function addkas(Request $request)
-    {
-        $this->validate($request, [
-            'bk_kas' => 'required|unique:bukukas',
-            'tipe' => 'required'
-        ]);
-        Bukukas::create([
-            'bk_kas' => $request->bk_kas,
-            'tipe' => $request->tipe
-        ]);
-        return redirect('/main/kas')->with('success', 'Kas berhasil ditambahkan');
-    }
-
-    public function ekas(Request $request, $id)
-    {
-        $data = Bukukas::where('id',$id)->first();
-
-        if ($request->bk_kas == $data->bk_kas) {
-            if ($request->tipe == $data->tipe){
-                $this->validate($request, [
-                    'bk_kas' => 'unique:bukukas',
-                ]);
-            }
-            Bukukas::where('id', $request->id,)->update([
-                'bk_kas' => $request->bk_kas,
-                'tipe' => $request->tipe
-            ]);
-            return redirect('/main/kas')->with('success', 'Kas berhasil diubah.');
-        } 
-        else {
-            $this->validate($request, [
-                'bk_kas' => 'unique:bukukas',
-            ]);
-            Bukukas::where('id', $request->id,)->update([
-                'bk_kas' => $request->bk_kas,
-                'tipe' => $request->tipe
-            ]);
-            return redirect('/main/kas')->with('success', 'Kas berhasil diubah.');
-        }
-    }
-
-    public function dkas($id)
-    {
-        Bukukas::where('id', $id)->delete();
-        return redirect('/main/kas')->with('success', 'Kas berhasil dihapus.');;
-    }
-
-    // CRUD Kategori
-    public function tambahkat()
-    {
-        // Check Login
-        if (!Auth::user()) {
-            return redirect('/login');
-        }
-
-        $year = Carbon::now()->format('Y');
-        $auth = Auth::user();
-        $nama = $auth->name;
-        $pecah = explode(' ', $nama);
-        $forename = $pecah[0];
-        if (empty($pecah[1])) {
-            $surname = "";
-        } else {
-            $surname = $pecah[1];
-        }
-
-        $kat = Kategori::get();
-        return view('kategori.tambahkat', [
             'kat' => $kat,
-            'surname' => $surname,
+            'akun' => $akun,
+            'keu' => $keu,
+            'today' => $today,
+            'pemasukkan2' => $pemasukkan2,
+            'biaya' => $biaya,
+            'saldo' => $saldo,
+            'ratio' => $ratio,
+            'sortakun' => $sortakun,
+            'sort' => $sort,
+            'year' => $year,
+            'year3' => $year3,
             'forename' => $forename,
-            'year' => $year
+            'surname' => $surname,
+            'juser' => $juser,
+            'month' => $month,
+            'month2' => $month2,
+            'chart' => $chart,
+            'chart2' => $chart2,
+            'chart3' => $chart3,
+            'cardin' => $cardin,
+            'cardout' => $cardout,
+            'cardrat' => $cardrat,
+            'countakun' => $countakun
         ]);
     }
 
-    public function addkat(Request $request)
-    {
-        $this->validate($request, ['name' => 'required|unique:kategori',]);
-        kategori::create(['name' => $request->name]);
-        return redirect('/main/kategori')->with('success', 'Kategori berhasil ditambahkan');
-    }
-
-    public function ekat(Request $request)
-    {
-        $this->validate($request, ['name' => 'required|unique:kategori',]);
-        Kategori::where('id', $request->id,)->update(['name' => $request->name]);
-        return redirect('/main/kategori')->with('success', 'Kategori berhasil diubah');
-    }
-
-    public function dkat($id)
-    {
-        Kategori::where('id', $id)->delete();
-        return redirect('/main/kategori')->with('success', 'Kategori berhasil dihapus');
-    }
-
-    // Reset Data
     public function reset()
     {
         // Check Login
@@ -339,52 +332,6 @@ class MainController extends Controller
             'surname' => $surname,
             'year' => $year
         ]);
-    }
-
-    public function delakun()
-    {
-        if (Akun::exists()) {
-            Akun::query()->delete();
-            KategoriAkun::query()->delete();
-            File::deleteDirectory(public_path('/assets/image'));
-            return redirect()->back()->with('success', 'Reset data akun berhasil');
-        } else {
-            return redirect()->back()->with('warning', 'Proses ditolak karena data kosong');
-        }
-    }
-
-    public function delkas()
-    {
-        if (Bukukas::exists()) {
-            Bukukas::query()->delete();
-            File::deleteDirectory(public_path('/assets/image'));
-            return redirect()->back()->with('success', 'Reset data buku kas berhasil');
-        } else {
-            return redirect()->back()->with('warning', 'Proses ditolak karena data kosong');
-        }
-    }
-
-    public function delkat()
-    {
-        if (Kategori::exists()) {
-            Kategori::query()->delete();
-            File::deleteDirectory(public_path('/assets/image'));
-            return redirect()->back()->with('success', 'Reset data kategori berhasil');
-        } else {
-            return redirect()->back()->with('warning', 'Proses ditolak karena data kosong');
-        }
-    }
-
-    public function delkeu()
-    {
-        if (Keuangan::exists()) {
-            Keuangan::query()->delete();
-            Total::query()->delete();
-            File::deleteDirectory(public_path('/assets/image'));
-            return redirect()->back()->with('success', 'Reset data keuangan berhasil');
-        } else {
-            return redirect()->back()->with('warning', 'Proses ditolak karena data kosong');
-        }
     }
 
     public function help()

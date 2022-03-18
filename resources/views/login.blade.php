@@ -86,11 +86,13 @@
                     <div class="container-login100-form-btn">
 						<button class="login100-form-btn" type="submit">Login</button>
 					</div>
-					<div class="text-center p-t-40 p-b-20">
+					{{-- <div class="text-center p-t-40 p-b-20">
                         <p class="txt2">Belum punya akun? <a href="/signup" title="Sign Up" class="txt1">Sign Up</a></a><br>
 						<a href="" title="Help" data-bs-toggle="modal" data-bs-target="#help" class="txt2">Help?</a>
+					</div> --}}
+                    <div class="text-center p-t-40 p-b-20">
+                        <p>&copy; 2021 @if($year!=2021)- {{$year}}@endif IAC | All rights reserved</p>
 					</div>
-                    <p class="d-flex justify-content-center pt-2">&copy; 2021 @if($year!=2021)- {{$year}}@endif IAC | All rights reserved</p>
 				</form>
 				<div class="login100-more" style="background-image: url('assets/export.png');">
                     <div class="text">

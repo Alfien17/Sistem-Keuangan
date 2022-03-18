@@ -17,13 +17,11 @@
     <div class="row">
         <div class="col-md-8 pb-3">
             @if(Auth::user()->bagian == 'cashier' || Auth::user()->bagian == 'accounting')
-                <div class="wrapper">
-                    <div class="btn-add" data-bs-toggle="modal" data-bs-target="#add">
-                        <div class="icon">
-                            <i class="fas fa-plus"></i>
-                        </div>
-                        <span>Add</span>
+                <div class="button btn-add" data-bs-toggle="modal" data-bs-target="#add">
+                    <div class="circle">
+                        <span class="fas fa-plus"></span>
                     </div>
+                    <p class="button-text pl-1">Tambah Akun</p>
                 </div>
             @endif
             {{-- Data Akun --}}
@@ -201,13 +199,11 @@
 
         <div class="col-md-4">
             @if(Auth::user()->bagian == 'cashier' || Auth::user()->bagian == 'accounting')
-                <div class="wrapper">
-                    <div class="btn-add" data-bs-toggle="modal" data-bs-target="#addkat">
-                        <div class="icon">
-                            <i class="fas fa-plus"></i>
-                        </div>
-                        <span>Add</span>
+                <div class="button btn-add2" data-bs-toggle="modal" data-bs-target="#addkat">
+                    <div class="circle">
+                        <span class="fas fa-plus"></span>
                     </div>
+                    <p class="button-text pl-1">Tambah Kategori Akun</p>
                 </div>
             @endif
             {{-- Data Kategori Akun --}}

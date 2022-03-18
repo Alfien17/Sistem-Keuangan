@@ -34,7 +34,7 @@
             <div class="d-flex justify-content-center">
             @foreach($user as $u)
                 <form action="/postverif/{{$u->id}}" method="post" class="box">
-                    <h1 class="text-center">Update Password</h1>
+                    <h1 class="text-center">Verifikasi Akun</h1>
                     @csrf
                     <div class="card-body">
                         Klik Verifikasi untuk verifikasi akun

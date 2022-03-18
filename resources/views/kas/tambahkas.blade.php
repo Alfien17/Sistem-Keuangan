@@ -17,13 +17,11 @@
     @endif
 
     @if(Auth::user()->bagian == 'cashier' || Auth::user()->bagian == 'accounting')
-        <div class="wrapper">
-            <div class="btn-add" data-bs-toggle="modal" data-bs-target="#add">
-                <div class="icon">
-                    <i class="fas fa-plus"></i>
-                </div>
-                <span>Add</span>
+        <div class="button btn-add3" data-bs-toggle="modal" data-bs-target="#add">
+            <div class="circle">
+                <span class="fas fa-plus"></span>
             </div>
+            <p class="button-text pl-1">Tambah Buku Kas</p>
         </div>
     @endif
 
@@ -144,7 +142,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Tambah Kas</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Tambah Buku Kas</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

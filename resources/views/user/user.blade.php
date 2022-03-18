@@ -16,13 +16,11 @@
     </div>
     @endif
 
-    <div class="wrapper">
-        <div class="btn-add" data-bs-toggle="modal" data-bs-target="#add">
-            <div class="icon">
-                <i class="fas fa-plus"></i>
-            </div>
-            <span>Add</span>
+    <div class="button btn-add" data-bs-toggle="modal" data-bs-target="#add">
+        <div class="circle">
+            <span class="fas fa-plus"></span>
         </div>
+        <p class="button-text pl-1">Tambah User</p>
     </div>
 
     <div class="card shadow mt-2">

@@ -68,4 +68,10 @@ class UserController extends Controller
             'year' => $year
         ]);
     }
+
+    public function duser($id)
+    {
+        User::where('id', $id)->delete();
+        return redirect()->back()->with('success', 'User berhasil dihapus');
+    }
 }

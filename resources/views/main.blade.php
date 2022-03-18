@@ -243,7 +243,7 @@
     <script src="/js/buttons.print.min.js"></script>
     <script src="/js/buttons.colVis.min.js"></script>
     <script src="/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/fixedheader/3.2.0/js/dataTables.fixedHeader.min.js"></script>
+    <script src="/js/dataTables.fixedHeader.min.js"></script>
     
 	<script src="/js/bootstrap.min.js"></script>
     <script src="/js/spur.js"></script>

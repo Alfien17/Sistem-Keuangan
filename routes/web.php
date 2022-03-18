@@ -17,7 +17,7 @@ Route::get('/', 'AuthController@showFormLogin')->name('login');
 Route::get('login', 'AuthController@showFormLogin')->name('login');
 Route::post('login', 'AuthController@login');
 Route::post('logout', 'AuthController@logout')->name('logout');
-Route::get('signup', 'AuthController@showFormRegister')->name('signup');
+// Route::get('signup', 'AuthController@showFormRegister')->name('signup');
 Route::post('postsignup', 'AuthController@register')->name('postsignup');
 Route::post('/password', 'AuthController@editpsw');
 Route::get('/update-password/{encrypt_id}', 'AuthController@password')->name('update');
@@ -76,6 +76,7 @@ Route::group(['middleware' => ['auth', 'bagian3']], function ()
     Route::get('/main/datauser', 'UserController@user')->name('datauser');
     Route::get('/main/datauser/detail/{id}', 'UserController@detailuser')->name('datauser');
     Route::put('/euser/{id}', 'UserController@euser');
+    Route::delete('/duser/{id}', 'UserController@duser');
 });
 
 // Semua

@@ -71,7 +71,11 @@ class UserController extends Controller
 
     public function duser($id)
     {
-        User::where('id', $id)->delete();
-        return redirect()->back()->with('success', 'User berhasil dihapus');
+        if ($id == '1') {
+            return redirect()->back()->with('warning', 'User tidak bisa dihapus');
+        }else{
+            User::where('id', $id)->delete();
+            return redirect()->back()->with('success', 'User berhasil dihapus');
+        }
     }
 }

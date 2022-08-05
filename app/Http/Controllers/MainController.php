@@ -77,10 +77,6 @@ class MainController extends Controller
         $saldo = $pemasukkan2 - $biaya;
         $ratio = $biaya / ($pemasukkan2) *100;
 
-        $cardin = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')->select(DB::raw("kd_akun, SUM(total)*-1 pendapatan"))
-            ->where('tipe','pendapatan')->groupBy('kd_akun')->orderBy('pendapatan','DESC')->get();
-        $cardout = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')->select(DB::raw("kd_akun, SUM(total) biaya"))
-        ->where('tipe', 'biaya')->groupBy('kd_akun')->orderBy('biaya', 'DESC')->get();
         $chart = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')
             ->select(DB::raw("DATE_FORMAT(tanggal, '%M') month,
             SUM(CASE WHEN tipe = 'pendapatan' THEN total ELSE '0' END*-1) - SUM(CASE WHEN tipe = 'biaya' THEN total ELSE '0' END) total"))
@@ -116,8 +112,6 @@ class MainController extends Controller
             'chart' => $chart,
             'chart2' => $chart2,
             'chart3' => $chart3,
-            'cardin' => $cardin,
-            'cardout' => $cardout,
             'cardrat' => $cardrat,
             'countakun' => $countakun
         ]);
@@ -155,10 +149,6 @@ class MainController extends Controller
         $saldo = $pemasukkan2 - $biaya;
         $ratio = $biaya / ($pemasukkan2) * 100;
 
-        $cardin = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')->select(DB::raw("kd_akun, SUM(total)*-1 pendapatan"))
-        ->where('tipe', 'pendapatan')->groupBy('kd_akun')->orderBy('pendapatan', 'DESC')->get();
-        $cardout = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')->select(DB::raw("kd_akun, SUM(total) biaya"))
-        ->where('tipe', 'biaya')->groupBy('kd_akun')->orderBy('biaya', 'DESC')->get();
         $cardrat = DataKeuangan::join('akun', 'akun.id', '=', 'tbl_keuangan.akun_id')
         ->select(DB::raw("DATE_FORMAT(tanggal, '%M') month,
             SUM(CASE WHEN tipe = 'biaya' THEN total ELSE '0' END) / SUM(CASE WHEN tipe = 'pendapatan' THEN total ELSE '0' END*-1)*100 ratio"))
@@ -209,8 +199,6 @@ class MainController extends Controller
             'chart' => $chart,
             'chart2' => $chart2,
             'chart3' => $chart3,
-            'cardin' => $cardin,
-            'cardout' => $cardout,
             'cardrat' => $cardrat,
             'countakun' => $countakun
         ]);
@@ -356,6 +344,136 @@ class MainController extends Controller
             'forename' => $forename,
             'surname' => $surname,
             'year' => $year
+        ]);
+    }
+
+    public function pendapatan()
+    {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $year = Carbon::now()->format('Y');
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
+        $pendapatan = DataKeuangan::join('akun','tbl_keuangan.akun_id','=','akun.id')->where('tipe','pendapatan')->get();
+        $total = DataKeuangan::join('akun', 'tbl_keuangan.akun_id', '=', 'akun.id')->where('tipe', 'pendapatan')->sum('total');
+        return view('dashboard.pendapatan',[
+            'pendapatan' => $pendapatan,
+            'total' => $total,
+            'forename' => $forename,
+            'surname' => $surname,
+            'year' => $year
+        ]);
+    }
+
+    public function postpendapatan (Request $request)
+    {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $year = Carbon::now()->format('Y');
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
+        $from = $request->dari;
+        $to = $request->ke;
+
+        $pendapatan = DataKeuangan::join('akun', 'tbl_keuangan.akun_id', '=', 'akun.id')->where('tipe', 'pendapatan')
+            ->whereBetween('tanggal', [$from, $to])->get();
+        $total = DataKeuangan::join('akun', 'tbl_keuangan.akun_id', '=', 'akun.id')->where('tipe', 'pendapatan')
+            ->whereBetween('tanggal', [$from, $to])->sum('total');
+        return view('dashboard.pendapatan', [
+            'pendapatan' => $pendapatan,
+            'total' => $total,
+            'forename' => $forename,
+            'surname' => $surname,
+            'year' => $year,
+            'from' => $from,
+            'to' => $to
+        ]);
+    }
+
+    public function biaya()
+    {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $year = Carbon::now()->format('Y');
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
+        $biaya = DataKeuangan::join('akun', 'tbl_keuangan.akun_id', '=', 'akun.id')->where('tipe', 'biaya')->get();
+        $total = DataKeuangan::join('akun', 'tbl_keuangan.akun_id', '=', 'akun.id')->where('tipe', 'biaya')->sum('total');
+        return view('dashboard.biaya', [
+            'biaya' => $biaya,
+            'total' => $total,
+            'forename' => $forename,
+            'surname' => $surname,
+            'year' => $year
+        ]);
+    }
+
+    public function postbiaya(Request $request)
+    {
+        // Check Login
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
+
+        $year = Carbon::now()->format('Y');
+        $auth = Auth::user();
+        $nama = $auth->name;
+        $pecah = explode(' ', $nama);
+        $forename = $pecah[0];
+        if (empty($pecah[1])) {
+            $surname = "";
+        } else {
+            $surname = $pecah[1];
+        }
+
+        $from = $request->dari;
+        $to = $request->ke;
+
+        $biaya = DataKeuangan::join('akun', 'tbl_keuangan.akun_id', '=', 'akun.id')->where('tipe', 'biaya')
+        ->whereBetween('tanggal', [$from, $to])->get();
+        $total = DataKeuangan::join('akun', 'tbl_keuangan.akun_id', '=', 'akun.id')->where('tipe', 'biaya')
+        ->whereBetween('tanggal', [$from, $to])->sum('total');
+        return view('dashboard.biaya', [
+            'biaya' => $biaya,
+            'total' => $total,
+            'forename' => $forename,
+            'surname' => $surname,
+            'year' => $year,
+            'from' => $from,
+            'to' => $to
         ]);
     }
 }

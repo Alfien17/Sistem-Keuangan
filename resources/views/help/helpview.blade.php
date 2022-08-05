@@ -74,7 +74,7 @@
                     <strong>Hapus Akun </strong><br>
                     Yang akan terhapus : <strong>akun</strong> yang dipilih dan <strong> data keuangan</strong> yang berhubungan dengan akun.<br>
                     <strong>Hapus Kategori Akun </strong><br>
-                    Yang akan terhapus : <strong>kategori akun</strong> yang dipilih, <strong>akun-akun</strong> yang ada pada kategori, dan <strong>data keuangan</strong> yang berhubungan dengan akun.<br>
+                    Yang akan terhapus : <strong>kategori akun</strong> yang dipilih.<br>
                     <strong>Hapus Buku Kas </strong><br>
                     Yang akan terhapus : <strong>buku kas</strong> yang dipilih dan <strong>data keuangan</strong> yang berhubungan dengan akun.<br>
                     <strong>Hapus Kategori </strong><br>

@@ -18,7 +18,7 @@
                     <div class="row">
                         <label class="col-sm-3 col-form-label">Tanggal</label>
                         <div class="col-sm-7">
-                            <input type="date" name="tanggal" class="form-control effect-1 {{$errors->has('tanggal')?'is-invalid':''}}"  value="{{old('tanggal', $keuangan->tanggal ?? '')}}" required>
+                            <input type="date" name="tanggal" class="form-control effect-1 {{$errors->has('tanggal')?'is-invalid':''}}" required>
                             <span class="focus-border"></span>
                             <div class="valid-tooltip">
                                 Great!
@@ -158,7 +158,7 @@
                                 <div class="col-6">
                                 <input type="number" min="1" name="uang" class="form-control effect-1 {{$errors->has('uang')?'is-invalid':''}}" value="{{old('uang')}}" autocomplete="off" 
                                     placeholder="Masukkan Jumlah Uang..." required id="inputAngka"> 
-                                    <span class="focus-border"></span>
+                                    <span class="focus-border2"></span>
                                     <div class="valid-tooltip">
                                         Great!
                                     </div>

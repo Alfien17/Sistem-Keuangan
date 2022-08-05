@@ -34,7 +34,7 @@
     <div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100">
-				<form class="login100-form validate-form" action="{{ route('login') }}" method="post">
+				<form class="login100-form validate-form" action="postlogin" method="post">
                     @csrf
 					<span class="login100-form-title p-b-40">
 						Login
@@ -82,16 +82,18 @@
 					</div>
                     <div class="d-flex justify-content-end p-t-3 p-b-32">
 						<a href="#" data-bs-toggle="modal" data-bs-target="#password" title="Forgot Password" class="txt1">Forgot Password?</a>
+                        {{-- <a href="/epass" title="Forgot Password" class="txt1">Forgot Password?</a> --}}
 					</div>
                     <div class="container-login100-form-btn">
 						<button class="login100-form-btn" type="submit">Login</button>
 					</div>
-					{{-- <div class="text-center p-t-40 p-b-20">
+					<div class="text-center p-t-40 p-b-20">
                         <p class="txt2">Belum punya akun? <a href="/signup" title="Sign Up" class="txt1">Sign Up</a></a><br>
 						<a href="" title="Help" data-bs-toggle="modal" data-bs-target="#help" class="txt2">Help?</a>
-					</div> --}}
+					</div>
                     <div class="text-center p-t-40 p-b-20">
                         <p>&copy; 2021 @if($year!=2021)- {{$year}}@endif IAC | All rights reserved</p>
+                        <p>Designed by <a href="https://instagram.com/alfiensukma?utm_medium=copy_link" target="_blank">Alfiensukma</a></p>
 					</div>
 				</form>
 				<div class="login100-more" style="background-image: url('assets/export.png');">

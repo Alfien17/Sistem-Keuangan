@@ -20,117 +20,39 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-3">
-                <div class="stats stats-light" data-bs-toggle="modal" data-bs-target="#pemasukkan">
-                    <div class="d-flex justify-content-between">
-                        <div class="card-body-icon">
-                            <i class="fa-solid fa-hand-holding-dollar"></i>
+                <a href="/main/pendapatan">
+                    <div class="stats stats-light">
+                        <div class="d-flex justify-content-between">
+                            <div class="card-body-icon">
+                                <i class="fa-solid fa-hand-holding-dollar"></i>
+                            </div>
+                            <h3 class="stats-title"> Pendapatan </h3>
                         </div>
-                        <h3 class="stats-title"> Pendapatan </h3>
-                    </div>
-                    <div class="stats-content">
-                        <div class="stats-data">
-                            <div class="stats-number">Rp. {{number_format((float)$pemasukkan2)}}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Modal Pendapatan --}}
-            <div class="modal fade" id="pemasukkan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title ml-2" id="exampleModalLabel">Rekap Pendapatan</h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <table class="table table-borderless">
-                                @forelse ($cardin as $c)
-                                <tr>
-                                    <th 
-                                    @foreach ($sortakun as $s)
-                                        @if ($s->kd_akun == $c->kd_akun)
-                                            title="{{ucwords($s->nama_akun)}}"
-                                        @endif
-                                    @endforeach 
-                                    style="cursor: pointer">{{$c->kd_akun}}</th>
-                                    <td>:</td>
-                                    <td>
-                                        <a class="float-left">Rp.</a> 
-                                        <a class="float-right">{{number_format((float)$c->pendapatan)}}</a>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <th>Data Kosong.</th>
-                                </tr>   
-                                @endforelse
-                                <tr class="dropdown-divider">
-                                    <th>Total</th>
-                                    <td>:</td>
-                                    <td><a class="float-left">Rp.</a> <a class="float-right">{{number_format((float)$pemasukkan2)}}</a></td>
-                                </tr>
-                            </table>
+                        <div class="stats-content">
+                            <div class="stats-data">
+                                <div class="stats-number">Rp. {{number_format((float)$pemasukkan2)}}</div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
 
             <div class="col-xl-3">
-                <div class="stats stats-light" data-bs-toggle="modal" data-bs-target="#biaya">
-                    <div class="d-flex justify-content-between">
-                        <div class="card-body-icon">
-                            <i class="fa-solid fa-money-bill-1-wave"></i>
+                <a href="/main/biaya">
+                    <div class="stats stats-light">
+                        <div class="d-flex justify-content-between">
+                            <div class="card-body-icon">
+                                <i class="fa-solid fa-money-bill-1-wave"></i>
+                            </div>
+                            <h3 class="stats-title"> Biaya </h3>
                         </div>
-                        <h3 class="stats-title"> Biaya </h3>
-                    </div>
-                    <div class="stats-content">
-                        <div class="stats-data">
-                            <div class="stats-number">Rp. {{number_format((float)$biaya)}}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Modal Biaya --}}
-            <div class="modal fade" id="biaya" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title ml-2" id="exampleModalLabel">Rekap Biaya</h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <table class="table table-borderless">
-                                @forelse ($cardout as $c)
-                                <tr>
-                                    <th 
-                                    @foreach ($sortakun as $s)
-                                        @if ($s->kd_akun == $c->kd_akun)
-                                            title="{{ucwords($s->nama_akun)}}"
-                                        @endif
-                                    @endforeach 
-                                    style="cursor: pointer">{{$c->kd_akun}}</th>
-                                    <td>:</td>
-                                    <td>
-                                        <a class="float-left">Rp.</a> 
-                                        <a class="float-right">{{number_format((float)$c->biaya)}}</a>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <th>Data Kosong.</th>
-                                </tr>   
-                                @endforelse
-                                <tr class="dropdown-divider">
-                                    <th>Total</th>
-                                    <td>:</td>
-                                    <td><a class="float-left">Rp.</a> <a class="float-right">{{number_format((float)$biaya)}}</a></td>
-                                </tr>
-                            </table>
+                        <div class="stats-content">
+                            <div class="stats-data">
+                                <div class="stats-number">Rp. {{number_format((float)$biaya)}}</div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
 
             <div class="col-xl-3">
@@ -139,7 +61,7 @@
                         <div class="card-body-icon">
                             <i class="fa-solid fa-scale-balanced"></i>
                         </div>
-                        <h3 class="stats-title"> Selisih </h3>
+                        <h3 class="stats-title"> Saldo (Selisih) </h3>
                     </div>
                     <div class="stats-content">
                         <div class="stats-data">
@@ -213,7 +135,7 @@
             </div> --}}
 
             <div class="col-xl-3" data-bs-toggle="modal" data-bs-target="#ratio">
-                <div class="stats stats-light">
+                <div class="stats stats-light" style="cursor: pointer">
                    <div class="d-flex justify-content-between">
                         <div class="card-body-icon pl-2 pr-2">
                             <i class="fa-solid fa-percent"></i>
@@ -230,49 +152,33 @@
         </div>
 
         {{-- Modal Ratio --}}
-            {{-- <div class="modal fade" id="ratio" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="ratio" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title ml-2" id="exampleModalLabel">Rekap Biaya</h5>
+                            <h5 class="modal-title ml-2" id="exampleModalLabel">Rasio</h5>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <table class="table table-borderless">
-                                @forelse ($sort as $y)
-                                <tr>
-                                    <th>Tahun {{$y->year}}</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                                @foreach ($month as $m)
-                                <tr>
-                                    <td>{{$m->month}}</td>
-                                    <td>:</td>
-                                    <td class="float-right">
-                                        @foreach ($cardrat as $c)
-                                            @if ($m->month == $c->month)
-                                                {{number_format((float)$c->ratio)}}%
-                                            @endif
-                                        @endforeach
-                                    </td>
-                                </tr>
-                                @endforeach 
-                                @empty
-                                <tr>
-                                    <th>Data Kosong.</th>
-                                </tr>   
-                                @endforelse
-                                <tr class="dropdown-divider">
-                                    <th>Total</th>
-                                    <td>:</td>
-                                    <td><a class="float-left">Rp.</a> <a class="float-right">{{number_format((float)$ratio)}}%</div></a></td>
-                                </tr>
-                            </table>
+                            @if (number_format((float)$ratio) > 100)
+                                Semakin tinggi nilai rasio Total Biaya daripada Total Pendapatan maka semakin tidak efisien. Rasio yang sudah dihitung 
+                                berdasarkan total biaya dan total pendapatan bahwa rasio yang didapatkan sebesar <strong>{{number_format((float)$ratio)}}%</strong>. 
+                                Karena rasio lebih besar dari 100%, maka artinya nilai tersebut belum efisien dilihat dari nilai pendapatan yang lebih kecil 
+                                dibandingkan dengan nilai biaya. Nilai pendapatan sebesar <strong>Rp. {{number_format((float)$pemasukkan2)}}</strong> 
+                                dan biaya sebesar <strong>Rp. {{number_format((float)$biaya)}}</strong> dan mengakibatkan adanya penurunan asset bersih 
+                                sebesar <strong>Rp. {{number_format((float)$saldo*-1)}}</strong>.
+                            @else
+                                Semakin tinggi nilai rasio Total Pendapatan daripada Total Biaya maka semakin efisien. Rasio yang sudah dihitung 
+                                berdasarkan total biaya dan total pendapatan bahwa rasio yang didapatkan sebesar <strong>{{number_format((float)$ratio)}}%</strong>. 
+                                Karena rasio lebih kecil dari 100%, maka artinya nilai tersebut termasuk efisien dilihat dari nilai pendapatan yang lebih besar 
+                                dibandingkan dengan nilai biaya. Nilai pendapatan sebesar <strong>Rp. {{number_format((float)$pemasukkan2)}}</strong> 
+                                dan biaya sebesar <strong>Rp. {{number_format((float)$biaya)}}</strong> dan mengakibatkan adanya penaikan asset bersih 
+                                sebesar <strong>Rp. {{number_format((float)$saldo)}}</strong>.
+                            @endif
                         </div>
                     </div>
                 </div>
-            </div> --}}
+            </div>
     
         <div class="row">
             <div class="col-xl-8">

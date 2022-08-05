@@ -12,18 +12,24 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+// Jika aplikasi ingin offline
+Route::get('epass', 'AuthController@epass')->name('epass');
+Route::post('postepass', 'AuthController@postepass')->name('postepass');
+Route::post('postsignup2', 'AuthController@register2')->name('postsignup2');
 
-Route::get('/', 'AuthController@showFormLogin')->name('login');
-Route::get('login', 'AuthController@showFormLogin')->name('login');
-Route::post('login', 'AuthController@login');
-Route::post('logout', 'AuthController@logout')->name('logout');
-// Route::get('signup', 'AuthController@showFormRegister')->name('signup');
-Route::post('postsignup', 'AuthController@register')->name('postsignup');
+// Jika aplikasi ingin online
 Route::post('/password', 'AuthController@editpsw');
 Route::get('/update-password/{encrypt_id}', 'AuthController@password')->name('update');
 Route::get('/verifikasi/{encrypt_id}', 'AuthController@verifikasi')->name('verif');
 Route::post('/postpassword/{id}', 'AuthController@postpassword');
 Route::post('/postverif/{id}', 'AuthController@postverif');
+Route::post('postsignup', 'AuthController@register')->name('postsignup');
+
+Route::get('/', 'AuthController@showFormLogin')->name('login');
+Route::get('login', 'AuthController@showFormLogin')->name('login');
+Route::post('postlogin', 'AuthController@login');
+Route::post('logout', 'AuthController@logout')->name('logout');
+// Route::get('signup', 'AuthController@showFormRegister')->name('signup');
 
 Route::group(['middleware' => ['auth', 'bagian1']], function () 
 {
@@ -79,16 +85,26 @@ Route::group(['middleware' => ['auth', 'bagian3']], function ()
     Route::delete('/duser/{id}', 'UserController@duser');
 });
 
+Route::group(['middleware' => ['auth', 'bagian4']], function ()
+{
+    Route::get('/main/chart1', 'MainController@sortyear1')->name('main');
+    Route::get('/main/chart2', 'MainController@sortyear2')->name('main');
+    Route::get('/main/pendapatan', 'MainController@pendapatan')->name('card');
+    Route::post('/postpendapatan', 'MainController@postpendapatan')->name('card');
+    Route::get('/main/biaya', 'MainController@biaya')->name('card');
+    Route::post('/postbiaya', 'MainController@postbiaya')->name('card');
+    Route::get('/main/akun', 'AkunController@tambahakun')->name('dataakun');
+    Route::get('/main/kas', 'BukuKasController@tambahkas')->name('datakas');
+    Route::get('/main/kategori', 'KategoriController@tambahkat')->name('datakat');
+    Route::get('/main/keuangan', 'KeuanganController@rekap')->name('rekap');
+    Route::get('/main/keuangan/detail/{id}', 'KeuanganController@detail')->name('rekap');
+
+});
+
+
 // Semua
 Route::get('/main', 'MainController@main')->name('main');
 Route::get('/main', 'MainController@dashboard')->name('main');
-Route::get('/main/chart1', 'MainController@sortyear1')->name('main');
-Route::get('/main/chart2', 'MainController@sortyear2')->name('main');
-Route::get('/main/akun', 'AkunController@tambahakun')->name('dataakun');
-Route::get('/main/kas', 'BukuKasController@tambahkas')->name('datakas');
-Route::get('/main/kategori', 'KategoriController@tambahkat')->name('datakat');
-Route::get('/main/keuangan', 'KeuanganController@rekap')->name('rekap');
-Route::get('/main/keuangan/detail/{id}', 'KeuanganController@detail')->name('rekap');
 Route::get('/main/help', 'MainController@help')->name('help');
 Route::get('/main/profil', 'AuthController@editakun')->name('editprofil');
 

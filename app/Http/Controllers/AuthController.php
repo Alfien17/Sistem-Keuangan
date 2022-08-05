@@ -17,16 +17,22 @@ class AuthController extends Controller
 {
     public function showFormLogin()
     {
+        // $year = Carbon::now()->format('Y');
+        // if (Auth::check()) 
+        // {
+        //     $auth = Auth::user();
+        //     if ($auth->status_vrf == '0') 
+        //     {
+        //         return redirect('/main');
+        //     }
+        // }
+        // return view('login',['year'=>$year]);
+
         $year = Carbon::now()->format('Y');
-        if (Auth::check()) 
-        {
-            $auth = Auth::user();
-            if ($auth->status_vrf == '0') 
-            {
-                return redirect('/main');
-            }
+        if (Auth::check()) {
+            return redirect('/main');
         }
-        return view('login',['year'=>$year]);
+        return view('login', ['year' => $year]);
     }
 
     public function login(Request $request)
@@ -53,9 +59,22 @@ class AuthController extends Controller
 
         if (Auth::check()) 
         {
-            $auth = Auth::user();
-            if ($auth->status_vrf == '0')
-            {
+            // $auth = Auth::user();
+            // if ($auth->status_vrf == '0')
+            // {
+            //     $nama = $auth->name;
+            //     $pecah = explode(' ', $nama);
+            //     $forename = $pecah[0];
+            //     if (empty($pecah[1])) {
+            //         $surname = "";
+            //     } else {
+            //         $surname = $pecah[1];
+            //     }
+            //     $request->session()->regenerate();
+            //     return redirect()->intended('/')->with('success', 'Selamat Datang, ' . $forename . ' ' . $surname);
+            // } 
+
+                $auth = Auth::user();
                 $nama = $auth->name;
                 $pecah = explode(' ', $nama);
                 $forename = $pecah[0];
@@ -64,19 +83,52 @@ class AuthController extends Controller
                 } else {
                     $surname = $pecah[1];
                 }
-                return redirect('/main')->with('success', 'Selamat Datang, ' . $forename . ' ' . $surname);
-            } 
-            else 
-            {
-                Session::flash('error', 'Anda belum melakukan verifikasi email!');
-                return redirect()->back();
-            }
+                $request->session()->regenerate();
+                return redirect()->intended('/')->with('success', 'Selamat Datang, ' . $forename . ' ' . $surname);
         }
         else
         {
             Session::flash('error', 'Username atau Password salah');
             return redirect()->back();
         }
+    }
+
+    public function epass()
+    {
+        $year = Carbon::now()->format('Y');
+        return view('editpass', ['year' => $year]);
+    }
+
+    public function postepass(Request $request)
+    {
+        // $rules = [
+        //     'email'                 => 'required|email|unique:users',
+        //     'password'              => 'required|confirmed'
+        // ];
+
+        // $messages = [
+        //     'email.required'        => 'Email wajib diisi',
+        //     'email.email'           => 'Email tidak valid',
+        //     'email.unique'          => 'Email sudah terdaftar',
+        //     'password.required'     => 'Password wajib diisi',
+        //     'password.confirmed'    => 'Password tidak sama dengan konfirmasi password'
+        // ];
+
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:users',
+        ]);
+        if ($validator->fails()) {
+            $this->validate($request, [
+                'password' => 'required|confirmed'
+            ]);
+            User::where('email', $request->email)->update([
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+            ]);
+            return redirect('login')->with('success', 'Password berhasil diubah');
+        } else
+        return redirect()->back()->with('error', 'Email tidak terdaftar.');
+
     }
 
     public function showFormRegister()
@@ -134,13 +186,61 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->get();
         $nama = $request->name;
         $email = $request->email;
-            Mail::send('editakun.link2',['user' => $user],
+        $password = $request->password;
+            Mail::send('editakun.link2',[
+                'user' => $user,
+                'password' => $password
+            ],
             function ($mail) use ($email, $nama) {
                 $mail->to($email, 'Admin IAC')
                     ->subject('Hi ' . $nama. ', Verification Your Account');
             }
         );
         return redirect()->back()->with('success', 'Link verifikasi berhasil terkirim ke email Anda. Silahkan cek email. Batas verifikasi email adalah 2 jam');
+    }
+
+    public function register2(Request $request)
+    {
+        $rules = [
+            'username'              => 'required|alpha_num|min:5|max:10|unique:users',
+            'name'                  => 'required|min:3|max:35',
+            'email'                 => 'required|email|unique:users',
+            'password'              => 'required|confirmed'
+        ];
+
+        $messages = [
+            'username.required'     => 'Username wajib diisi',
+            'username.alpha_num'    => 'Username hanya diisi dengan huruf dan angka!',
+            'username.min'          => 'Username minimal 5 karakter',
+            'username.max'          => 'Username maksimal 10 karakter',
+            'username.unique'       => 'Username sudah terdaftar',
+            'name.required'         => 'Nama Lengkap wajib diisi',
+            'name.min'              => 'Nama lengkap minimal 3 karakter',
+            'name.max'              => 'Nama lengkap maksimal 35 karakter',
+            'email.required'        => 'Email wajib diisi',
+            'email.email'           => 'Email tidak valid',
+            'email.unique'          => 'Email sudah terdaftar',
+            'password.required'     => 'Password wajib diisi',
+            'password.confirmed'    => 'Password tidak sama dengan konfirmasi password'
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput($request->all);
+        }
+
+        User::create([
+            'username' => $request->username,
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'bagian' => 'supervisor',
+            'image' => 'default/default2.png',
+            
+        ]);
+
+        return redirect()->back()->with('success', 'User berhasil ditambah.');
     }
 
     public function verifikasi($encrypt_id)

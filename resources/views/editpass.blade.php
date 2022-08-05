@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sign Up | IAC Finance</title>
+    <title>Update Password | IAC Finance</title>
     <link rel="stylesheet" href="/fontawesome-free-5.15.3-web/css/all.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/main.css">
@@ -34,10 +34,10 @@
     <div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100">
-				<form class="login100-form validate-form" action="postsignup" method="post">
+				<form class="login100-form validate-form" action="postepass" method="post">
                     @csrf
-					<span class="login100-form-title">
-						Sign Up
+					<span class="login100-form-title p-b-30">
+						Update Password
 					</span>
                         @if (count($errors)>0)
                             <div class="alert alert-danger alert-dismissible" role="alert" id="liveAlert">
@@ -64,39 +64,31 @@
                                 <small><span class="fas fa-exclamation-triangle text-light"></span> {{ Session::get('error') }}</small>
                             </div>
                         @endif
-                        <div class="form-floating">
-                            <input type="text" class="form-control form-control3 effect-2" id="floatingInput" placeholder="username" name="username" autocomplete="off" value="{{old('username')}}" required>
-                            <label for="floatingInput">Username</label>
-                            <span class="focus-border"></span>
+                        <div class="wrap-input100 validate-input">
+                            <input class="input100" type="text" name="email" autocomplete="off" required>
+                            <span class="focus-input100"></span>
+                            <span class="label-input100">Email</span>
                         </div>
-                        <div class="form-floating">
-                            <input type="text" class="form-control form-control3 effect-2" id="floatingInput1" placeholder="name" name="name" autocomplete="off" value="{{old('name')}}" required>
-                            <label for="floatingInput1">Nama Lengkap</label>
-                            <span class="focus-border"></span>
+                        <div class="wrap-input100 validate-input">
+                            <input class="input100" type="password" name="password" required>
+                            <span class="focus-input100"></span>
+                            <span class="label-input100">Password</span>
                         </div>
-                        <div class="form-floating">
-                            <input type="email" class="form-control form-control3 effect-2" id="floatingInput2" placeholder="email" name="email" autocomplete="off" value="{{old('email')}}" required>
-                            <label for="floatingInput2">Email</label>
-                            <span class="focus-border"></span>
-                        </div>
-                        <div class="form-floating">
-                            <input type="password" class="form-control form-control3 effect-2" id="floatingInput3" placeholder="password" name="password" required>
-                            <label for="floatingInput3">Password</label>
-                            <span class="focus-border"></span>
-                        </div>
-                        <div class="form-floating">
-                            <input type="password" class="form-control form-control3 effect-2" id="floatingInput4" placeholder="password" name="password_confirmation" required>
-                            <label for="floatingInput4">Konfirmasi Password</label>
-                            <span class="focus-border"></span>
+                        <div class="wrap-input100 validate-input">
+                            <input class="input100" type="password" name="password_confirmation" required>
+                            <span class="focus-input100"></span>
+                            <span class="label-input100">Password Confirmation</span>
                         </div>
                     <div class="container-login100-form-btn pt-4">
-						<button class="login100-form-btn" type="submit">Sign Up</button>
+						<button class="login100-form-btn" type="submit">Update</button>
 					</div>
 					<div class="text-center p-t-20 p-b-20">
-                        <p class="txt2 text-center pt-4">Sudah punya akun? <a class="txt1" href="{{ route('login') }}">Login</a> sekarang!</p>
+                        <a class="txt1 text-center pt-4" href="{{ route('login') }}">Login</a>
 					</div>
-                    <p class="d-flex justify-content-center pt-2">&copy; 2021 @if($year!=2021)- {{$year}}@endif IAC | All rights reserved</p>
-                    <p>Designed by <a href="https://instagram.com/alfiensukma?utm_medium=copy_link" target="_blank">Alfiensukma</a></p>
+                    <div class="text-center p-t-20 p-b-20">
+                        <p>&copy; 2021 @if($year!=2021)- {{$year}}@endif IAC | All rights reserved</p>
+                        <p>Designed by <a href="https://instagram.com/alfiensukma?utm_medium=copy_link" target="_blank">Alfiensukma</a></p>
+					</div>
 				</form>
 				<div class="login100-more" style="background-image: url('assets/export.png');">
                     <div class="text">

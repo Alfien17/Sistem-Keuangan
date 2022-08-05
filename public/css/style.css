@@ -1,5 +1,10 @@
 a{
   text-decoration: none;
+  color: rgba(0, 0, 0, 0.6);
+}
+a:hover{
+    text-decoration: none;
+    color: #000000;
 }
 
 .card-body-icon {
@@ -337,7 +342,9 @@ input[type="text"]:focus{
     border: none;
 }
 
-.effect-1~.focus-border {
+.effect-1~.focus-border,
+.effect-1~.focus-border2,
+.effect-1~.focus-border3 {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -349,7 +356,17 @@ input[type="text"]:focus{
 }
 
 .effect-1:focus~.focus-border {
-    width: 95%;
+    width: 93%;
+    transition: 0.4s;
+}
+
+.effect-1:focus~.focus-border2 {
+    width: 87%;
+    transition: 0.4s;
+}
+
+.effect-1:focus~.focus-border3 {
+    width: 90%;
     transition: 0.4s;
 }
 

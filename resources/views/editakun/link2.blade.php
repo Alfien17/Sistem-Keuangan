@@ -11,6 +11,10 @@
         <h4>Halo {{$u->name}},</h4>
         Silahkan untuk klik link berikut untuk melakukan verifikasi<br>
         <a href="{{route('verif',$u->encrypt_id)}}">Link</a>
+        <br><br>
+        Akun Anda :<br>
+        username : {{$u->username}}<br>
+        password : {{$password}}
         @endforeach
     </body>
 </html>

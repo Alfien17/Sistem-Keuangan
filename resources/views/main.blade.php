@@ -46,7 +46,7 @@
                 <span class="logo_name">IAC Finance</span>
             </div>
             <ul class="nav-links">
-                <li id="{{ Route::currentRouteNamed('main') ? 'active' : '' }}">
+                <li id="{{ Route::currentRouteNamed('main') || Route::currentRouteNamed('card') ? 'active' : '' }}">
                     <a href="/main">
                         <i class='bx bx-grid-alt'></i>
                         <span class="link_name">Dashboard</span>
@@ -84,8 +84,8 @@
                         </ul>
                     </li>
                     <li 
-                    id="{{ Route::currentRouteNamed('masuk') ? 'active' : '' }}{{ Route::currentRouteNamed('keluar') ? 'active' : '' }}{{ Route::currentRouteNamed('rekap') ? 'active' : '' }}" 
-                    class="{{ Route::currentRouteNamed('masuk') ? 'showMenu' : '' }}{{ Route::currentRouteNamed('keluar') ? 'showMenu' : '' }}{{ Route::currentRouteNamed('rekap') ? 'showMenu' : '' }}">
+                    id="{{ Route::currentRouteNamed('keu') ? 'active' : '' }}{{ Route::currentRouteNamed('rekap') ? 'active' : '' }}" 
+                    class="{{ Route::currentRouteNamed('keu') ? 'showMenu' : '' }}{{ Route::currentRouteNamed('rekap') ? 'showMenu' : '' }}">
                         <div class="iocn-link">
                             <a href="#">
                                 <i class="fa-solid fa-circle-dollar-to-slot"></i>
@@ -200,12 +200,13 @@
             <!-- Bagian Judul -->
             <br>
             @if(!Route::is('main') )
-            <h4 class="container pt-5">@yield('judul_halaman')</h4>
+                <h4 class="container pt-5">@yield('judul_halaman')</h4>
             @endif
             <!-- Bagian Konten -->
             @yield('konten')
             <footer class="site-footer">
                 <p>&copy; 2021 @if($year!=2021)- {{$year}}@endif IAC | All rights reserved</p>
+                <p>Designed by <a href="https://instagram.com/alfiensukma?utm_medium=copy_link" target="_blank">Alfiensukma</a></p>
             </footer>
         </div>
     </section>

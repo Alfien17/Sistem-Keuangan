@@ -49,7 +49,7 @@
                         @if ($k->status == 'debit')
                             <tr>
                                 <td>{{$id++}}</td>
-                                <td>{{date('d-m-Y', strtotime($k->tanggal))}}</td>
+                                <td style="cursor:pointer" title="Diubah pada {{$k->updated_at}}">{{date('d-m-Y', strtotime($k->tanggal))}}</td>
                                 <td>{{ucwords($k->kas->bk_kas)}}</td>
                                 <td>{{ucwords($k->kas->tipe)}}</td>
                                 <td>{{ucwords($k->kategori->name)}}</td>

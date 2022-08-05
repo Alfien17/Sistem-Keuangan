@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'bagian1' => \App\Http\Middleware\CekBagian::class,
         'bagian2' => \App\Http\Middleware\CekBagian2::class,
         'bagian3' => \App\Http\Middleware\CekBagian3::class,
+        'bagian4' => \App\Http\Middleware\CekBagian4::class,
     ];
 }

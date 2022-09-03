@@ -39,78 +39,79 @@
                     <tbody class="text-left">
                         <?php $id = 1 ?>
                         @forelse($user as $u)
-                        <tr>
-                            <td>{{$id++}}</td>
-                            <td>{{ucwords($u->name)}}</td>
-                            <td>{{$u->email}}</td>
-                            <td>{{ucwords($u->bagian)}}</td>
-                            <td class="text-center">
-                                <a type="button" class="btn btn-outline-custom2" href="/main/datauser/detail/{{$u->id}}" title="Detail"><i class="fas fa-info text-dark pl-1 pr-1"></i></a>
-                                <button type="button" title="Edit" class="btn btn-outline-custom2" data-bs-toggle="modal" data-bs-target="#edit{{$u->id}}"><i class="far fa-edit text-dark"></i></button>
-                                <button type="button" title="Delete" class="btn btn-outline-custom2" data-bs-toggle="modal" data-bs-target="#delete{{$u->id}}"><i class="fas fa-trash text-dark"></i></button>
+                            @if($u->id != 1)
+                                <tr>
+                                    <td>{{$id++}}</td>
+                                    <td>{{ucwords($u->name)}}</td>
+                                    <td>{{$u->email}}</td>
+                                    <td>{{ucwords($u->bagian)}}</td>
+                                    <td class="text-center">
+                                        <a type="button" class="btn btn-outline-custom2" href="/main/datauser/detail/{{$u->id}}" title="Detail"><i class="fas fa-info text-dark pl-1 pr-1"></i></a>
+                                        <button type="button" title="Edit" class="btn btn-outline-custom2" data-bs-toggle="modal" data-bs-target="#edit{{$u->id}}"><i class="far fa-edit text-dark"></i></button>
+                                        <button type="button" title="Delete" class="btn btn-outline-custom2" data-bs-toggle="modal" data-bs-target="#delete{{$u->id}}"><i class="fas fa-trash text-dark"></i></button>
 
-                                {{-- Modal Delete --}}
-                                <div class="modal fade" id="delete{{$u->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-exclamation-triangle text-danger"></i> Alert</h5>
-                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">Anda yakin ingin menghapus user
-                                                {{ucwords($u->name)}}?
-                                            </div>
-                                            <div class="modal-footer">
-                                                <form action="/duser/{{$u->id}}" method="post">
-                                                    @csrf
-                                                    @method('delete')
-                                                    <button type="button" class="btn btn-outline-custom" data-bs-dismiss="modal">Cancel</button>
-                                                    <button type="submit" class="btn btn-custom">Yes</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {{-- Edit Modal --}}
-                                <div class="modal fade text-left" id="edit{{$u->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Edit Bagian User</h5>
-                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form method="post" action="/euser/{{$u->id}}" enctype="multipart/form-data">
-                                                    @csrf
-                                                    @method('put')
-                                                    <div class="form-group">
-                                                        <div class="row">
-                                                            <label class="col-4 col-form-label">Bagian</label>
-                                                            <div class="col-sm-5">
-                                                                <select name="bagian" class="form-select effect" required>
-                                                                    <option value="{{$u->bagian}}" selected hidden>{{ucwords($u->bagian)}}</option>
-                                                                    <option value="admin">Admin</option>
-                                                                    <option value="accounting">Accounting</option>
-                                                                    <option value="cashier">Cashier</option>
-                                                                    <option value="supervisor">Supervisor</option>
-                                                                </select>
-                                                            </div>
-                                                            <input type="hidden" name="id" value="{{$u->id}}">
-                                                        </div>
+                                        {{-- Modal Delete --}}
+                                        <div class="modal fade" id="delete{{$u->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-exclamation-triangle text-danger"></i> Alert</h5>
+                                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
+                                                    <div class="modal-body">Anda yakin ingin menghapus user
+                                                        {{ucwords($u->name)}}?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <form action="/duser/{{$u->id}}" method="post">
+                                                            @csrf
+                                                            @method('delete')
+                                                            <button type="button" class="btn btn-outline-custom" data-bs-dismiss="modal">Cancel</button>
+                                                            <button type="submit" class="btn btn-custom">Yes</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-outline-custom" data-bs-dismiss="modal">Cancel</button>
-                                                <button type="submit" class="btn btn-custom">Update</button>
-                                            </div>
-                                            </form>
                                         </div>
-                                    </div>
-                                </div>
 
-                            </td>
-                        </tr>
+                                        {{-- Edit Modal --}}
+                                        <div class="modal fade text-left" id="edit{{$u->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Edit Bagian User</h5>
+                                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form method="post" action="/euser/{{$u->id}}" enctype="multipart/form-data">
+                                                            @csrf
+                                                            @method('put')
+                                                            <div class="form-group">
+                                                                <div class="row">
+                                                                    <label class="col-4 col-form-label">Bagian</label>
+                                                                    <div class="col-sm-5">
+                                                                        <select name="bagian" class="form-select effect" required>
+                                                                            <option value="{{$u->bagian}}" selected hidden>{{ucwords($u->bagian)}}</option>
+                                                                            <option value="admin">Admin</option>
+                                                                            <option value="accounting">Accounting</option>
+                                                                            <option value="cashier">Cashier</option>
+                                                                            <option value="supervisor">Supervisor</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <input type="hidden" name="id" value="{{$u->id}}">
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-outline-custom" data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="submit" class="btn btn-custom">Update</button>
+                                                    </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endif
                         @empty
                         <tr class="text-center">
                             <td colspan="5">

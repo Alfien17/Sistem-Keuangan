@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login | IAC Finance</title>
-    <link rel="stylesheet" href="/fontawesome-free-5.15.3-web/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/fontawesome-free-6.2.0-web/css/all.min.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/util.css">
@@ -87,17 +87,17 @@
                     <div class="container-login100-form-btn">
 						<button class="login100-form-btn" type="submit">Login</button>
 					</div>
-					<div class="text-center p-t-40 p-b-20">
-                        <p class="txt2">Belum punya akun? <a href="/signup" title="Sign Up" class="txt1">Sign Up</a></a><br>
+					<div class="text-center p-t-20 p-b-20">
+                        {{-- <p class="txt2">Belum punya akun? <a href="/signup" title="Sign Up" class="txt1">Sign Up</a></a><br> --}}
 						<a href="" title="Help" data-bs-toggle="modal" data-bs-target="#help" class="txt2">Help?</a>
 					</div>
                     <div class="text-center p-t-40 p-b-20">
                         <p>&copy; 2021 @if($year!=2021)- {{$year}}@endif IAC | All rights reserved</p>
-                        <p>Designed by <a href="https://instagram.com/alfiensukma?utm_medium=copy_link" target="_blank">Alfiensukma</a></p>
+                        <p>Designed by <a href="https://instagram.com/alfien.skm?utm_medium=copy_link" target="_blank">Alfiensukma</a></p>
 					</div>
 				</form>
 				<div class="login100-more" style="background-image: url('assets/export.png');">
-                    <div class="text">
+                    <div class="box text">
                         <span class="text-1">Selamat Datang di<br> Aplikasi IAC Finance</span>
                         <span class="text-2">Let's make some magic</span>
                     </div>

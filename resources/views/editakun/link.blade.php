@@ -10,7 +10,8 @@
         @foreach($user as $u)
         <h4>Halo {{$u->name}},</h4>
         Silahkan untuk klik link berikut untuk melakukan update password<br>
-        <a href="{{route('update',$u->encrypt_id)}}">Link</a>
+        <a href="{{route('update',$u->encrypt_id)}}">Link</a><br>
+        Batas melakukan verifikasi email adalah <strong>2 jam.</strong>
         @endforeach
     </body>
 </html>

@@ -56,7 +56,7 @@ class MainController extends Controller
 
         $sortakun = Akun::get();
 
-        $juser = User::count();
+        $juser = User::where('id','!=',1)->count();
         $akun = Akun::get();
         $kas = Bukukas::count();
         $kat = Kategori::count();

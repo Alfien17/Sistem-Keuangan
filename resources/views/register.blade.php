@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Sign Up | IAC Finance</title>
-    <link rel="stylesheet" href="/fontawesome-free-5.15.3-web/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/fontawesome-free-6.2.0-web/css/all.min.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/util.css">
@@ -96,7 +96,7 @@
                         <p class="txt2 text-center pt-4">Sudah punya akun? <a class="txt1" href="{{ route('login') }}">Login</a> sekarang!</p>
 					</div>
                     <p class="d-flex justify-content-center pt-2">&copy; 2021 @if($year!=2021)- {{$year}}@endif IAC | All rights reserved</p>
-                    <p>Designed by <a href="https://instagram.com/alfiensukma?utm_medium=copy_link" target="_blank">Alfiensukma</a></p>
+                    <p>Designed by <a href="https://instagram.com/alfien.skm?utm_medium=copy_link" target="_blank">Alfiensukma</a></p>
 				</form>
 				<div class="login100-more" style="background-image: url('assets/export.png');">
                     <div class="text">

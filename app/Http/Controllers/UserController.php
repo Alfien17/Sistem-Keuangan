@@ -42,7 +42,7 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'Bagian berhasil diubah.');
     }
 
-    public function detailuser($id)
+    public function detailuser ($id)
     {
         // Check Login
         if (!Auth::user()) {

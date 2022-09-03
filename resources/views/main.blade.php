@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" type="text/css" href="/fontawesome-free-6.0.0-web/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/fontawesome-free-6.2.0-web/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="/css/spur.css">
     <link rel="stylesheet" type="text/css" href="/css/sidebar.css">
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css">
@@ -58,7 +58,7 @@
                 @if(Auth::user()->bagian != 'admin')
                     <li id="{{ Route::currentRouteNamed('dataakun') ? 'active' : '' }}">
                         <a href="/main/akun">
-                            <i class="fa-solid fa-folder"></i>
+                            <i class="fa-solid fa-money-bill-transfer"></i>
                             <span class="link_name">Data Akun</span>
                         </a>
                         <ul class="sub-menu blank">
@@ -67,7 +67,7 @@
                     </li>
                     <li id="{{ Route::currentRouteNamed('datakas') ? 'active' : '' }}">
                         <a href="/main/kas">
-                            <i class="fa-solid fa-folder"></i>
+                            <i class="fa-solid fa-wallet"></i>
                             <span class="link_name">Data Kas</span>
                         </a>
                         <ul class="sub-menu blank">
@@ -76,7 +76,7 @@
                     </li>
                     <li id="{{ Route::currentRouteNamed('datakat') ? 'active' : '' }}">
                         <a href="/main/kategori">
-                            <i class="fa-solid fa-folder"></i>
+                            <i class="fa-solid fa-sitemap"></i>
                             <span class="link_name">Data Kategori</span>
                         </a>
                         <ul class="sub-menu blank">
@@ -104,7 +104,7 @@
                 @else
                     <li id="{{ Route::currentRouteNamed('datauser') ? 'active' : '' }}">
                         <a href="/main/datauser">
-                            <i class="fa-solid fa-folder"></i>
+                            <i class="fa-solid fa-users"></i>
                             <span class="link_name">Data User</span>
                         </a>
                         <ul class="sub-menu blank">
@@ -206,7 +206,7 @@
             @yield('konten')
             <footer class="site-footer">
                 <p>&copy; 2021 @if($year!=2021)- {{$year}}@endif IAC | All rights reserved</p>
-                <p>Designed by <a href="https://instagram.com/alfiensukma?utm_medium=copy_link" target="_blank">Alfiensukma</a></p>
+                <p>Designed by <a href="https://instagram.com/alfien.skm?utm_medium=copy_link" target="_blank">Alfiensukma</a></p>
             </footer>
         </div>
     </section>
